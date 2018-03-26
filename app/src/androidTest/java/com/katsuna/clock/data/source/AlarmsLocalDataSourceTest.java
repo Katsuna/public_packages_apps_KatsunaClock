@@ -1,19 +1,3 @@
-/*
- * Copyright 2016, The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.katsuna.clock.data.source;
 
 import android.arch.persistence.room.Room;
@@ -54,11 +38,11 @@ public class AlarmsLocalDataSourceTest {
         mDatabase = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getContext(),
                 ClockDatabase.class)
                 .build();
-        AlarmsDao tasksDao = mDatabase.alarmsDao();
+        AlarmsDao alarmsDao = mDatabase.alarmsDao();
 
         // Make sure that we're not keeping a reference to the wrong instance.
         AlarmsLocalDataSource.clearInstance();
-        mLocalDataSource = AlarmsLocalDataSource.getInstance(new SingleExecutors(), tasksDao);
+        mLocalDataSource = AlarmsLocalDataSource.getInstance(new SingleExecutors(), alarmsDao);
     }
 
     @After
@@ -102,7 +86,7 @@ public class AlarmsLocalDataSourceTest {
         final Alarm newAlarm2 = new Alarm(2, "desc2");
         mLocalDataSource.saveAlarm(newAlarm2);
 
-        // Then the tasks can be retrieved from the persistent repository
+        // Then the alarms can be retrieved from the persistent repository
         mLocalDataSource.getAlarms(new AlarmsDataSource.LoadAlarmsCallback() {
             @Override
             public void onAlarmsLoaded(List<Alarm> alarms) {

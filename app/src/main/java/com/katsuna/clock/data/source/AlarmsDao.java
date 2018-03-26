@@ -39,7 +39,7 @@ public interface AlarmsDao {
     void insertAlarm(Alarm alarm);
 
     /**
-     * Update a task.
+     * Update an alarm.
      *
      * @param alarm alarm to be updated
      * @return the number of alarms updated. This should always be 1.
@@ -48,7 +48,7 @@ public interface AlarmsDao {
     int updateAlarm(Alarm alarm);
 
     /**
-     * Delete a task by id.
+     * Delete an alarm by id.
      *
      * @return the number of alarms deleted. This should always be 1.
      */

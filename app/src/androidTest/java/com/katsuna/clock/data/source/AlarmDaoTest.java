@@ -88,10 +88,10 @@ public class AlarmDaoTest {
         mDatabase.alarmsDao().deleteAlarmById(ALARM.getId());
 
         //When getting the alarms
-        List<Alarm> tasks = mDatabase.alarmsDao().getAlarms();
+        List<Alarm> alarms = mDatabase.alarmsDao().getAlarms();
 
         // The list is empty
-        assertThat(tasks.size(), is(0));
+        assertThat(alarms.size(), is(0));
     }
 
 }

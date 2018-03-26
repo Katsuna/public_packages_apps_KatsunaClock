@@ -1,10 +1,10 @@
-package com.katsuna.clock.data;
+package com.katsuna.clock.data.source;
 
 import android.arch.persistence.room.Room;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.katsuna.clock.data.source.ClockDatabase;
+import com.katsuna.clock.data.Alarm;
 
 import org.junit.After;
 import org.junit.Before;

@@ -24,8 +24,6 @@ import com.katsuna.clock.util.AppExecutors;
 
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 
 /**
  * Concrete implementation of a data source as a db.
@@ -113,7 +111,6 @@ public class AlarmsLocalDataSource implements AlarmsDataSource {
 
     @Override
     public void saveAlarm(@NonNull final Alarm alarm) {
-        checkNotNull(alarm);
         Runnable saveRunnable = new Runnable() {
             @Override
             public void run() {

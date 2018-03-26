@@ -1,4 +1,4 @@
-package com.katsuna.clock.data.local;
+package com.katsuna.clock.data.source;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;

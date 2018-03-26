@@ -4,7 +4,7 @@ import android.arch.persistence.room.Room;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.katsuna.clock.data.local.AlarmDatabase;
+import com.katsuna.clock.data.source.ClockDatabase;
 
 import org.junit.After;
 import org.junit.Before;
@@ -23,12 +23,12 @@ public class AlarmDaoTest {
     private static final Alarm ALARM = new Alarm(1, "description", true, true, true, true, true,
             false, false);
 
-    private AlarmDatabase mDatabase;
+    private ClockDatabase mDatabase;
 
     @Before
     public void initDb() {
         mDatabase = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getContext(),
-                AlarmDatabase.class).build();
+                ClockDatabase.class).build();
     }
 
     @After

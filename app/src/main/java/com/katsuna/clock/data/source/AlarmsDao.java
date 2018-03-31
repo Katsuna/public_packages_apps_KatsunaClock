@@ -55,4 +55,11 @@ public interface AlarmsDao {
     @Query("DELETE FROM alarms WHERE entryid = :alarmId")
     int deleteAlarmById(String alarmId);
 
+    /**
+     * Delete an alarms.
+     *
+     * @return the number of alarms deleted.
+     */
+    @Query("DELETE FROM alarms")
+    int deleteAlarms();
 }

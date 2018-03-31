@@ -6,6 +6,9 @@ import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.source.AlarmsDataSource;
 import com.katsuna.clock.util.EspressoIdlingResource;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -18,18 +21,19 @@ public class AlarmsPresenter implements AlarmsContract.Presenter {
 
     private final AlarmsDataSource mAlarmsDataSource;
 
-    private final AlarmsContract.View mTasksView;
+    private final AlarmsContract.View mAlarmsView;
 
     public AlarmsPresenter(@NonNull AlarmsDataSource alarmsDataSource,
                            @NonNull AlarmsContract.View alarmsView) {
         mAlarmsDataSource = checkNotNull(alarmsDataSource, "dataSource cannot be null");
-        mTasksView = checkNotNull(alarmsView, "alarmsView cannot be null!");
+        mAlarmsView = checkNotNull(alarmsView, "alarmsView cannot be null!");
 
-        mTasksView.setPresenter(this);
+        mAlarmsView.setPresenter(this);
     }
 
     @Override
     public void start() {
+        loadDateTime();
         loadAlarms();
     }
 
@@ -39,9 +43,17 @@ public class AlarmsPresenter implements AlarmsContract.Presenter {
         /* not yet..
         if (AddEditTaskActivity.REQUEST_ADD_TASK == requestCode && Activity.RESULT_OK == resultCode) {
 
-            mTasksView.showSuccessfullySavedMessage();
+            mAlarmsView.showSuccessfullySavedMessage();
         }
         */
+    }
+
+    @Override
+    public void loadDateTime() {
+        Date now = new Date();
+        String time = new SimpleDateFormat("HH:mm").format(now);
+        String date = java.text.DateFormat.getDateInstance(DateFormat.SHORT).toString();
+        mAlarmsView.showDateTime(time, date);
     }
 
     @Override
@@ -61,30 +73,30 @@ public class AlarmsPresenter implements AlarmsContract.Presenter {
                 }
 
                 // The view may not be able to handle UI updates anymore
-                if (!mTasksView.isActive()) {
+                if (!mAlarmsView.isActive()) {
                     return;
                 }
 
-                mTasksView.showAlarms(alarms);
+                mAlarmsView.showAlarms(alarms);
             }
 
             @Override
             public void onDataNotAvailable() {
                 // The view may not be able to handle UI updates anymore
-                if (!mTasksView.isActive()) {
+                if (!mAlarmsView.isActive()) {
                     return;
                 }
-                mTasksView.showLoadingAlarmsError();
+                mAlarmsView.showLoadingAlarmsError();
             }
         });
     }
 
     public void addNewAlarm() {
-        mTasksView.showAddAlarm();
+        mAlarmsView.showAddAlarm();
     }
 
     @Override
     public void openAlarmDetails(@NonNull Alarm requestedAlarm) {
-        mTasksView.showAlarmDetailsUi(requestedAlarm.getId());
+        mAlarmsView.showAlarmDetailsUi(requestedAlarm.getId());
     }
 }

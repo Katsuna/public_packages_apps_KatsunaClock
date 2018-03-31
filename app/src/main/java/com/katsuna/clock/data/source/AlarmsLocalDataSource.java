@@ -116,6 +116,18 @@ public class AlarmsLocalDataSource implements AlarmsDataSource {
         mAppExecutors.diskIO().execute(deleteRunnable);
     }
 
+    @Override
+    public void deleteAlarms() {
+        Runnable deleteRunnable = new Runnable() {
+            @Override
+            public void run() {
+                mAlarmsDao.deleteAlarms();
+            }
+        };
+
+        mAppExecutors.diskIO().execute(deleteRunnable);
+    }
+
     @VisibleForTesting
     static void clearInstance() {
         INSTANCE = null;

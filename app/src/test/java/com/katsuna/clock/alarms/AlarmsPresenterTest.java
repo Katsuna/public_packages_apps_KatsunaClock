@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
@@ -39,6 +40,9 @@ public class AlarmsPresenterTest {
      */
     @Captor
     private ArgumentCaptor<LoadAlarmsCallback> mLoadAlarmsCallbackCaptor;
+
+    @Captor
+    private ArgumentCaptor<List<Alarm>> mAlarmsCaptor;
 
     private AlarmsPresenter mAlarmsPresenter;
 
@@ -93,12 +97,11 @@ public class AlarmsPresenterTest {
         mLoadAlarmsCallbackCaptor.getValue().onAlarmsLoaded(ALARMS);
 
         // Then all alarms are shown in UI
-        ArgumentCaptor<List> showAlarmsArgumentCaptor = ArgumentCaptor.forClass(List.class);
-        verify(mAlarmsView, never()).showAlarms(showAlarmsArgumentCaptor.capture());
+        verify(mAlarmsView, never()).showAlarms(Mockito.anyListOf(Alarm.class));
     }
 
     @Test
-    public void loadAllAlarmsFromDatasourceAndLoadIntoView() {
+    public void loadAllAlarmsFromDataSourceAndLoadIntoView() {
         // Given an initialized AlarmsPresenter with initialized alarms
         // When loading of Alarms is requested
         mAlarmsPresenter.loadAlarms();
@@ -108,9 +111,8 @@ public class AlarmsPresenterTest {
         mLoadAlarmsCallbackCaptor.getValue().onAlarmsLoaded(ALARMS);
 
         // Then all alarms are shown in UI
-        ArgumentCaptor<List> showAlarmsArgumentCaptor = ArgumentCaptor.forClass(List.class);
-        verify(mAlarmsView).showAlarms(showAlarmsArgumentCaptor.capture());
-        assertTrue(showAlarmsArgumentCaptor.getValue().size() == 3);
+        verify(mAlarmsView).showAlarms(mAlarmsCaptor.capture());
+        assertTrue(mAlarmsCaptor.getValue().size() == 3);
     }
 
     @Test

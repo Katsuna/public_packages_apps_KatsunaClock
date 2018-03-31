@@ -9,6 +9,12 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
     buildTypes {
         release {
@@ -26,6 +32,7 @@ dependencies {
     implementation "com.android.support.test.espresso:espresso-idling-resource:$rootProject.espressoVersion"
     implementation "com.google.guava:guava:$rootProject.guavaVersion"
     implementation "com.google.code.gson:gson:$rootProject.gson"
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     annotationProcessor "android.arch.persistence.room:compiler:$rootProject.roomVersion"
 
     // Dependencies for local unit tests

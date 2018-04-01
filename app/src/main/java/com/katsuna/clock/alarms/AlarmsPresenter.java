@@ -19,8 +19,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class AlarmsPresenter implements AlarmsContract.Presenter {
 
+    @NonNull
     private final AlarmsDataSource mAlarmsDataSource;
 
+    @NonNull
     private final AlarmsContract.View mAlarmsView;
 
     public AlarmsPresenter(@NonNull AlarmsDataSource alarmsDataSource,

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Clock</string>
+    <string name="no_alarms">There are no active alarms or reminders yet</string>
+    <string name="add_new">Add new</string>
 </resources>

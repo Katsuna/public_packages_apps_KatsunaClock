@@ -1,40 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.katsuna.clock.alarms.AlarmsActivity">
+    tools:openDrawer="start">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-
-        <Button
-            android:layout_width="wrap_content"
+        <ScrollView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="create test alarm"
-            android:onClick="createNewAlarm"/>
+            android:background="@color/colorAccent">
 
-        <Button
-            android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:textSize="80sp" />
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/no_alarms"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="60dp"
+                    android:gravity="center"
+                    android:text="@string/no_alarms"
+                    android:textSize="20sp"
+                    android:visibility="gone" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/alarms_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="4dp"
+                    android:clipToPadding="false" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/dial_buttons_container"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="delete all alarm"
-            android:onClick="deleteAllAlarms"/>
+            android:layout_gravity="bottom"
+            android:gravity="end"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/create_alarm_button"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/add_new"
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                android:visibility="gone" />
 
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/create_alarm_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_add_black_24dp" />
 
-</android.support.constraint.ConstraintLayout>
+        </LinearLayout>
+
+    </FrameLayout>
+
+</android.support.v4.widget.DrawerLayout>

@@ -4,7 +4,7 @@ import com.katsuna.clock.BasePresenter;
 import com.katsuna.clock.BaseView;
 import com.katsuna.clock.data.Alarm;
 
-public class ManageAlarmContract {
+class ManageAlarmContract {
 
     interface View extends BaseView<ManageAlarmContract.Presenter> {
         void showEmptyAlarmError();

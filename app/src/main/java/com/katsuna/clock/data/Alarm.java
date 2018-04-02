@@ -24,6 +24,14 @@ public final class Alarm {
     @ColumnInfo(name = "type")
     private final Integer mType;
 
+    @NonNull
+    @ColumnInfo(name = "hour")
+    private final Integer mHour;
+
+    @NonNull
+    @ColumnInfo(name = "minute")
+    private final Integer mMinute;
+
     @Nullable
     @ColumnInfo(name = "description")
     private final String mDescription;
@@ -51,21 +59,23 @@ public final class Alarm {
 
 
     /**
-     * Use this constructor to create a new active Alarm without day recurrence.
+     * Use this constructor to create easily a new active Alarm without day recurrence.
      *
-     * @param type             type of the alarm
-     * @param description      description of the alarm
+     * @param type        type of the alarm
+     * @param description description of the alarm
      */
     @Ignore
     public Alarm(@NonNull Integer type, @Nullable String description) {
-        this(UUID.randomUUID().toString(), type, description, false, false, false, false, false,
-                false, false);
+        this(UUID.randomUUID().toString(), 0, 0, type, description, false, false, false, false,
+                false, false, false);
     }
 
     /**
      * Use this constructor to create a new active Alarm.
      *
      * @param type             type of the alarm
+     * @param hour             hour of the alarm
+     * @param minute           minute of the alarm
      * @param description      description of the alarm
      * @param mondayEnabled    enable flag for monday
      * @param tuesdayEnabled   enable flag for tuesday
@@ -76,17 +86,21 @@ public final class Alarm {
      * @param sundayEnabled    enable flag for sunday
      */
     @Ignore
-    public Alarm(@NonNull Integer type, @Nullable String description, boolean mondayEnabled,
-                 boolean tuesdayEnabled, boolean wednesdayEnabled, boolean thursdayEnabled,
-                 boolean fridayEnabled, boolean saturdayEnabled, boolean sundayEnabled) {
-        this(UUID.randomUUID().toString(), type, description, mondayEnabled, tuesdayEnabled,
-                wednesdayEnabled, thursdayEnabled, fridayEnabled, saturdayEnabled, sundayEnabled);
+    public Alarm(@NonNull Integer type, @Nullable String description, @NonNull Integer hour,
+                 @NonNull Integer minute, boolean mondayEnabled, boolean tuesdayEnabled,
+                 boolean wednesdayEnabled, boolean thursdayEnabled, boolean fridayEnabled,
+                 boolean saturdayEnabled, boolean sundayEnabled) {
+        this(UUID.randomUUID().toString(), type, hour, minute, description, mondayEnabled,
+                tuesdayEnabled, wednesdayEnabled, thursdayEnabled, fridayEnabled, saturdayEnabled,
+                sundayEnabled);
     }
 
 
     /**
      * @param id               id of the alarm
      * @param type             type of the alarm
+     * @param hour             hour of the alarm
+     * @param minute           minute of the alarm
      * @param description      description of the alarm
      * @param mondayEnabled    enable flag for monday
      * @param tuesdayEnabled   enable flag for tuesday
@@ -96,12 +110,14 @@ public final class Alarm {
      * @param saturdayEnabled  enable flag for saturday
      * @param sundayEnabled    enable flag for sunday
      */
-    public Alarm(@NonNull String id, @NonNull Integer type, @Nullable String description,
-                 boolean mondayEnabled, boolean tuesdayEnabled, boolean wednesdayEnabled,
-                 boolean thursdayEnabled, boolean fridayEnabled, boolean saturdayEnabled,
-                 boolean sundayEnabled) {
+    public Alarm(@NonNull String id, @NonNull Integer type, @NonNull Integer hour,
+                 @NonNull Integer minute,@Nullable String description, boolean mondayEnabled,
+                 boolean tuesdayEnabled, boolean wednesdayEnabled, boolean thursdayEnabled,
+                 boolean fridayEnabled, boolean saturdayEnabled, boolean sundayEnabled) {
         mId = id;
         mType = type;
+        mHour = hour;
+        mMinute = minute;
         mDescription = description;
         mMondayEnabled = mondayEnabled;
         mTuesdayEnabled = tuesdayEnabled;
@@ -120,6 +136,16 @@ public final class Alarm {
     @NonNull
     public Integer getType() {
         return mType;
+    }
+
+    @NonNull
+    public Integer getHour() {
+        return mHour;
+    }
+
+    @NonNull
+    public Integer getMinute() {
+        return mMinute;
     }
 
     @Nullable

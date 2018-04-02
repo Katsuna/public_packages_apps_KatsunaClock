@@ -16,9 +16,9 @@ public class AlarmsLocalDataSource implements AlarmsDataSource {
 
     private static volatile AlarmsLocalDataSource INSTANCE;
 
-    private AlarmsDao mAlarmsDao;
+    private final AlarmsDao mAlarmsDao;
 
-    private AppExecutors mAppExecutors;
+    private final AppExecutors mAppExecutors;
 
     // Prevent direct instantiation.
     private AlarmsLocalDataSource(@NonNull AppExecutors appExecutors,

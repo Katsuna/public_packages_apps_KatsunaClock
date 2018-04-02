@@ -1,15 +1,18 @@
 package com.katsuna.clock.alarms;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.katsuna.clock.R;
+import com.katsuna.clock.alarm.ManageAlarmActivity;
 import com.katsuna.clock.data.Alarm;
-import com.katsuna.clock.data.source.AlarmsDataSource;
 import com.katsuna.clock.util.Injection;
 
 import java.util.List;
@@ -25,6 +28,9 @@ public class AlarmsActivity extends AppCompatActivity implements AlarmsContract.
     private AlarmsContract.Presenter mPresenter;
     private TextView mTime;
     private TextView mDate;
+    private TextView mNoAlarmsText;
+    private Button mCreateAlarmButton;
+    private FloatingActionButton mCreateAlarmFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +46,27 @@ public class AlarmsActivity extends AppCompatActivity implements AlarmsContract.
     private void init() {
         mTime = findViewById(R.id.time);
         mDate = findViewById(R.id.date);
+        mNoAlarmsText = findViewById(R.id.no_alarms);
+        mCreateAlarmButton = findViewById(R.id.create_alarm_button);
+        mCreateAlarmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchManageActivity();
+            }
+        });
+
+        mCreateAlarmFab = findViewById(R.id.create_alarm_fab);
+        mCreateAlarmFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchManageActivity();
+            }
+        });
+    }
+
+    private void launchManageActivity() {
+        Intent i = new Intent(this, ManageAlarmActivity.class);
+        startActivity(i);
     }
 
     @Override
@@ -75,39 +102,8 @@ public class AlarmsActivity extends AppCompatActivity implements AlarmsContract.
     }
 
     @Override
-    public void showLoadingAlarmsError() {
-
-    }
-
-    @Override
     public void showNoAlarms() {
-        Log.e(TAG, "showNoAlarms called");
-    }
-
-    @Override
-    public void showSuccessfullySavedMessage() {
-
-    }
-
-    @Override
-    public boolean isActive() {
-        return true;
-    }
-
-    @Override
-    public void showFilteringPopUpMenu() {
-
-    }
-
-    // TODO: remove this
-    public void createNewAlarm(View view) {
-        AlarmsDataSource dataSource = Injection.provideAlarmsDataSource(this);
-        dataSource.saveAlarm(new Alarm(1, "desc 1"));
-    }
-
-    // TODO: remove this
-    public void deleteAllAlarms(View view) {
-        AlarmsDataSource dataSource = Injection.provideAlarmsDataSource(this);
-        dataSource.deleteAlarms();
+        mNoAlarmsText.setVisibility(View.VISIBLE);
+        mCreateAlarmButton.setVisibility(View.VISIBLE);
     }
 }

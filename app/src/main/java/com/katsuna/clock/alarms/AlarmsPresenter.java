@@ -6,10 +6,10 @@ import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.source.AlarmsDataSource;
 import com.katsuna.clock.util.EspressoIdlingResource;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -40,21 +40,11 @@ public class AlarmsPresenter implements AlarmsContract.Presenter {
     }
 
     @Override
-    public void result(int requestCode, int resultCode) {
-        // If a task was successfully added, show snackbar
-        /* not yet..
-        if (AddEditTaskActivity.REQUEST_ADD_TASK == requestCode && Activity.RESULT_OK == resultCode) {
-
-            mAlarmsView.showSuccessfullySavedMessage();
-        }
-        */
-    }
-
-    @Override
     public void loadDateTime() {
         Date now = new Date();
-        String time = new SimpleDateFormat("HH:mm").format(now);
-        String date = java.text.DateFormat.getDateInstance(DateFormat.SHORT).toString();
+        Locale locale = Locale.getDefault();
+        String time = new SimpleDateFormat("HH:mm", locale).format(now);
+        String date = new SimpleDateFormat("EEEE ,d MMMM", locale).format(now);
         mAlarmsView.showDateTime(time, date);
     }
 
@@ -74,21 +64,12 @@ public class AlarmsPresenter implements AlarmsContract.Presenter {
                     EspressoIdlingResource.decrement(); // Set app as idle.
                 }
 
-                // The view may not be able to handle UI updates anymore
-                if (!mAlarmsView.isActive()) {
-                    return;
-                }
-
                 mAlarmsView.showAlarms(alarms);
             }
 
             @Override
             public void onDataNotAvailable() {
-                // The view may not be able to handle UI updates anymore
-                if (!mAlarmsView.isActive()) {
-                    return;
-                }
-                mAlarmsView.showLoadingAlarmsError();
+                mAlarmsView.showNoAlarms();
             }
         });
     }

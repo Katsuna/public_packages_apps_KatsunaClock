@@ -10,16 +10,13 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for the implementation of {@link AlarmsPresenter}
@@ -55,9 +52,6 @@ public class AlarmsPresenterTest {
         // Get a reference to the class under test
         mAlarmsPresenter = new AlarmsPresenter(mAlarmsDataSource, mAlarmsView);
 
-        // The presenter won't update the view unless it's active.
-        when(mAlarmsView.isActive()).thenReturn(true);
-
         // We start the alarms to 3
         ALARMS = Lists.newArrayList(new Alarm(1, "Description1"),
                 new Alarm(2, "Description2"), new Alarm(3, "Description3"));
@@ -81,23 +75,6 @@ public class AlarmsPresenterTest {
 
         verify(mAlarmsDataSource).getAlarms(mLoadAlarmsCallbackCaptor.capture());
         mLoadAlarmsCallbackCaptor.getValue().onAlarmsLoaded(ALARMS);
-    }
-
-    @Test
-    public void startPresenterOnInactiveView_Returns() {
-        // The presenter won't update the view unless it's active.
-        when(mAlarmsView.isActive()).thenReturn(false);
-
-        // Get a reference to the class under test
-        mAlarmsPresenter = new AlarmsPresenter(mAlarmsDataSource, mAlarmsView);
-        mAlarmsPresenter.start();
-
-        // Callback is captured and invoked with stubbed alarms
-        verify(mAlarmsDataSource).getAlarms(mLoadAlarmsCallbackCaptor.capture());
-        mLoadAlarmsCallbackCaptor.getValue().onAlarmsLoaded(ALARMS);
-
-        // Then all alarms are shown in UI
-        verify(mAlarmsView, never()).showAlarms(Mockito.anyListOf(Alarm.class));
     }
 
     @Test
@@ -146,22 +123,7 @@ public class AlarmsPresenterTest {
         mLoadAlarmsCallbackCaptor.getValue().onDataNotAvailable();
 
         // Then an error message is shown
-        verify(mAlarmsView).showLoadingAlarmsError();
+        verify(mAlarmsView).showNoAlarms();
     }
 
-    @Test
-    public void unavailableAlarmsOnInactiveView_Returns() {
-        // The presenter won't update the view unless it's active.
-        when(mAlarmsView.isActive()).thenReturn(false);
-
-        // When alarms are loaded
-        mAlarmsPresenter.loadAlarms();
-
-        // And the alarms aren't available in the datasource
-        verify(mAlarmsDataSource).getAlarms(mLoadAlarmsCallbackCaptor.capture());
-        mLoadAlarmsCallbackCaptor.getValue().onDataNotAvailable();
-
-        // Then an error message is never shown
-        verify(mAlarmsView, never()).showLoadingAlarmsError();
-    }
 }

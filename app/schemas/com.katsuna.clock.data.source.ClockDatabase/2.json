@@ -1,0 +1,99 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "3132561c0b937ff0c2c1faab4f4b6d8b",
+    "entities": [
+      {
+        "tableName": "alarms",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`entryid` TEXT NOT NULL, `type` INTEGER NOT NULL, `hour` INTEGER NOT NULL, `minute` INTEGER NOT NULL, `description` TEXT, `monday_enabled` INTEGER NOT NULL, `tuesday_enabled` INTEGER NOT NULL, `wednesday_enabled` INTEGER NOT NULL, `thursday_enabled` INTEGER NOT NULL, `friday_enabled` INTEGER NOT NULL, `saturday_enabled` INTEGER NOT NULL, `sunday_enabled` INTEGER NOT NULL, PRIMARY KEY(`entryid`))",
+        "fields": [
+          {
+            "fieldPath": "mId",
+            "columnName": "entryid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mType",
+            "columnName": "type",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mHour",
+            "columnName": "hour",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mMinute",
+            "columnName": "minute",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mDescription",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mMondayEnabled",
+            "columnName": "monday_enabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mTuesdayEnabled",
+            "columnName": "tuesday_enabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mWednesdayEnabled",
+            "columnName": "wednesday_enabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mThursdayEnabled",
+            "columnName": "thursday_enabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mFridayEnabled",
+            "columnName": "friday_enabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mSaturdayEnabled",
+            "columnName": "saturday_enabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mSundayEnabled",
+            "columnName": "sunday_enabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "entryid"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"3132561c0b937ff0c2c1faab4f4b6d8b\")"
+    ]
+  }
+}

@@ -52,6 +52,7 @@ public class ManageAlarmPresenter implements ManageAlarmContract.Presenter, Alar
         if (isNewAlarm()) {
             throw new RuntimeException("populateAlarm() was called but task is new.");
         }
+        //noinspection ConstantConditions
         mAlarmsDataSource.getAlarm(mAlarmId, this);
     }
 

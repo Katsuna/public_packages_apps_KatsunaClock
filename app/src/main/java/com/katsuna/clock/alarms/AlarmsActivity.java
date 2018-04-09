@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.katsuna.clock.R;
@@ -15,6 +16,7 @@ import com.katsuna.clock.alarm.ManageAlarmActivity;
 import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.util.Injection;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -31,6 +33,28 @@ public class AlarmsActivity extends AppCompatActivity implements AlarmsContract.
     private TextView mNoAlarmsText;
     private Button mCreateAlarmButton;
     private FloatingActionButton mCreateAlarmFab;
+    private ListView mAlarmsList;
+    private AlarmsAdapter mAlarmsAdapter;
+
+    /**
+     * Listener for clicks on alarms in the ListView.
+     */
+    private final AlarmItemListener mItemListener = new AlarmItemListener() {
+        @Override
+        public void onAlarmEdit(Alarm alarm) {
+            //mPresenter.openTaskDetails(clickedTask);
+        }
+
+        @Override
+        public void onAlarmTurnOff(Alarm alarm) {
+            //mPresenter.completeTask(completedTask);
+        }
+
+        @Override
+        public void onAlarmDelete(Alarm alarm) {
+            mPresenter.deleteAlarm(alarm);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +86,10 @@ public class AlarmsActivity extends AppCompatActivity implements AlarmsContract.
                 launchManageActivity();
             }
         });
+
+        mAlarmsAdapter = new AlarmsAdapter(new ArrayList<Alarm>(0), mItemListener);
+        mAlarmsList = findViewById(R.id.alarms_list);
+        mAlarmsList.setAdapter(mAlarmsAdapter);
     }
 
     private void launchManageActivity() {
@@ -82,7 +110,11 @@ public class AlarmsActivity extends AppCompatActivity implements AlarmsContract.
 
     @Override
     public void showAlarms(List<Alarm> alarms) {
-        Log.e(TAG, "alarms fetched: " + alarms.size());
+        mAlarmsAdapter.replaceData(alarms);
+
+        mAlarmsList.setVisibility(View.VISIBLE);
+        mNoAlarmsText.setVisibility(View.GONE);
+        Log.d(TAG, "alarms fetched: " + alarms.size());
     }
 
     @Override
@@ -105,5 +137,10 @@ public class AlarmsActivity extends AppCompatActivity implements AlarmsContract.
     public void showNoAlarms() {
         mNoAlarmsText.setVisibility(View.VISIBLE);
         mCreateAlarmButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void removeAlarm(Alarm alarm) {
+        // TODO
     }
 }

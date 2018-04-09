@@ -25,6 +25,7 @@ interface AlarmsContract {
 
         void showNoAlarms();
 
+        void removeAlarm(Alarm alarm);
     }
 
     interface Presenter extends BasePresenter {
@@ -35,6 +36,10 @@ interface AlarmsContract {
 
         void addNewAlarm();
 
-        void openAlarmDetails(@NonNull Alarm requestedAlarm);
+        void openAlarmDetails(@NonNull Alarm alarm);
+
+        void deleteAlarm(@NonNull Alarm alarm);
+
+        void turnOffAlarm(@NonNull Alarm alarm);
     }
 }

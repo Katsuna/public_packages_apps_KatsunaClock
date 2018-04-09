@@ -2,6 +2,7 @@ package com.katsuna.clock.alarms;
 
 import com.google.common.collect.Lists;
 import com.katsuna.clock.data.Alarm;
+import com.katsuna.clock.data.AlarmType;
 import com.katsuna.clock.data.source.AlarmsDataSource;
 import com.katsuna.clock.data.source.AlarmsDataSource.LoadAlarmsCallback;
 
@@ -53,24 +54,19 @@ public class AlarmsPresenterTest {
         mAlarmsPresenter = new AlarmsPresenter(mAlarmsDataSource, mAlarmsView);
 
         // We start the alarms to 3
-        ALARMS = Lists.newArrayList(new Alarm(1, "Description1"),
-                new Alarm(2, "Description2"), new Alarm(3, "Description3"));
+        ALARMS = Lists.newArrayList(new Alarm(AlarmType.ALARM, "Description1"),
+                new Alarm(AlarmType.ALARM, "Description2"),
+                new Alarm(AlarmType.ALARM, "Description3"));
     }
 
     @Test
     public void createPresenter_setsThePresenterToView() {
-        // Get a reference to the class under test
-        mAlarmsPresenter = new AlarmsPresenter(mAlarmsDataSource, mAlarmsView);
-
         // Then the presenter is set to the view
         verify(mAlarmsView).setPresenter(mAlarmsPresenter);
     }
 
     @Test
     public void startPresenterLoadsAllAlarms() {
-        // Get a reference to the class under test
-        mAlarmsPresenter = new AlarmsPresenter(mAlarmsDataSource, mAlarmsView);
-
         mAlarmsPresenter.start();
 
         verify(mAlarmsDataSource).getAlarms(mLoadAlarmsCallbackCaptor.capture());
@@ -104,7 +100,7 @@ public class AlarmsPresenterTest {
     @Test
     public void clickOnTask_ShowsDetailUi() {
         // Given a stubbed active alarm
-        Alarm requestedAlarm = new Alarm(1, "Details Requested");
+        Alarm requestedAlarm = new Alarm(AlarmType.ALARM, "Details Requested");
 
         // When open alarm details is requested
         mAlarmsPresenter.openAlarmDetails(requestedAlarm);
@@ -126,4 +122,17 @@ public class AlarmsPresenterTest {
         verify(mAlarmsView).showNoAlarms();
     }
 
+    @Test
+    public void alarmDeletion_removesDeletedAlarm() {
+        // Given an initialized AlarmsPresenter with initialized alarms
+        // When loading of Alarms is requested
+        mAlarmsPresenter.loadAlarms();
+
+        // Callback is captured and invoked with stubbed alarms
+        verify(mAlarmsDataSource).getAlarms(mLoadAlarmsCallbackCaptor.capture());
+        mLoadAlarmsCallbackCaptor.getValue().onAlarmsLoaded(ALARMS);
+
+        mAlarmsPresenter.deleteAlarm(ALARMS.get(0));
+        verify(mAlarmsView).removeAlarm(ALARMS.get(0));
+    }
 }

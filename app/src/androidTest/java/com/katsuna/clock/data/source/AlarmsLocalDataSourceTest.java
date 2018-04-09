@@ -6,6 +6,7 @@ import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.katsuna.clock.data.Alarm;
+import com.katsuna.clock.data.AlarmType;
 import com.katsuna.clock.util.SingleExecutors;
 
 import org.junit.After;
@@ -59,7 +60,7 @@ public class AlarmsLocalDataSourceTest {
     @Test
     public void saveAlarm_retrievesTask() {
         // Given a new alarm
-        final Alarm newAlarm = new Alarm(1, "desc");
+        final Alarm newAlarm = new Alarm(AlarmType.ALARM, "desc");
 
         // When saved into the persistent repository
         mLocalDataSource.saveAlarm(newAlarm);
@@ -81,9 +82,9 @@ public class AlarmsLocalDataSourceTest {
     @Test
     public void getTasks_retrieveSavedTasks() {
         // Given 2 new alarms in the persistent repository
-        final Alarm newAlarm1 = new Alarm(1, "desc1");
+        final Alarm newAlarm1 = new Alarm(AlarmType.ALARM, "desc1");
         mLocalDataSource.saveAlarm(newAlarm1);
-        final Alarm newAlarm2 = new Alarm(2, "desc2");
+        final Alarm newAlarm2 = new Alarm(AlarmType.ALARM, "desc2");
         mLocalDataSource.saveAlarm(newAlarm2);
 
         // Then the alarms can be retrieved from the persistent repository

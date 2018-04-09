@@ -1,6 +1,7 @@
 package com.katsuna.clock.alarm;
 
 import com.katsuna.clock.data.Alarm;
+import com.katsuna.clock.data.AlarmType;
 import com.katsuna.clock.data.source.AlarmsDataSource;
 
 import org.junit.Before;
@@ -52,7 +53,7 @@ public class ManageAlarmPresenterTest {
         mManageAlarmPresenter = new ManageAlarmPresenter(null, mAlarmsDataSource, mManageAlarmView);
 
         // When the presenter is asked to save an alarm
-        Alarm alarm = new Alarm(1, "desc");
+        Alarm alarm = new Alarm(AlarmType.ALARM, "desc");
         mManageAlarmPresenter.saveAlarm(alarm);
 
         // Then a task is saved in the repository and the view updated
@@ -66,7 +67,7 @@ public class ManageAlarmPresenterTest {
         mManageAlarmPresenter = new ManageAlarmPresenter("1", mAlarmsDataSource, mManageAlarmView);
 
         // When the presenter is asked to save an existing task
-        mManageAlarmPresenter.saveAlarm(new Alarm(1, "desc"));
+        mManageAlarmPresenter.saveAlarm(new Alarm(AlarmType.ALARM, "desc"));
 
         // Then a task is saved in the repository and the view updated
         verify(mAlarmsDataSource).saveAlarm(any(Alarm.class)); // saved to the model
@@ -75,7 +76,7 @@ public class ManageAlarmPresenterTest {
 
     @Test
     public void populateAlarm_callsDataSourceAndUpdatesView() {
-        Alarm testAlarm = new Alarm(1, "DESCRIPTION");
+        Alarm testAlarm = new Alarm(AlarmType.ALARM, "DESCRIPTION");
         // Get a reference to the class under test
         mManageAlarmPresenter = new ManageAlarmPresenter(testAlarm.getId(), mAlarmsDataSource,
                 mManageAlarmView);

@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.katsuna.clock.R;
 import com.katsuna.clock.data.Alarm;
+import com.katsuna.clock.data.AlarmType;
 import com.katsuna.clock.data.source.AlarmsDataSource;
 import com.katsuna.clock.util.Injection;
 
@@ -48,7 +49,7 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
     // TODO: remove this
     public void createNewAlarm(View view) {
         AlarmsDataSource dataSource = Injection.provideAlarmsDataSource(this);
-        dataSource.saveAlarm(new Alarm(1, "desc 1"));
+        dataSource.saveAlarm(new Alarm(AlarmType.ALARM, "desc 1"));
     }
 
     // TODO: remove this

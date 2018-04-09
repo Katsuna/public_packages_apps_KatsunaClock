@@ -7,7 +7,7 @@ import android.content.Context;
 
 import com.katsuna.clock.data.Alarm;
 
-@Database(entities = {Alarm.class}, version = 2)
+@Database(entities = {Alarm.class}, version = 3)
 public abstract class ClockDatabase extends RoomDatabase {
 
     private static final Object sLock = new Object();

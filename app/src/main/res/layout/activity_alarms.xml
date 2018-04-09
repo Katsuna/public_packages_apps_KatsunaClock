@@ -10,12 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ScrollView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorAccent">
 
             <LinearLayout
+                android:id="@+id/date_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -49,16 +50,19 @@
                     android:textSize="20sp"
                     android:visibility="gone" />
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/alarms_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="4dp"
-                    android:clipToPadding="false" />
-
             </LinearLayout>
 
-        </ScrollView>
+            <ListView
+                android:id="@+id/alarms_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/date_container"
+                android:clipToPadding="false"
+                android:divider="@color/common_transparent"
+                android:dividerHeight="0dp"
+                android:paddingBottom="80dp" />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/dial_buttons_container"

@@ -4,11 +4,14 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.common.base.Objects;
 import com.google.gson.Gson;
+import com.katsuna.clock.data.source.converters.AlarmStatusConverter;
+import com.katsuna.clock.data.source.converters.AlarmTypeConverter;
 
 import java.util.UUID;
 
@@ -22,7 +25,8 @@ public final class Alarm {
 
     @NonNull
     @ColumnInfo(name = "type")
-    private final Integer mType;
+    @TypeConverters(AlarmTypeConverter.class)
+    private final AlarmType mAlarmType;
 
     @NonNull
     @ColumnInfo(name = "hour")
@@ -57,23 +61,28 @@ public final class Alarm {
     @ColumnInfo(name = "sunday_enabled")
     private final boolean mSundayEnabled;
 
+    @NonNull
+    @ColumnInfo(name = "status")
+    @TypeConverters(AlarmStatusConverter.class)
+    private final AlarmStatus mAlarmStatus;
 
     /**
      * Use this constructor to create easily a new active Alarm without day recurrence.
+     * All the other alarm values get the default one.
      *
-     * @param type        type of the alarm
+     * @param alarmType   type of the alarm
      * @param description description of the alarm
      */
     @Ignore
-    public Alarm(@NonNull Integer type, @Nullable String description) {
-        this(UUID.randomUUID().toString(), 0, 0, type, description, false, false, false, false,
-                false, false, false);
+    public Alarm(@NonNull AlarmType alarmType, @Nullable String description) {
+        this(UUID.randomUUID().toString(), AlarmType.ALARM, 0, 0, description, false, false, false,
+                false, false, false, false, AlarmStatus.ACTIVE);
     }
 
     /**
      * Use this constructor to create a new active Alarm.
      *
-     * @param type             type of the alarm
+     * @param alarmType        type of the alarm
      * @param hour             hour of the alarm
      * @param minute           minute of the alarm
      * @param description      description of the alarm
@@ -84,21 +93,22 @@ public final class Alarm {
      * @param fridayEnabled    enable flag for friday
      * @param saturdayEnabled  enable flag for saturday
      * @param sundayEnabled    enable flag for sunday
+     * @param alarmStatus      status of the alarm
      */
     @Ignore
-    public Alarm(@NonNull Integer type, @Nullable String description, @NonNull Integer hour,
+    public Alarm(@NonNull AlarmType alarmType, @Nullable String description, @NonNull Integer hour,
                  @NonNull Integer minute, boolean mondayEnabled, boolean tuesdayEnabled,
                  boolean wednesdayEnabled, boolean thursdayEnabled, boolean fridayEnabled,
-                 boolean saturdayEnabled, boolean sundayEnabled) {
-        this(UUID.randomUUID().toString(), type, hour, minute, description, mondayEnabled,
+                 boolean saturdayEnabled, boolean sundayEnabled, AlarmStatus alarmStatus) {
+        this(UUID.randomUUID().toString(), alarmType, hour, minute, description, mondayEnabled,
                 tuesdayEnabled, wednesdayEnabled, thursdayEnabled, fridayEnabled, saturdayEnabled,
-                sundayEnabled);
+                sundayEnabled, alarmStatus);
     }
 
 
     /**
      * @param id               id of the alarm
-     * @param type             type of the alarm
+     * @param alarmType        type of the alarm
      * @param hour             hour of the alarm
      * @param minute           minute of the alarm
      * @param description      description of the alarm
@@ -109,13 +119,15 @@ public final class Alarm {
      * @param fridayEnabled    enable flag for friday
      * @param saturdayEnabled  enable flag for saturday
      * @param sundayEnabled    enable flag for sunday
+     * @param alarmStatus      status of the alarm
      */
-    public Alarm(@NonNull String id, @NonNull Integer type, @NonNull Integer hour,
-                 @NonNull Integer minute,@Nullable String description, boolean mondayEnabled,
+    public Alarm(@NonNull String id, @NonNull AlarmType alarmType, @NonNull Integer hour,
+                 @NonNull Integer minute, @Nullable String description, boolean mondayEnabled,
                  boolean tuesdayEnabled, boolean wednesdayEnabled, boolean thursdayEnabled,
-                 boolean fridayEnabled, boolean saturdayEnabled, boolean sundayEnabled) {
+                 boolean fridayEnabled, boolean saturdayEnabled, boolean sundayEnabled,
+                 @NonNull AlarmStatus alarmStatus) {
         mId = id;
-        mType = type;
+        mAlarmType = alarmType;
         mHour = hour;
         mMinute = minute;
         mDescription = description;
@@ -126,6 +138,7 @@ public final class Alarm {
         mFridayEnabled = fridayEnabled;
         mSaturdayEnabled = saturdayEnabled;
         mSundayEnabled = sundayEnabled;
+        mAlarmStatus = alarmStatus;
     }
 
     @NonNull
@@ -134,8 +147,8 @@ public final class Alarm {
     }
 
     @NonNull
-    public Integer getType() {
-        return mType;
+    public AlarmType getAlarmType() {
+        return mAlarmType;
     }
 
     @NonNull
@@ -181,13 +194,20 @@ public final class Alarm {
         return mSundayEnabled;
     }
 
+    @NonNull
+    public AlarmStatus getAlarmStatus() {
+        return mAlarmStatus;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Alarm alarm = (Alarm) o;
         return Objects.equal(mId, alarm.mId) &&
-                Objects.equal(mType, alarm.mType) &&
+                Objects.equal(mAlarmType, alarm.mAlarmType) &&
+                Objects.equal(mHour, alarm.mHour) &&
+                Objects.equal(mMinute, alarm.mMinute) &&
                 Objects.equal(mDescription, alarm.mDescription) &&
                 Objects.equal(mMondayEnabled, alarm.mMondayEnabled) &&
                 Objects.equal(mTuesdayEnabled, alarm.mTuesdayEnabled) &&
@@ -195,7 +215,8 @@ public final class Alarm {
                 Objects.equal(mThursdayEnabled, alarm.mThursdayEnabled) &&
                 Objects.equal(mFridayEnabled, alarm.mFridayEnabled) &&
                 Objects.equal(mSaturdayEnabled, alarm.mSaturdayEnabled) &&
-                Objects.equal(mSundayEnabled, alarm.mSundayEnabled);
+                Objects.equal(mSundayEnabled, alarm.mSundayEnabled) &&
+                Objects.equal(mAlarmStatus, alarm.mAlarmStatus);
     }
 
     @Override

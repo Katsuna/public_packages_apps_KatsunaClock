@@ -5,6 +5,8 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.katsuna.clock.data.Alarm;
+import com.katsuna.clock.data.AlarmStatus;
+import com.katsuna.clock.data.AlarmType;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,8 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class AlarmDaoTest {
 
-    private static final Alarm ALARM = new Alarm(1, "description", true, true, true, true, true,
-            false, false);
+    private static final Alarm ALARM = new Alarm(AlarmType.ALARM, "description");
 
     private ClockDatabase mDatabase;
 
@@ -51,8 +52,8 @@ public class AlarmDaoTest {
         mDatabase.alarmsDao().insertAlarm(ALARM);
 
         // When an alarm with the same id is inserted
-        Alarm newAlarm = new Alarm(ALARM.getId(), 2, "description2", false, false, false, false,
-                false, false, false);
+        Alarm newAlarm = new Alarm(ALARM.getId(), AlarmType.ALARM, 0, 0, "description2", false,
+                false, false, false, false, false, false, AlarmStatus.ACTIVE);
         mDatabase.alarmsDao().insertAlarm(newAlarm);
 
         // When getting the alarm by id from the database
@@ -68,8 +69,8 @@ public class AlarmDaoTest {
         mDatabase.alarmsDao().insertAlarm(ALARM);
 
         // When the alarm is updated
-        Alarm updatedAlarm = new Alarm(ALARM.getId(), 2, "description2", false, false, false, false,
-                false, false, false);
+        Alarm updatedAlarm = new Alarm(ALARM.getId(), AlarmType.ALARM, 0, 0, "description2", false,
+                false, false, false, false, false, false, AlarmStatus.ACTIVE);
         mDatabase.alarmsDao().updateAlarm(updatedAlarm);
 
         // When getting the alarm by id from the database

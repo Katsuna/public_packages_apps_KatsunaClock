@@ -22,8 +22,6 @@ public interface AlarmsDataSource {
 
     void deleteAlarm(@NonNull String alarmId);
 
-    void deleteAlarms();
-
     interface LoadAlarmsCallback {
 
         void onAlarmsLoaded(List<Alarm> alarms);

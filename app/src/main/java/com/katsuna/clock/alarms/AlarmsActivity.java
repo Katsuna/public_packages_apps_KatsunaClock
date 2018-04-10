@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.katsuna.clock.R;
 import com.katsuna.clock.alarm.ManageAlarmActivity;
 import com.katsuna.clock.data.Alarm;
+import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.util.Injection;
 
 import java.util.ArrayList;
@@ -28,6 +29,30 @@ public class AlarmsActivity extends AppCompatActivity implements AlarmsContract.
 
     private static final String TAG = "AlarmsActivity";
     private AlarmsContract.Presenter mPresenter;
+    /**
+     * Listener for clicks on alarms in the ListView.
+     */
+    private final AlarmItemListener mItemListener = new AlarmItemListener() {
+        @Override
+        public void onAlarmFocus(@NonNull Alarm alarm, boolean focus) {
+            mPresenter.focusOnAlarm(alarm, focus);
+        }
+
+        @Override
+        public void onAlarmEdit(@NonNull Alarm alarm) {
+            //mPresenter.openTaskDetails(clickedTask);
+        }
+
+        @Override
+        public void onAlarmStatusUpdate(@NonNull Alarm alarm, @NonNull AlarmStatus alarmStatus) {
+            mPresenter.updateAlarmStatus(alarm, alarmStatus);
+        }
+
+        @Override
+        public void onAlarmDelete(@NonNull Alarm alarm) {
+            mPresenter.deleteAlarm(alarm);
+        }
+    };
     private TextView mTime;
     private TextView mDate;
     private TextView mNoAlarmsText;
@@ -35,26 +60,6 @@ public class AlarmsActivity extends AppCompatActivity implements AlarmsContract.
     private FloatingActionButton mCreateAlarmFab;
     private ListView mAlarmsList;
     private AlarmsAdapter mAlarmsAdapter;
-
-    /**
-     * Listener for clicks on alarms in the ListView.
-     */
-    private final AlarmItemListener mItemListener = new AlarmItemListener() {
-        @Override
-        public void onAlarmEdit(Alarm alarm) {
-            //mPresenter.openTaskDetails(clickedTask);
-        }
-
-        @Override
-        public void onAlarmTurnOff(Alarm alarm) {
-            //mPresenter.completeTask(completedTask);
-        }
-
-        @Override
-        public void onAlarmDelete(Alarm alarm) {
-            mPresenter.deleteAlarm(alarm);
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,10 +142,17 @@ public class AlarmsActivity extends AppCompatActivity implements AlarmsContract.
     public void showNoAlarms() {
         mNoAlarmsText.setVisibility(View.VISIBLE);
         mCreateAlarmButton.setVisibility(View.VISIBLE);
+        mAlarmsList.setVisibility(View.GONE);
     }
 
     @Override
-    public void removeAlarm(Alarm alarm) {
-        // TODO
+    public void focusOnAlarm(Alarm alarm, boolean focus) {
+        mAlarmsAdapter.focusOnAlarm(alarm, focus);
     }
+
+    @Override
+    public void reloadAlarm(Alarm alarm) {
+        mAlarmsAdapter.reloadAlarm(alarm);
+    }
+
 }

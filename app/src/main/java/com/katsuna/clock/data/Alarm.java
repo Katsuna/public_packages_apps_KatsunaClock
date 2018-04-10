@@ -4,14 +4,11 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.common.base.Objects;
 import com.google.gson.Gson;
-import com.katsuna.clock.data.source.converters.AlarmStatusConverter;
-import com.katsuna.clock.data.source.converters.AlarmTypeConverter;
 
 import java.util.UUID;
 
@@ -25,7 +22,6 @@ public final class Alarm {
 
     @NonNull
     @ColumnInfo(name = "type")
-    @TypeConverters(AlarmTypeConverter.class)
     private final AlarmType mAlarmType;
 
     @NonNull
@@ -63,8 +59,7 @@ public final class Alarm {
 
     @NonNull
     @ColumnInfo(name = "status")
-    @TypeConverters(AlarmStatusConverter.class)
-    private final AlarmStatus mAlarmStatus;
+    private AlarmStatus mAlarmStatus = AlarmStatus.ACTIVE;
 
     /**
      * Use this constructor to create easily a new active Alarm without day recurrence.
@@ -75,36 +70,9 @@ public final class Alarm {
      */
     @Ignore
     public Alarm(@NonNull AlarmType alarmType, @Nullable String description) {
-        this(UUID.randomUUID().toString(), AlarmType.ALARM, 0, 0, description, false, false, false,
+        this(UUID.randomUUID().toString(), alarmType, 0, 0, description, false, false, false,
                 false, false, false, false, AlarmStatus.ACTIVE);
     }
-
-    /**
-     * Use this constructor to create a new active Alarm.
-     *
-     * @param alarmType        type of the alarm
-     * @param hour             hour of the alarm
-     * @param minute           minute of the alarm
-     * @param description      description of the alarm
-     * @param mondayEnabled    enable flag for monday
-     * @param tuesdayEnabled   enable flag for tuesday
-     * @param wednesdayEnabled enable flag for wednesday
-     * @param thursdayEnabled  enable flag for thursday
-     * @param fridayEnabled    enable flag for friday
-     * @param saturdayEnabled  enable flag for saturday
-     * @param sundayEnabled    enable flag for sunday
-     * @param alarmStatus      status of the alarm
-     */
-    @Ignore
-    public Alarm(@NonNull AlarmType alarmType, @Nullable String description, @NonNull Integer hour,
-                 @NonNull Integer minute, boolean mondayEnabled, boolean tuesdayEnabled,
-                 boolean wednesdayEnabled, boolean thursdayEnabled, boolean fridayEnabled,
-                 boolean saturdayEnabled, boolean sundayEnabled, AlarmStatus alarmStatus) {
-        this(UUID.randomUUID().toString(), alarmType, hour, minute, description, mondayEnabled,
-                tuesdayEnabled, wednesdayEnabled, thursdayEnabled, fridayEnabled, saturdayEnabled,
-                sundayEnabled, alarmStatus);
-    }
-
 
     /**
      * @param id               id of the alarm
@@ -197,6 +165,10 @@ public final class Alarm {
     @NonNull
     public AlarmStatus getAlarmStatus() {
         return mAlarmStatus;
+    }
+
+    public void setAlarmStatus(@NonNull AlarmStatus alarmStatus) {
+        this.mAlarmStatus = alarmStatus;
     }
 
     @Override

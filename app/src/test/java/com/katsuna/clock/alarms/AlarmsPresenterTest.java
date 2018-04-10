@@ -2,6 +2,7 @@ package com.katsuna.clock.alarms;
 
 import com.google.common.collect.Lists;
 import com.katsuna.clock.data.Alarm;
+import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.data.AlarmType;
 import com.katsuna.clock.data.source.AlarmsDataSource;
 import com.katsuna.clock.data.source.AlarmsDataSource.LoadAlarmsCallback;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -123,7 +125,7 @@ public class AlarmsPresenterTest {
     }
 
     @Test
-    public void alarmDeletion_removesDeletedAlarm() {
+    public void alarmDeletion() {
         // Given an initialized AlarmsPresenter with initialized alarms
         // When loading of Alarms is requested
         mAlarmsPresenter.loadAlarms();
@@ -132,7 +134,46 @@ public class AlarmsPresenterTest {
         verify(mAlarmsDataSource).getAlarms(mLoadAlarmsCallbackCaptor.capture());
         mLoadAlarmsCallbackCaptor.getValue().onAlarmsLoaded(ALARMS);
 
+        // Delete first alarm
         mAlarmsPresenter.deleteAlarm(ALARMS.get(0));
-        verify(mAlarmsView).removeAlarm(ALARMS.get(0));
+
+        // Verify actions taken by the presenter
+        verify(mAlarmsDataSource).deleteAlarm(ALARMS.get(0).getId());
+        verify(mAlarmsView).showAlarms(anyListOf(Alarm.class));
+    }
+
+    @Test
+    public void alarmDeactivation() {
+        // Given an initialized AlarmsPresenter with initialized alarms
+        // When loading of Alarms is requested
+        mAlarmsPresenter.loadAlarms();
+
+        // Callback is captured and invoked with stubbed alarms
+        verify(mAlarmsDataSource).getAlarms(mLoadAlarmsCallbackCaptor.capture());
+        mLoadAlarmsCallbackCaptor.getValue().onAlarmsLoaded(ALARMS);
+
+        // Update alarm status
+        mAlarmsPresenter.updateAlarmStatus(ALARMS.get(0), AlarmStatus.INACTIVE);
+
+        // Verify actions taken by the presenter
+        verify(mAlarmsDataSource).saveAlarm(ALARMS.get(0));
+        verify(mAlarmsView).reloadAlarm(ALARMS.get(0));
+    }
+
+    @Test
+    public void alarmFocus() {
+        // Given an initialized AlarmsPresenter with initialized alarms
+        // When loading of Alarms is requested
+        mAlarmsPresenter.loadAlarms();
+
+        // Callback is captured and invoked with stubbed alarms
+        verify(mAlarmsDataSource).getAlarms(mLoadAlarmsCallbackCaptor.capture());
+        mLoadAlarmsCallbackCaptor.getValue().onAlarmsLoaded(ALARMS);
+
+        // Focus on second alarm
+        mAlarmsPresenter.focusOnAlarm(ALARMS.get(1), true);
+
+        // Verify actions taken by the presenter
+        verify(mAlarmsView).focusOnAlarm(ALARMS.get(1), true);
     }
 }

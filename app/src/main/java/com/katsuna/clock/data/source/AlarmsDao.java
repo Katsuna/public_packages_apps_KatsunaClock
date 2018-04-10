@@ -4,12 +4,9 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
-import android.arch.persistence.room.TypeConverters;
 import android.arch.persistence.room.Update;
 
 import com.katsuna.clock.data.Alarm;
-import com.katsuna.clock.data.AlarmStatus;
-import com.katsuna.clock.data.source.converters.AlarmStatusConverter;
 
 import java.util.List;
 
@@ -51,16 +48,6 @@ public interface AlarmsDao {
     int updateAlarm(Alarm alarm);
 
     /**
-     * Update the status of an alarm
-     *
-     * @param alarmId id of the task
-     * @param status  status to be updated
-     */
-    @Query("UPDATE alarms SET status = :status WHERE entryid = :alarmId")
-    @TypeConverters(AlarmStatusConverter.class)
-    void updateStatus(String alarmId, AlarmStatus status);
-
-    /**
      * Delete an alarm by id.
      *
      * @return the number of alarms deleted. This should always be 1.
@@ -68,11 +55,4 @@ public interface AlarmsDao {
     @Query("DELETE FROM alarms WHERE entryid = :alarmId")
     int deleteAlarmById(String alarmId);
 
-    /**
-     * Delete an alarms.
-     *
-     * @return the number of alarms deleted.
-     */
-    @Query("DELETE FROM alarms")
-    int deleteAlarms();
 }

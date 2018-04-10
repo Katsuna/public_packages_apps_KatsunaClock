@@ -28,7 +28,7 @@ public class AlarmsLocalDataSource implements AlarmsDataSource {
     }
 
     public static AlarmsLocalDataSource getInstance(@NonNull AppExecutors appExecutors,
-            @NonNull AlarmsDao alarmsDao) {
+                                                    @NonNull AlarmsDao alarmsDao) {
         if (INSTANCE == null) {
             synchronized (AlarmsLocalDataSource.class) {
                 if (INSTANCE == null) {
@@ -37,6 +37,11 @@ public class AlarmsLocalDataSource implements AlarmsDataSource {
             }
         }
         return INSTANCE;
+    }
+
+    @VisibleForTesting
+    static void clearInstance() {
+        INSTANCE = null;
     }
 
     /**
@@ -116,20 +121,4 @@ public class AlarmsLocalDataSource implements AlarmsDataSource {
         mAppExecutors.diskIO().execute(deleteRunnable);
     }
 
-    @Override
-    public void deleteAlarms() {
-        Runnable deleteRunnable = new Runnable() {
-            @Override
-            public void run() {
-                mAlarmsDao.deleteAlarms();
-            }
-        };
-
-        mAppExecutors.diskIO().execute(deleteRunnable);
-    }
-
-    @VisibleForTesting
-    static void clearInstance() {
-        INSTANCE = null;
-    }
 }

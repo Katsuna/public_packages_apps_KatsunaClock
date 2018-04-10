@@ -78,12 +78,12 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/call_buttons_container"
+                android:id="@+id/alarm_buttons_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/alarm_details_container"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <View
                     android:layout_width="match_parent"

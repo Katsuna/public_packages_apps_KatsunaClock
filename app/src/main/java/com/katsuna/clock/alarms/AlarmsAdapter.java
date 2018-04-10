@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.katsuna.clock.R;
 import com.katsuna.clock.data.Alarm;
+import com.katsuna.clock.data.AlarmStatus;
 
 import java.util.List;
 
@@ -17,11 +18,26 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class AlarmsAdapter extends BaseAdapter {
 
     private List<Alarm> mAlarms;
+    private Alarm mAlarmFocused;
     private final AlarmItemListener mItemListener;
 
-    public AlarmsAdapter(List<Alarm> tasks, AlarmItemListener itemListener) {
+    AlarmsAdapter(List<Alarm> tasks, AlarmItemListener itemListener) {
         setList(tasks);
         mItemListener = itemListener;
+    }
+
+    public void focusOnAlarm(Alarm alarm, boolean focus) {
+        mAlarmFocused = focus ? alarm : null;
+        notifyDataSetChanged();
+    }
+
+    public void reloadAlarm(Alarm alarm) {
+        int itemIndex = mAlarms.indexOf(alarm);
+        if (itemIndex != -1) {
+            mAlarms.set(itemIndex, alarm);
+        }
+
+        notifyDataSetChanged();
     }
 
     public void replaceData(List<Alarm> alarms) {
@@ -65,7 +81,22 @@ public class AlarmsAdapter extends BaseAdapter {
         description.setText(alarm.getDescription());
 
         TextView days = rowView.findViewById(R.id.alarm_description);
-        days.setText(alarm.getDescription());
+        days.setText(alarm.getDescription() + alarm.getAlarmStatus());
+
+        View alarmCardInner = rowView.findViewById(R.id.alarm_container_card_inner);
+        alarmCardInner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mItemListener.onAlarmFocus(alarm, !alarm.equals(mAlarmFocused));
+            }
+        });
+
+        View actionsContainer = rowView.findViewById(R.id.alarm_buttons_container);
+        if (alarm.equals(mAlarmFocused)) {
+            actionsContainer.setVisibility(View.VISIBLE);
+        } else {
+            actionsContainer.setVisibility(View.GONE);
+        }
 
         Button editButton = rowView.findViewById(R.id.button_edit);
         editButton.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +110,11 @@ public class AlarmsAdapter extends BaseAdapter {
         turnOffButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mItemListener.onAlarmTurnOff(alarm);
+                if (alarm.getAlarmStatus() == AlarmStatus.ACTIVE) {
+                    mItemListener.onAlarmStatusUpdate(alarm, AlarmStatus.INACTIVE);
+                } else {
+                    mItemListener.onAlarmStatusUpdate(alarm, AlarmStatus.ACTIVE);
+                }
             }
         });
 

@@ -3,6 +3,7 @@ package com.katsuna.clock.alarms;
 import android.support.annotation.NonNull;
 
 import com.katsuna.clock.data.Alarm;
+import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.data.source.AlarmsDataSource;
 import com.katsuna.clock.util.EspressoIdlingResource;
 
@@ -25,8 +26,8 @@ public class AlarmsPresenter implements AlarmsContract.Presenter {
     @NonNull
     private final AlarmsContract.View mAlarmsView;
 
-    public AlarmsPresenter(@NonNull AlarmsDataSource alarmsDataSource,
-                           @NonNull AlarmsContract.View alarmsView) {
+    AlarmsPresenter(@NonNull AlarmsDataSource alarmsDataSource,
+                    @NonNull AlarmsContract.View alarmsView) {
         mAlarmsDataSource = checkNotNull(alarmsDataSource, "dataSource cannot be null");
         mAlarmsView = checkNotNull(alarmsView, "alarmsView cannot be null!");
 
@@ -86,11 +87,18 @@ public class AlarmsPresenter implements AlarmsContract.Presenter {
     @Override
     public void deleteAlarm(@NonNull Alarm alarm) {
         mAlarmsDataSource.deleteAlarm(alarm.getId());
-        mAlarmsView.removeAlarm(alarm);
+        loadAlarms();
     }
 
     @Override
-    public void turnOffAlarm(@NonNull Alarm alarm) {
+    public void updateAlarmStatus(@NonNull Alarm alarm, @NonNull AlarmStatus alarmStatus) {
+        alarm.setAlarmStatus(alarmStatus);
+        mAlarmsDataSource.saveAlarm(alarm);
+        mAlarmsView.reloadAlarm(alarm);
+    }
 
+    @Override
+    public void focusOnAlarm(@NonNull Alarm alarm, boolean focus) {
+        mAlarmsView.focusOnAlarm(alarm, focus);
     }
 }

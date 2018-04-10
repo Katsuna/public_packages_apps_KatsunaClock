@@ -52,10 +52,4 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
         dataSource.saveAlarm(new Alarm(AlarmType.ALARM, "desc 1"));
     }
 
-    // TODO: remove this
-    public void deleteAllAlarms(View view) {
-        AlarmsDataSource dataSource = Injection.provideAlarmsDataSource(this);
-        dataSource.deleteAlarms();
-    }
-
 }

@@ -1,8 +1,15 @@
 package com.katsuna.clock.alarm;
 
+import android.support.annotation.NonNull;
+
 import com.katsuna.clock.BasePresenter;
 import com.katsuna.clock.BaseView;
 import com.katsuna.clock.data.Alarm;
+import com.katsuna.clock.data.AlarmStatus;
+import com.katsuna.clock.data.AlarmType;
+import com.katsuna.clock.validators.ValidationResult;
+
+import java.util.List;
 
 class ManageAlarmContract {
 
@@ -11,14 +18,17 @@ class ManageAlarmContract {
 
         void showAlarmsList();
 
-        void setTitle(String title);
+        void loadAlarm(Alarm alarm);
 
-        void setDescription(String description);
+        void showValidationResults(List<ValidationResult> results);
     }
 
     interface Presenter extends BasePresenter {
 
-        void saveAlarm(Alarm alarm);
+        void saveAlarm(@NonNull AlarmType alarmType, String hour, String minute, String description,
+                       boolean mondayEnabled, boolean tuesdayEnabled, boolean wednesdayEnabled,
+                       boolean thursdayEnabled, boolean fridayEnabled, boolean saturdayEnabled,
+                       boolean sundayEnabled, @NonNull AlarmStatus alarmStatus);
 
         void populateAlarm();
 

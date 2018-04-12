@@ -1,6 +1,7 @@
 package com.katsuna.clock.alarm;
 
 import com.katsuna.clock.data.Alarm;
+import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.data.AlarmType;
 import com.katsuna.clock.data.source.AlarmsDataSource;
 
@@ -53,10 +54,10 @@ public class ManageAlarmPresenterTest {
         mManageAlarmPresenter = new ManageAlarmPresenter(null, mAlarmsDataSource, mManageAlarmView);
 
         // When the presenter is asked to save an alarm
-        Alarm alarm = new Alarm(AlarmType.ALARM, "desc");
-        mManageAlarmPresenter.saveAlarm(alarm);
+        mManageAlarmPresenter.saveAlarm(AlarmType.ALARM, "12", "30", "desc", false, false, false,
+                false, false, false, false, AlarmStatus.ACTIVE);
 
-        // Then a task is saved in the repository and the view updated
+        // Then an alarm is saved in the repository and the view updated
         verify(mAlarmsDataSource).saveAlarm(any(Alarm.class)); // saved to the model
         verify(mManageAlarmView).showAlarmsList(); // shown in the UI
     }
@@ -67,7 +68,8 @@ public class ManageAlarmPresenterTest {
         mManageAlarmPresenter = new ManageAlarmPresenter("1", mAlarmsDataSource, mManageAlarmView);
 
         // When the presenter is asked to save an existing task
-        mManageAlarmPresenter.saveAlarm(new Alarm(AlarmType.ALARM, "desc"));
+        mManageAlarmPresenter.saveAlarm(AlarmType.ALARM, "12", "30", "desc", false, false, false,
+                false, false, false, false, AlarmStatus.ACTIVE);
 
         // Then a task is saved in the repository and the view updated
         verify(mAlarmsDataSource).saveAlarm(any(Alarm.class)); // saved to the model
@@ -91,8 +93,7 @@ public class ManageAlarmPresenterTest {
         // Simulate callback
         mGetAlarmCallbackCaptor.getValue().onAlarmLoaded(testAlarm);
 
-        //verify(mManageAlarmView).setTitle(testAlarm.getTitle());
-        verify(mManageAlarmView).setDescription(testAlarm.getDescription());
+        verify(mManageAlarmView).loadAlarm(testAlarm);
         assertThat(mManageAlarmPresenter.isDataMissing(), is(false));
     }
 

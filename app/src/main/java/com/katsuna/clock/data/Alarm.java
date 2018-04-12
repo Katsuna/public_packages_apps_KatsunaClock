@@ -75,6 +75,33 @@ public final class Alarm {
     }
 
     /**
+     * Use this constructor to create new Alarm
+     *
+     * @param alarmType        type of the alarm
+     * @param hour             hour of the alarm
+     * @param minute           minute of the alarm
+     * @param description      description of the alarm
+     * @param mondayEnabled    enable flag for monday
+     * @param tuesdayEnabled   enable flag for tuesday
+     * @param wednesdayEnabled enable flag for wednesday
+     * @param thursdayEnabled  enable flag for thursday
+     * @param fridayEnabled    enable flag for friday
+     * @param saturdayEnabled  enable flag for saturday
+     * @param sundayEnabled    enable flag for sunday
+     * @param alarmStatus      status of the alarm
+     */
+    @Ignore
+    public Alarm(@NonNull AlarmType alarmType, @NonNull Integer hour,
+                 @NonNull Integer minute, @Nullable String description, boolean mondayEnabled,
+                 boolean tuesdayEnabled, boolean wednesdayEnabled, boolean thursdayEnabled,
+                 boolean fridayEnabled, boolean saturdayEnabled, boolean sundayEnabled,
+                 @NonNull AlarmStatus alarmStatus) {
+        this(UUID.randomUUID().toString(), alarmType, hour, minute, description, mondayEnabled,
+                tuesdayEnabled, wednesdayEnabled, thursdayEnabled, fridayEnabled, saturdayEnabled,
+                sundayEnabled, alarmStatus);
+    }
+
+    /**
      * @param id               id of the alarm
      * @param alarmType        type of the alarm
      * @param hour             hour of the alarm

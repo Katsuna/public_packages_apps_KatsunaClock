@@ -4,11 +4,18 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.katsuna.clock.data.Alarm;
+import com.katsuna.clock.data.AlarmStatus;
+import com.katsuna.clock.data.AlarmType;
 import com.katsuna.clock.data.source.AlarmsDataSource;
+import com.katsuna.clock.validators.AlarmValidator;
+import com.katsuna.clock.validators.ValidationResult;
+
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class ManageAlarmPresenter implements ManageAlarmContract.Presenter, AlarmsDataSource.GetAlarmCallback {
+public class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
+        AlarmsDataSource.GetAlarmCallback {
 
     @NonNull
     private final AlarmsDataSource mAlarmsDataSource;
@@ -39,11 +46,30 @@ public class ManageAlarmPresenter implements ManageAlarmContract.Presenter, Alar
     }
 
     @Override
-    public void saveAlarm(Alarm alarm) {
-        if (isNewAlarm()) {
-            createAlarm(alarm);
+    public void saveAlarm(AlarmType alarmType, String hour, String minute, String description,
+                          boolean mondayEnabled, boolean tuesdayEnabled, boolean wednesdayEnabled,
+                          boolean thursdayEnabled, boolean fridayEnabled, boolean saturdayEnabled,
+                          boolean sundayEnabled, AlarmStatus alarmStatus) {
+        AlarmValidator validator = new AlarmValidator(hour, minute);
+
+        List<ValidationResult> results = validator.validate();
+        if (results.size() == 0) {
+            // all good, move on
+            if (isNewAlarm()) {
+                Alarm alarm = new Alarm(alarmType, Integer.parseInt(hour), Integer.parseInt(minute),
+                        description, mondayEnabled,  tuesdayEnabled,  wednesdayEnabled,
+                        thursdayEnabled, fridayEnabled, saturdayEnabled, sundayEnabled,
+                        alarmStatus);
+                createAlarm(alarm);
+            } else {
+                Alarm alarm = new Alarm(mAlarmId, alarmType, Integer.parseInt(hour),
+                        Integer.parseInt(minute), description, mondayEnabled, tuesdayEnabled,
+                        wednesdayEnabled, thursdayEnabled, fridayEnabled, saturdayEnabled,
+                        sundayEnabled, alarmStatus);
+                updateAlarm(alarm);
+            }
         } else {
-            updateAlarm(alarm);
+            mManageAlarmView.showValidationResults(results);
         }
     }
 
@@ -72,7 +98,7 @@ public class ManageAlarmPresenter implements ManageAlarmContract.Presenter, Alar
 
     private void updateAlarm(Alarm alarm) {
         if (isNewAlarm()) {
-            throw new RuntimeException("updateTask() was called but task is new.");
+            throw new RuntimeException("updateAlarm() was called but task is new.");
         }
         mAlarmsDataSource.saveAlarm(alarm);
         mManageAlarmView.showAlarmsList(); // After an edit, go back to the list.
@@ -80,8 +106,7 @@ public class ManageAlarmPresenter implements ManageAlarmContract.Presenter, Alar
 
     @Override
     public void onAlarmLoaded(Alarm alarm) {
-        //mManageAlarmView.setTitle(alarm.getTitle());
-        mManageAlarmView.setDescription(alarm.getDescription());
+        mManageAlarmView.loadAlarm(alarm);
         mIsDataMissing = false;
     }
 

@@ -64,7 +64,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="start"
                                 android:button="@null"
-                                android:checked="true"
                                 android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
                                 android:gravity="start|center"
                                 android:text="@string/alarm"

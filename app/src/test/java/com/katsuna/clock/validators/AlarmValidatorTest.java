@@ -1,32 +1,37 @@
 package com.katsuna.clock.validators;
 
 import com.katsuna.clock.R;
+import com.katsuna.clock.data.AlarmType;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.internal.configuration.GlobalConfiguration.validate;
 
 public class AlarmValidatorTest {
 
-    @Test
-    public void validAlarmInput_returnsNoValidationResults(){
-        // given valid input
-        AlarmValidator alarmValidator = new AlarmValidator("13", "34");
 
+    private IAlarmValidator mValidator;
+
+    @Before
+    public void setup() {
+        mValidator = new AlarmValidator();
+    }
+
+    @Test
+    public void validAlarmInput_returnsNoValidationResults() {
+        // given valid input
         // validator returns zero results
-        assertTrue(alarmValidator.validate().isEmpty());
+        assertTrue(mValidator.validateAll(AlarmType.ALARM, "", "13", "34").isEmpty());
     }
 
     @Test
-    public void emptyHourAlarmInput_returnsValidationResult(){
-        // given valid input
-        AlarmValidator alarmValidator = new AlarmValidator("", "34");
-
+    public void emptyHourAlarmInput_returnsValidationResult() {
+        // given invalid input
         // validator returns results
-        List<ValidationResult> results = alarmValidator.validate();
+        List<ValidationResult> results = mValidator.validateTime("", "34");
         assertTrue(results.size() == 1);
 
         ValidationResult result = results.get(0);
@@ -34,12 +39,10 @@ public class AlarmValidatorTest {
     }
 
     @Test
-    public void emptyMinuteAlarmInput_returnsValidationResult(){
-        // given valid input
-        AlarmValidator alarmValidator = new AlarmValidator("10", "");
-
+    public void emptyMinuteAlarmInput_returnsValidationResult() {
+        // given invalid input
         // validator returns results
-        List<ValidationResult> results = alarmValidator.validate();
+        List<ValidationResult> results = mValidator.validateTime("10", "");
         assertTrue(results.size() == 1);
 
         ValidationResult result = results.get(0);
@@ -47,12 +50,10 @@ public class AlarmValidatorTest {
     }
 
     @Test
-    public void outOfLowerRangeMinuteAlarmInput_returnsValidationResult(){
-        // given valid input
-        AlarmValidator alarmValidator = new AlarmValidator("10", "-1");
-
+    public void outOfLowerRangeMinuteAlarmInput_returnsValidationResult() {
+        // given invalid input
         // validator returns results
-        List<ValidationResult> results = alarmValidator.validate();
+        List<ValidationResult> results = mValidator.validateTime("10", "-1");
         assertTrue(results.size() == 1);
 
         ValidationResult result = results.get(0);
@@ -60,12 +61,10 @@ public class AlarmValidatorTest {
     }
 
     @Test
-    public void outOfUpperRangeMinuteAlarmInput_returnsValidationResult(){
-        // given valid input
-        AlarmValidator alarmValidator = new AlarmValidator("10", "60");
-
+    public void outOfUpperRangeMinuteAlarmInput_returnsValidationResult() {
+        // given invalid input
         // validator returns results
-        List<ValidationResult> results = alarmValidator.validate();
+        List<ValidationResult> results = mValidator.validateTime("10", "60");
         assertTrue(results.size() == 1);
 
         ValidationResult result = results.get(0);
@@ -73,12 +72,10 @@ public class AlarmValidatorTest {
     }
 
     @Test
-    public void outOfLowerRangeHourAlarmInput_returnsValidationResult(){
-        // given valid input
-        AlarmValidator alarmValidator = new AlarmValidator("-1", "10");
-
+    public void outOfLowerRangeHourAlarmInput_returnsValidationResult() {
+        // given invalid input
         // validator returns results
-        List<ValidationResult> results = alarmValidator.validate();
+        List<ValidationResult> results = mValidator.validateTime("-1", "10");
         assertTrue(results.size() == 1);
 
         ValidationResult result = results.get(0);
@@ -86,12 +83,10 @@ public class AlarmValidatorTest {
     }
 
     @Test
-    public void outOfUpperRangeHourAlarmInput_returnsValidationResult(){
-        // given valid input
-        AlarmValidator alarmValidator = new AlarmValidator("24", "59");
-
+    public void outOfUpperRangeHourAlarmInput_returnsValidationResult() {
+        // given invalid input
         // validator returns results
-        List<ValidationResult> results = alarmValidator.validate();
+        List<ValidationResult> results = mValidator.validateTime("24", "59");
         assertTrue(results.size() == 1);
 
         ValidationResult result = results.get(0);
@@ -100,12 +95,10 @@ public class AlarmValidatorTest {
 
 
     @Test
-    public void unparsableAlarmInput_returnsValidationResult(){
-        // given valid input
-        AlarmValidator alarmValidator = new AlarmValidator("text", "text");
-
+    public void unparsableAlarmInput_returnsValidationResult() {
+        // given invalid input
         // validator returns results
-        List<ValidationResult> results = alarmValidator.validate();
+        List<ValidationResult> results = mValidator.validateTime("text", "text");
         assertTrue(results.size() == 2);
 
         ValidationResult hourResult = results.get(0);
@@ -113,6 +106,17 @@ public class AlarmValidatorTest {
 
         ValidationResult minuteResult = results.get(1);
         assertTrue(minuteResult.messageResId == R.string.validation_minute);
+    }
+
+    @Test
+    public void emptyAlarmType_returnsValidationResult() {
+        // given invalid input
+        // validator returns result
+        List<ValidationResult> results = mValidator.validateAlarmType(null, "");
+        assertTrue(results.size() == 1);
+
+        ValidationResult result = results.get(0);
+        assertTrue(result.messageResId == R.string.validation_alarm_type);
     }
 
 

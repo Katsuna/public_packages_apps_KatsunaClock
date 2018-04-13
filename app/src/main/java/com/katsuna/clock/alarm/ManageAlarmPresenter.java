@@ -7,7 +7,7 @@ import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.data.AlarmType;
 import com.katsuna.clock.data.source.AlarmsDataSource;
-import com.katsuna.clock.validators.AlarmValidator;
+import com.katsuna.clock.validators.IAlarmValidator;
 import com.katsuna.clock.validators.ValidationResult;
 
 import java.util.List;
@@ -23,17 +23,24 @@ public class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
     @NonNull
     private final ManageAlarmContract.View mManageAlarmView;
 
+    @NonNull
+    private final IAlarmValidator mAlarmValidator;
+
     @Nullable
     private final String mAlarmId;
 
     private boolean mIsDataMissing = true;
+    private ManageAlarmStep mStep = ManageAlarmStep.TYPE;
+    private Alarm mAlarm;
 
     public ManageAlarmPresenter(@Nullable String alarmId,
                                 @NonNull AlarmsDataSource alarmsDataSource,
-                                @NonNull ManageAlarmContract.View manageAlarmView) {
+                                @NonNull ManageAlarmContract.View manageAlarmView,
+                                @NonNull IAlarmValidator alarmValidator) {
         mAlarmId = alarmId;
         mAlarmsDataSource = checkNotNull(alarmsDataSource, "dataSource cannot be null");
         mManageAlarmView = checkNotNull(manageAlarmView, "manageAlarmView cannot be null!");
+        mAlarmValidator = checkNotNull(alarmValidator, "alarmValidator cannot be null!");
 
         mManageAlarmView.setPresenter(this);
     }
@@ -42,41 +49,35 @@ public class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
     public void start() {
         if (!isNewAlarm() && mIsDataMissing) {
             populateAlarm();
+        } else {
+            mAlarm = new Alarm();
         }
     }
 
     @Override
-    public void saveAlarm(AlarmType alarmType, String hour, String minute, String description,
-                          boolean mondayEnabled, boolean tuesdayEnabled, boolean wednesdayEnabled,
+    public void saveAlarm(boolean mondayEnabled, boolean tuesdayEnabled, boolean wednesdayEnabled,
                           boolean thursdayEnabled, boolean fridayEnabled, boolean saturdayEnabled,
-                          boolean sundayEnabled, AlarmStatus alarmStatus) {
-        AlarmValidator validator = new AlarmValidator(hour, minute);
-
-        List<ValidationResult> results = validator.validate();
-        if (results.size() == 0) {
-            // all good, move on
-            if (isNewAlarm()) {
-                Alarm alarm = new Alarm(alarmType, Integer.parseInt(hour), Integer.parseInt(minute),
-                        description, mondayEnabled,  tuesdayEnabled,  wednesdayEnabled,
-                        thursdayEnabled, fridayEnabled, saturdayEnabled, sundayEnabled,
-                        alarmStatus);
-                createAlarm(alarm);
-            } else {
-                Alarm alarm = new Alarm(mAlarmId, alarmType, Integer.parseInt(hour),
-                        Integer.parseInt(minute), description, mondayEnabled, tuesdayEnabled,
-                        wednesdayEnabled, thursdayEnabled, fridayEnabled, saturdayEnabled,
-                        sundayEnabled, alarmStatus);
-                updateAlarm(alarm);
-            }
+                          boolean sundayEnabled, @NonNull AlarmStatus alarmStatus) {
+        // all good, move on
+        if (isNewAlarm()) {
+            Alarm alarm = new Alarm(mAlarm.getAlarmType(), mAlarm.getHour(), mAlarm.getMinute(),
+                    mAlarm.getDescription(), mondayEnabled, tuesdayEnabled, wednesdayEnabled,
+                    thursdayEnabled, fridayEnabled, saturdayEnabled, sundayEnabled,
+                    alarmStatus);
+            createAlarm(alarm);
         } else {
-            mManageAlarmView.showValidationResults(results);
+            Alarm alarm = new Alarm(mAlarmId, mAlarm.getAlarmType(), mAlarm.getHour(),
+                    mAlarm.getMinute(), mAlarm.getDescription(), mondayEnabled, tuesdayEnabled,
+                    wednesdayEnabled, thursdayEnabled, fridayEnabled, saturdayEnabled,
+                    sundayEnabled, alarmStatus);
+            updateAlarm(alarm);
         }
     }
 
     @Override
     public void populateAlarm() {
         if (isNewAlarm()) {
-            throw new RuntimeException("populateAlarm() was called but task is new.");
+            throw new RuntimeException("populateAlarm() was called but alarm is new.");
         }
         //noinspection ConstantConditions
         mAlarmsDataSource.getAlarm(mAlarmId, this);
@@ -85,6 +86,50 @@ public class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
     @Override
     public boolean isDataMissing() {
         return mIsDataMissing;
+    }
+
+    @Override
+    public void previousStep() {
+        ManageAlarmStep nextStep = null;
+        switch (mStep) {
+            case TIME:
+                nextStep = ManageAlarmStep.TYPE;
+                break;
+            case DAYS:
+                nextStep = ManageAlarmStep.DAYS;
+                break;
+        }
+
+        if (nextStep != null) {
+            mStep = nextStep;
+            mManageAlarmView.showStep(nextStep);
+        }
+    }
+
+    @Override
+    public void setAlarmTypeInfo(AlarmType alarmType, String description) {
+        List<ValidationResult> results = mAlarmValidator.validateAlarmType(alarmType, description);
+        if (results.size() == 0) {
+            mAlarm.setAlarmType(alarmType);
+            mAlarm.setDescription(description);
+
+            mManageAlarmView.showStep(ManageAlarmStep.TIME);
+        } else {
+            mManageAlarmView.showValidationResults(results);
+        }
+    }
+
+    @Override
+    public void setAlarmTime(String hour, String minute) {
+        List<ValidationResult> results = mAlarmValidator.validateTime(hour, minute);
+        if (results.size() == 0) {
+            mAlarm.setHour(Integer.parseInt(hour));
+            mAlarm.setMinute(Integer.parseInt(minute));
+
+            mManageAlarmView.showStep(ManageAlarmStep.DAYS);
+        } else {
+            mManageAlarmView.showValidationResults(results);
+        }
     }
 
     private boolean isNewAlarm() {
@@ -97,9 +142,6 @@ public class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
     }
 
     private void updateAlarm(Alarm alarm) {
-        if (isNewAlarm()) {
-            throw new RuntimeException("updateAlarm() was called but task is new.");
-        }
         mAlarmsDataSource.saveAlarm(alarm);
         mManageAlarmView.showAlarmsList(); // After an edit, go back to the list.
     }
@@ -108,6 +150,7 @@ public class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
     public void onAlarmLoaded(Alarm alarm) {
         mManageAlarmView.loadAlarm(alarm);
         mIsDataMissing = false;
+        mAlarm = alarm;
     }
 
     @Override

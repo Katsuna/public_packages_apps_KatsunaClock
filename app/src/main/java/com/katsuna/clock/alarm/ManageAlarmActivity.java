@@ -22,7 +22,8 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
         setContentView(R.layout.activity_manage_alarm);
 
         // Create the presenter
-        new ManageAlarmPresenter(null, Injection.provideAlarmsDataSource(getApplicationContext()), this);
+        new ManageAlarmPresenter(null, Injection.provideAlarmsDataSource(getApplicationContext()),
+                this, Injection.provideAlarmValidator());
     }
 
     @Override
@@ -43,6 +44,11 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
     @Override
     public void showValidationResults(List<ValidationResult> results) {
         Log.d("AAA", results.toString());
+    }
+
+    @Override
+    public void showStep(ManageAlarmStep step) {
+        // TODO
     }
 
     @Override

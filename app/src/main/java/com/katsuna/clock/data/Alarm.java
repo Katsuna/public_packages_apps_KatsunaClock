@@ -18,48 +18,55 @@ public final class Alarm {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "entryid")
-    private final String mId;
+    private String mId;
 
     @NonNull
     @ColumnInfo(name = "type")
-    private final AlarmType mAlarmType;
+    private AlarmType mAlarmType;
 
     @NonNull
     @ColumnInfo(name = "hour")
-    private final Integer mHour;
+    private Integer mHour;
 
     @NonNull
     @ColumnInfo(name = "minute")
-    private final Integer mMinute;
+    private Integer mMinute;
 
     @Nullable
     @ColumnInfo(name = "description")
-    private final String mDescription;
+    private String mDescription;
 
     @ColumnInfo(name = "monday_enabled")
-    private final boolean mMondayEnabled;
+    private boolean mMondayEnabled;
 
     @ColumnInfo(name = "tuesday_enabled")
-    private final boolean mTuesdayEnabled;
+    private boolean mTuesdayEnabled;
 
     @ColumnInfo(name = "wednesday_enabled")
-    private final boolean mWednesdayEnabled;
+    private boolean mWednesdayEnabled;
 
     @ColumnInfo(name = "thursday_enabled")
-    private final boolean mThursdayEnabled;
+    private boolean mThursdayEnabled;
 
     @ColumnInfo(name = "friday_enabled")
-    private final boolean mFridayEnabled;
+    private boolean mFridayEnabled;
 
     @ColumnInfo(name = "saturday_enabled")
-    private final boolean mSaturdayEnabled;
+    private boolean mSaturdayEnabled;
 
     @ColumnInfo(name = "sunday_enabled")
-    private final boolean mSundayEnabled;
+    private boolean mSundayEnabled;
 
     @NonNull
     @ColumnInfo(name = "status")
     private AlarmStatus mAlarmStatus = AlarmStatus.ACTIVE;
+
+    /**
+     * Use this constructor to create easily a new empty Alarm.
+     */
+    @Ignore
+    public Alarm() {
+    }
 
     /**
      * Use this constructor to create easily a new active Alarm without day recurrence.
@@ -141,9 +148,17 @@ public final class Alarm {
         return mId;
     }
 
+    public void setId(String id) {
+        mId = id;
+    }
+
     @NonNull
     public AlarmType getAlarmType() {
         return mAlarmType;
+    }
+
+    public void setAlarmType(@NonNull AlarmType alarmType) {
+        mAlarmType = alarmType;
     }
 
     @NonNull
@@ -151,14 +166,26 @@ public final class Alarm {
         return mHour;
     }
 
+    public void setHour(Integer hour) {
+        mHour = hour;
+    }
+
     @NonNull
     public Integer getMinute() {
         return mMinute;
     }
 
+    public void setMinute(Integer minute) {
+        mMinute = minute;
+    }
+
     @Nullable
     public String getDescription() {
         return mDescription;
+    }
+
+    public void setDescription(String description) {
+        mDescription = description;
     }
 
     public boolean isMondayEnabled() {

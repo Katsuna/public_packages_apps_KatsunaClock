@@ -21,18 +21,25 @@ class ManageAlarmContract {
         void loadAlarm(Alarm alarm);
 
         void showValidationResults(List<ValidationResult> results);
+
+        void showStep(ManageAlarmStep step);
     }
 
     interface Presenter extends BasePresenter {
 
-        void saveAlarm(@NonNull AlarmType alarmType, String hour, String minute, String description,
-                       boolean mondayEnabled, boolean tuesdayEnabled, boolean wednesdayEnabled,
+        void saveAlarm(boolean mondayEnabled, boolean tuesdayEnabled, boolean wednesdayEnabled,
                        boolean thursdayEnabled, boolean fridayEnabled, boolean saturdayEnabled,
                        boolean sundayEnabled, @NonNull AlarmStatus alarmStatus);
 
         void populateAlarm();
 
         boolean isDataMissing();
+
+        void previousStep();
+
+        void setAlarmTypeInfo(AlarmType alarmType, String description);
+
+        void setAlarmTime(String hour, String minute);
     }
 
 }

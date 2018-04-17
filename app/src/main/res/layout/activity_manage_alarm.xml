@@ -16,6 +16,28 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/prev_step_fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_access_time_black_24dp"
+                    android:visibility="gone" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/next_step_fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add_black_24dp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
             <android.support.v7.widget.CardView
                 android:id="@+id/alarm_container_card"
                 android:layout_width="match_parent"
@@ -60,6 +82,7 @@
                             android:layout_marginStart="32dp">
 
                             <RadioButton
+                                android:id="@+id/alarm_type_radio_button"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="start"
@@ -71,6 +94,7 @@
                                 android:textSize="18sp" />
 
                             <RadioButton
+                                android:id="@+id/reminder_type_radio_button"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="start"
@@ -84,19 +108,22 @@
                         </RadioGroup>
 
                         <EditText
+                            android:id="@+id/alarm_description"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignStart="@id/alarm_type_radio_group"
                             android:layout_below="@id/alarm_type_radio_group"
                             android:hint="@string/description"
-                            android:inputType="text" />
+                            android:inputType="text"
+                            android:visibility="gone" />
 
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:id="@+id/alarm_time_container"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/alarm_time_text"
@@ -175,7 +202,8 @@
                     <RelativeLayout
                         android:id="@+id/alarm_days_container"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/alarm_days_text"
@@ -295,20 +323,6 @@
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="createNewAlarm"
-                    android:text="create test alarm" />
-
-            </LinearLayout>
 
         </LinearLayout>
 

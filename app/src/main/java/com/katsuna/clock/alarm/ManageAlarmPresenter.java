@@ -102,7 +102,7 @@ public class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
 
         if (nextStep != null) {
             mStep = nextStep;
-            mManageAlarmView.showStep(nextStep);
+            showStep(nextStep);
         }
     }
 
@@ -113,7 +113,7 @@ public class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
             mAlarm.setAlarmType(alarmType);
             mAlarm.setDescription(description);
 
-            mManageAlarmView.showStep(ManageAlarmStep.TIME);
+            showStep(ManageAlarmStep.TIME);
         } else {
             mManageAlarmView.showValidationResults(results);
         }
@@ -126,10 +126,39 @@ public class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
             mAlarm.setHour(Integer.parseInt(hour));
             mAlarm.setMinute(Integer.parseInt(minute));
 
-            mManageAlarmView.showStep(ManageAlarmStep.DAYS);
+            showStep(ManageAlarmStep.DAYS);
         } else {
             mManageAlarmView.showValidationResults(results);
         }
+    }
+
+    private void showStep(ManageAlarmStep step) {
+        switch (step) {
+            case TYPE:
+                mManageAlarmView.showAlarmTypeControl(true);
+                mManageAlarmView.showAlarmTimeControl(false);
+                mManageAlarmView.showPreviousStepFab(false);
+                break;
+            case TIME:
+                mManageAlarmView.showAlarmTypeControlUnfocused();
+                mManageAlarmView.showAlarmTimeControlInputMode();
+                mManageAlarmView.showPreviousStepFab(true);
+                break;
+            case DAYS:
+
+                break;
+        }
+    }
+
+    @Override
+    public ManageAlarmStep getCurrentStep() {
+        return mStep;
+    }
+
+    @Override
+    public void alarmTypeSelected(AlarmType alarmType) {
+        mManageAlarmView.showDescriptionControl(alarmType == AlarmType.REMINDER);
+        mManageAlarmView.showNextStepFab(true);
     }
 
     private boolean isNewAlarm() {

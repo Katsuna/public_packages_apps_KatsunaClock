@@ -173,6 +173,33 @@ public class ManageAlarmPresenterTest {
         verify(mManageAlarmView).showEmptyAlarmError();
     }
 
+    @Test
+    public void alarmTypeSelection_showsNextStepFab() {
+        mManageAlarmPresenter = new ManageAlarmPresenter(null, mAlarmsDataSource, mManageAlarmView,
+                new AlarmValidator());
+
+        // When an alarm type is selected
+        mManageAlarmPresenter.alarmTypeSelected(AlarmType.ALARM);
+
+        // Then next step fab should be shown
+        verify(mManageAlarmView).showNextStepFab(true);
+
+        // And description control should remain invisible for this type of alarm.
+        verify(mManageAlarmView).showDescriptionControl(false);
+    }
+
+    @Test
+    public void reminderTypeSelection_showsDescriptionControl() {
+        mManageAlarmPresenter = new ManageAlarmPresenter(null, mAlarmsDataSource, mManageAlarmView,
+                new AlarmValidator());
+
+        // When an alarm type is selected
+        mManageAlarmPresenter.alarmTypeSelected(AlarmType.REMINDER);
+
+        // Then description control should be visible for this type of alarm.
+        verify(mManageAlarmView).showDescriptionControl(true);
+    }
+
 
 }
 

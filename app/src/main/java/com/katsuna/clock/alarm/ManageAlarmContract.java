@@ -22,7 +22,20 @@ class ManageAlarmContract {
 
         void showValidationResults(List<ValidationResult> results);
 
-        void showStep(ManageAlarmStep step);
+        void showNextStepFab(boolean flag);
+
+        void showPreviousStepFab(boolean flag);
+
+        void showDescriptionControl(boolean flag);
+
+        void showAlarmTypeControl(boolean flag);
+
+        void showAlarmTimeControl(boolean flag);
+
+        void showAlarmTypeControlUnfocused();
+
+        void showAlarmTimeControlInputMode();
+
     }
 
     interface Presenter extends BasePresenter {
@@ -40,6 +53,10 @@ class ManageAlarmContract {
         void setAlarmTypeInfo(AlarmType alarmType, String description);
 
         void setAlarmTime(String hour, String minute);
+
+        ManageAlarmStep getCurrentStep();
+
+        void alarmTypeSelected(AlarmType alarmType);
     }
 
 }

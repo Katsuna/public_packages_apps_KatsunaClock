@@ -8,11 +8,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.ToggleButton;
 
 import com.katsuna.clock.R;
 import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmType;
-import com.katsuna.clock.data.source.AlarmsDataSource;
 import com.katsuna.clock.util.Injection;
 import com.katsuna.clock.validators.ValidationResult;
 
@@ -23,11 +23,19 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
     private ManageAlarmContract.Presenter mPresenter;
     private FloatingActionButton mPreviousStepFab;
     private FloatingActionButton mNextStepFab;
-    private View mAlarmTimeContainer;
-    private View mAlarmTypeContainer;
-    private View mAlarmDaysContainer;
+    private View mAlarmDaysControl;
     private RadioGroup mAlarmTypeRadioGroup;
     private EditText mDescription;
+    private EditText mHour;
+    private EditText mMinute;
+    private View mAlarmTimeControl;
+    private ToggleButton mMondayToggle;
+    private ToggleButton mTuesdayToggle;
+    private ToggleButton mWednesdayToggle;
+    private ToggleButton mThursdayToggle;
+    private ToggleButton mFridayToggle;
+    private ToggleButton mSaturdayToggle;
+    private ToggleButton mSundayToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +50,6 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
     }
 
     private void init() {
-        mAlarmTypeContainer = findViewById(R.id.alarm_type_container);
         mAlarmTypeRadioGroup = findViewById(R.id.alarm_type_radio_group);
         mAlarmTypeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -59,8 +66,18 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
         });
         mDescription = findViewById(R.id.alarm_description);
 
-        mAlarmTimeContainer = findViewById(R.id.alarm_time_container);
-        mAlarmDaysContainer = findViewById(R.id.alarm_days_container);
+        mAlarmTimeControl = findViewById(R.id.alarm_time_control);
+        mHour = findViewById(R.id.hour);
+        mMinute = findViewById(R.id.minute);
+
+        mAlarmDaysControl = findViewById(R.id.alarm_days_radio_group);
+        mMondayToggle = findViewById(R.id.monday_tb);
+        mTuesdayToggle = findViewById(R.id.tuesday_tb);
+        mWednesdayToggle = findViewById(R.id.wednesday_tb);
+        mThursdayToggle = findViewById(R.id.thursday_tb);
+        mFridayToggle = findViewById(R.id.friday_tb);
+        mSaturdayToggle = findViewById(R.id.saturday_tb);
+        mSundayToggle = findViewById(R.id.sunday_tb);
 
         mPreviousStepFab = findViewById(R.id.prev_step_fab);
         mPreviousStepFab.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +110,13 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
 
     @Override
     public void showAlarmsList() {
+        finish();
+    }
 
+    @Override
+    public void setTime(String hour, String minute) {
+        mHour.setText(hour);
+        mMinute.setText(minute);
     }
 
     @Override
@@ -129,16 +152,28 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
     @Override
     public void showAlarmTypeControlUnfocused() {
         // TODO
+        mAlarmTypeRadioGroup.setVisibility(View.GONE);
     }
 
     @Override
     public void showAlarmTimeControlInputMode() {
-        mAlarmTimeContainer.setVisibility(View.VISIBLE);
+        mAlarmTimeControl.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showAlarmTimeControlUnfocused() {
+        // TODO
+        mAlarmTimeControl.setVisibility(View.GONE);
     }
 
     @Override
     public void showAlarmTimeControl(boolean flag) {
-        mAlarmTimeContainer.setVisibility(flag ? View.VISIBLE : View.GONE);
+        mAlarmTimeControl.setVisibility(flag ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void showAlarmDaysControl(boolean flag) {
+        mAlarmDaysControl.setVisibility(flag ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -150,14 +185,19 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
         ManageAlarmStep step = mPresenter.getCurrentStep();
         switch (step) {
             case TYPE:
-                mPresenter.setAlarmTypeInfo(getAlarmType(), mDescription.getText().toString());
+                mPresenter.validateAlarmTypeInfo(getAlarmType(), mDescription.getText().toString());
                 break;
             case TIME:
-                mPresenter.setAlarmTime("10", "15");
+                mPresenter.validateAlarmTime(mHour.getText().toString(),
+                        mMinute.getText().toString());
                 break;
             case DAYS:
-                AlarmsDataSource dataSource = Injection.provideAlarmsDataSource(this);
-                dataSource.saveAlarm(new Alarm(AlarmType.ALARM, "desc 1"));
+                mPresenter.saveAlarm(getAlarmType(), mDescription.getText().toString(),
+                        mHour.getText().toString(), mMinute.getText().toString(),
+                        mMondayToggle.isChecked(), mTuesdayToggle.isChecked(),
+                        mWednesdayToggle.isChecked(), mThursdayToggle.isChecked(),
+                        mFridayToggle.isChecked(), mSaturdayToggle.isChecked(),
+                        mSundayToggle.isChecked());
                 break;
         }
     }

@@ -2,6 +2,7 @@ package com.katsuna.clock.alarm;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 
 import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmStatus;
@@ -10,6 +11,7 @@ import com.katsuna.clock.data.source.AlarmsDataSource;
 import com.katsuna.clock.validators.IAlarmValidator;
 import com.katsuna.clock.validators.ValidationResult;
 
+import java.util.Calendar;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -31,7 +33,6 @@ public class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
 
     private boolean mIsDataMissing = true;
     private ManageAlarmStep mStep = ManageAlarmStep.TYPE;
-    private Alarm mAlarm;
 
     public ManageAlarmPresenter(@Nullable String alarmId,
                                 @NonNull AlarmsDataSource alarmsDataSource,
@@ -50,27 +51,40 @@ public class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
         if (!isNewAlarm() && mIsDataMissing) {
             populateAlarm();
         } else {
-            mAlarm = new Alarm();
+            initTime();
         }
     }
 
+    private void initTime() {
+        Calendar now = Calendar.getInstance();
+        int currentHour = now.get(Calendar.HOUR_OF_DAY);
+        int currentMinute = now.get(Calendar.MINUTE);
+        mManageAlarmView.setTime(String.valueOf(currentHour), String.valueOf(currentMinute));
+    }
+
     @Override
-    public void saveAlarm(boolean mondayEnabled, boolean tuesdayEnabled, boolean wednesdayEnabled,
+    public void saveAlarm(@NonNull AlarmType alarmType, String description, String hour, String minute,
+                          boolean mondayEnabled, boolean tuesdayEnabled, boolean wednesdayEnabled,
                           boolean thursdayEnabled, boolean fridayEnabled, boolean saturdayEnabled,
-                          boolean sundayEnabled, @NonNull AlarmStatus alarmStatus) {
-        // all good, move on
-        if (isNewAlarm()) {
-            Alarm alarm = new Alarm(mAlarm.getAlarmType(), mAlarm.getHour(), mAlarm.getMinute(),
-                    mAlarm.getDescription(), mondayEnabled, tuesdayEnabled, wednesdayEnabled,
-                    thursdayEnabled, fridayEnabled, saturdayEnabled, sundayEnabled,
-                    alarmStatus);
-            createAlarm(alarm);
+                          boolean sundayEnabled) {
+        List<ValidationResult> results = mAlarmValidator.validateAll(alarmType, description, hour,
+                minute);
+        if (results.size() == 0) {
+            // all good, move on
+            Alarm alarm;
+            if (isNewAlarm()) {
+                alarm = new Alarm(alarmType, Integer.parseInt(hour), Integer.parseInt(minute),
+                        description, mondayEnabled, tuesdayEnabled, wednesdayEnabled, thursdayEnabled,
+                        fridayEnabled, saturdayEnabled, sundayEnabled, AlarmStatus.ACTIVE);
+            } else {
+                alarm = new Alarm(mAlarmId, alarmType, Integer.parseInt(hour), Integer.parseInt(minute),
+                        description, mondayEnabled, tuesdayEnabled, wednesdayEnabled, thursdayEnabled,
+                        fridayEnabled, saturdayEnabled, sundayEnabled, AlarmStatus.ACTIVE);
+            }
+            mAlarmsDataSource.saveAlarm(alarm);
+            mManageAlarmView.showAlarmsList();
         } else {
-            Alarm alarm = new Alarm(mAlarmId, mAlarm.getAlarmType(), mAlarm.getHour(),
-                    mAlarm.getMinute(), mAlarm.getDescription(), mondayEnabled, tuesdayEnabled,
-                    wednesdayEnabled, thursdayEnabled, fridayEnabled, saturdayEnabled,
-                    sundayEnabled, alarmStatus);
-            updateAlarm(alarm);
+            mManageAlarmView.showValidationResults(results);
         }
     }
 
@@ -96,7 +110,7 @@ public class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
                 nextStep = ManageAlarmStep.TYPE;
                 break;
             case DAYS:
-                nextStep = ManageAlarmStep.DAYS;
+                nextStep = ManageAlarmStep.TIME;
                 break;
         }
 
@@ -107,12 +121,9 @@ public class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
     }
 
     @Override
-    public void setAlarmTypeInfo(AlarmType alarmType, String description) {
+    public void validateAlarmTypeInfo(AlarmType alarmType, String description) {
         List<ValidationResult> results = mAlarmValidator.validateAlarmType(alarmType, description);
         if (results.size() == 0) {
-            mAlarm.setAlarmType(alarmType);
-            mAlarm.setDescription(description);
-
             showStep(ManageAlarmStep.TIME);
         } else {
             mManageAlarmView.showValidationResults(results);
@@ -120,18 +131,16 @@ public class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
     }
 
     @Override
-    public void setAlarmTime(String hour, String minute) {
+    public void validateAlarmTime(String hour, String minute) {
         List<ValidationResult> results = mAlarmValidator.validateTime(hour, minute);
         if (results.size() == 0) {
-            mAlarm.setHour(Integer.parseInt(hour));
-            mAlarm.setMinute(Integer.parseInt(minute));
-
             showStep(ManageAlarmStep.DAYS);
         } else {
             mManageAlarmView.showValidationResults(results);
         }
     }
 
+    @VisibleForTesting
     private void showStep(ManageAlarmStep step) {
         switch (step) {
             case TYPE:
@@ -142,12 +151,16 @@ public class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
             case TIME:
                 mManageAlarmView.showAlarmTypeControlUnfocused();
                 mManageAlarmView.showAlarmTimeControlInputMode();
+                mManageAlarmView.showAlarmDaysControl(false);
                 mManageAlarmView.showPreviousStepFab(true);
                 break;
             case DAYS:
-
+                mManageAlarmView.showAlarmTypeControlUnfocused();
+                mManageAlarmView.showAlarmTimeControlUnfocused();
+                mManageAlarmView.showAlarmDaysControl(true);
                 break;
         }
+        mStep = step;
     }
 
     @Override
@@ -165,21 +178,10 @@ public class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
         return mAlarmId == null;
     }
 
-    private void createAlarm(Alarm alarm) {
-        mAlarmsDataSource.saveAlarm(alarm);
-        mManageAlarmView.showAlarmsList();
-    }
-
-    private void updateAlarm(Alarm alarm) {
-        mAlarmsDataSource.saveAlarm(alarm);
-        mManageAlarmView.showAlarmsList(); // After an edit, go back to the list.
-    }
-
     @Override
     public void onAlarmLoaded(Alarm alarm) {
         mManageAlarmView.loadAlarm(alarm);
         mIsDataMissing = false;
-        mAlarm = alarm;
     }
 
     @Override

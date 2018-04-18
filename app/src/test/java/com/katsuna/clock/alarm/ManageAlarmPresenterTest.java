@@ -1,12 +1,13 @@
 package com.katsuna.clock.alarm;
 
 import com.katsuna.clock.data.Alarm;
-import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.data.AlarmType;
 import com.katsuna.clock.data.source.AlarmsDataSource;
 import com.katsuna.clock.validators.AlarmValidator;
 import com.katsuna.clock.validators.IAlarmValidator;
 import com.katsuna.clock.validators.ValidationResult;
+
+import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +21,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -82,10 +84,14 @@ public class ManageAlarmPresenterTest {
                 mAlarmValidator);
 
         mManageAlarmPresenter.start();
-        mManageAlarmPresenter.setAlarmTypeInfo(AlarmType.ALARM, "desc");
-        mManageAlarmPresenter.setAlarmTime("12", "30");
-        mManageAlarmPresenter.saveAlarm(false, false, false, false, false, false, false,
-                AlarmStatus.ACTIVE);
+        AlarmType alarmType = AlarmType.ALARM;
+        String description = null;
+        String hour = "12";
+        String minute = "30";
+        mManageAlarmPresenter.validateAlarmTypeInfo(alarmType, null);
+        mManageAlarmPresenter.validateAlarmTime(hour, minute);
+        mManageAlarmPresenter.saveAlarm(alarmType, null, hour, minute, false, false, false,
+                false, false, false, false);
 
         // Then an alarm is saved in the repository and the view updated
         verify(mAlarmsDataSource).saveAlarm(any(Alarm.class)); // saved to the model
@@ -99,12 +105,15 @@ public class ManageAlarmPresenterTest {
                 new AlarmValidator());
 
         mManageAlarmPresenter.start();
-        mManageAlarmPresenter.setAlarmTypeInfo(AlarmType.ALARM, "desc");
-        mManageAlarmPresenter.setAlarmTime("24", "61");
-        mManageAlarmPresenter.saveAlarm(false, false, false, false, false, false, false,
-                AlarmStatus.ACTIVE);
+        String hour = "24";
+        String minute = "61";
+        mManageAlarmPresenter.validateAlarmTypeInfo(null, null);
+        mManageAlarmPresenter.validateAlarmTime(hour, minute);
+        mManageAlarmPresenter.saveAlarm(null, null, hour, minute, false, false, false,
+                false, false, false, false);
 
-        verify(mManageAlarmView).showValidationResults(anyListOf(ValidationResult.class));
+        // we expect 3 invocation of showValidationResults
+        verify(mManageAlarmView, times(3)).showValidationResults(anyListOf(ValidationResult.class));
     }
 
     @Test
@@ -123,10 +132,14 @@ public class ManageAlarmPresenterTest {
                 mGetAlarmCallbackCaptor.capture());
         mGetAlarmCallbackCaptor.getValue().onAlarmLoaded(testAlarm);
 
-        mManageAlarmPresenter.setAlarmTypeInfo(AlarmType.ALARM, "desc");
-        mManageAlarmPresenter.setAlarmTime("12", "30");
-        mManageAlarmPresenter.saveAlarm(false, false, false, false, false, false, false,
-                AlarmStatus.ACTIVE);
+        AlarmType alarmType = AlarmType.ALARM;
+        String description = "desc";
+        String hour = "12";
+        String minute = "30";
+        mManageAlarmPresenter.validateAlarmTypeInfo(alarmType, description);
+        mManageAlarmPresenter.validateAlarmTime(hour, minute);
+        mManageAlarmPresenter.saveAlarm(alarmType, description, hour, minute, false, false, false,
+                false, false, false, false);
 
         // Then a task is saved in the repository and the view updated
         verify(mAlarmsDataSource).saveAlarm(any(Alarm.class)); // saved to the model
@@ -200,6 +213,100 @@ public class ManageAlarmPresenterTest {
         verify(mManageAlarmView).showDescriptionControl(true);
     }
 
+    @Test
+    public void alarmTypeStepCompleted_showsTimeSelectionStep() {
+        mManageAlarmPresenter = new ManageAlarmPresenter(null, mAlarmsDataSource, mManageAlarmView,
+                new AlarmValidator());
 
+        mManageAlarmPresenter.start();
+
+        // When an alarm type is selected and set
+        mManageAlarmPresenter.alarmTypeSelected(AlarmType.ALARM);
+        mManageAlarmPresenter.validateAlarmTypeInfo(AlarmType.ALARM, "");
+
+        // Then presenter step should change properly
+        Assert.assertTrue(mManageAlarmPresenter.getCurrentStep() == ManageAlarmStep.TIME);
+
+        // And view calls should be made
+        verify(mManageAlarmView).showAlarmTypeControlUnfocused();
+        verify(mManageAlarmView).showAlarmTimeControlInputMode();
+        verify(mManageAlarmView).showAlarmDaysControl(false);
+        verify(mManageAlarmView).showPreviousStepFab(true);
+
+    }
+
+    @Test
+    public void returnFromAlarmTimeStep_showsAlarmTypeStep() {
+        mManageAlarmPresenter = new ManageAlarmPresenter(null, mAlarmsDataSource, mManageAlarmView,
+                new AlarmValidator());
+
+        mManageAlarmPresenter.start();
+
+        // When an alarm type is selected and set
+        mManageAlarmPresenter.alarmTypeSelected(AlarmType.ALARM);
+        mManageAlarmPresenter.validateAlarmTypeInfo(AlarmType.ALARM, "");
+
+        // And previous button is pressed
+        mManageAlarmPresenter.previousStep();
+
+        // Then presenter step should change properly
+        Assert.assertTrue(mManageAlarmPresenter.getCurrentStep() == ManageAlarmStep.TYPE);
+
+        // And view calls must be made
+        verify(mManageAlarmView).showAlarmTypeControl(true);
+        verify(mManageAlarmView).showAlarmTimeControl(false);
+        verify(mManageAlarmView).showPreviousStepFab(false);
+    }
+
+    @Test
+    public void alarmTimeStepCompleted_showsAlarmDaysStep() {
+        mManageAlarmPresenter = new ManageAlarmPresenter(null, mAlarmsDataSource, mManageAlarmView,
+                new AlarmValidator());
+
+        mManageAlarmPresenter.start();
+
+        // When an alarm type is selected and set
+        mManageAlarmPresenter.alarmTypeSelected(AlarmType.ALARM);
+        mManageAlarmPresenter.validateAlarmTypeInfo(AlarmType.ALARM, "");
+
+        // And next button is pressed
+        mManageAlarmPresenter.validateAlarmTime("21", "34");
+
+        // Then presenter step should change properly
+        Assert.assertTrue(mManageAlarmPresenter.getCurrentStep() == ManageAlarmStep.DAYS);
+
+        // And view calls must be made
+        verify(mManageAlarmView, times(2)).showAlarmTypeControlUnfocused();
+        verify(mManageAlarmView).showAlarmTimeControlUnfocused();
+        verify(mManageAlarmView).showAlarmDaysControl(true);
+    }
+
+
+    @Test
+    public void returnFromAlarmDaysTimeStep_showsAlarmTimeStep() {
+        mManageAlarmPresenter = new ManageAlarmPresenter(null, mAlarmsDataSource, mManageAlarmView,
+                new AlarmValidator());
+
+        mManageAlarmPresenter.start();
+
+        // When an alarm type is selected and set
+        mManageAlarmPresenter.alarmTypeSelected(AlarmType.ALARM);
+        mManageAlarmPresenter.validateAlarmTypeInfo(AlarmType.ALARM, "");
+
+        // And next button is pressed
+        mManageAlarmPresenter.validateAlarmTime("21", "34");
+
+        // And previous button is pressed
+        mManageAlarmPresenter.previousStep();
+
+        // Then presenter step should change properly
+        Assert.assertTrue(mManageAlarmPresenter.getCurrentStep() == ManageAlarmStep.TIME);
+
+        // And view calls must be made
+        verify(mManageAlarmView, times(3)).showAlarmTypeControlUnfocused();
+        verify(mManageAlarmView, times(2)).showAlarmTimeControlInputMode();
+        verify(mManageAlarmView, times(2)).showAlarmDaysControl(false);
+        verify(mManageAlarmView, times(2)).showPreviousStepFab(true);
+    }
 }
 

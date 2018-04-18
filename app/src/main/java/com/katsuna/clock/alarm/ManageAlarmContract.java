@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import com.katsuna.clock.BasePresenter;
 import com.katsuna.clock.BaseView;
 import com.katsuna.clock.data.Alarm;
-import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.data.AlarmType;
 import com.katsuna.clock.validators.ValidationResult;
 
@@ -17,6 +16,8 @@ class ManageAlarmContract {
         void showEmptyAlarmError();
 
         void showAlarmsList();
+
+        void setTime(String hour, String minute);
 
         void loadAlarm(Alarm alarm);
 
@@ -30,19 +31,23 @@ class ManageAlarmContract {
 
         void showAlarmTypeControl(boolean flag);
 
-        void showAlarmTimeControl(boolean flag);
-
         void showAlarmTypeControlUnfocused();
+
+        void showAlarmTimeControl(boolean flag);
 
         void showAlarmTimeControlInputMode();
 
+        void showAlarmTimeControlUnfocused();
+
+        void showAlarmDaysControl(boolean flag);
     }
 
     interface Presenter extends BasePresenter {
 
-        void saveAlarm(boolean mondayEnabled, boolean tuesdayEnabled, boolean wednesdayEnabled,
+        void saveAlarm(@NonNull AlarmType alarmType, String description, String hour, String minute,
+                       boolean mondayEnabled, boolean tuesdayEnabled, boolean wednesdayEnabled,
                        boolean thursdayEnabled, boolean fridayEnabled, boolean saturdayEnabled,
-                       boolean sundayEnabled, @NonNull AlarmStatus alarmStatus);
+                       boolean sundayEnabled);
 
         void populateAlarm();
 
@@ -50,9 +55,9 @@ class ManageAlarmContract {
 
         void previousStep();
 
-        void setAlarmTypeInfo(AlarmType alarmType, String description);
+        void validateAlarmTypeInfo(AlarmType alarmType, String description);
 
-        void setAlarmTime(String hour, String minute);
+        void validateAlarmTime(String hour, String minute);
 
         ManageAlarmStep getCurrentStep();
 

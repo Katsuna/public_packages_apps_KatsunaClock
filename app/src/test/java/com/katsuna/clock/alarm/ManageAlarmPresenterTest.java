@@ -85,7 +85,6 @@ public class ManageAlarmPresenterTest {
 
         mManageAlarmPresenter.start();
         AlarmType alarmType = AlarmType.ALARM;
-        String description = null;
         String hour = "12";
         String minute = "30";
         mManageAlarmPresenter.validateAlarmTypeInfo(alarmType, null);
@@ -109,6 +108,7 @@ public class ManageAlarmPresenterTest {
         String minute = "61";
         mManageAlarmPresenter.validateAlarmTypeInfo(null, null);
         mManageAlarmPresenter.validateAlarmTime(hour, minute);
+        //noinspection ConstantConditions
         mManageAlarmPresenter.saveAlarm(null, null, hour, minute, false, false, false,
                 false, false, false, false);
 
@@ -165,6 +165,7 @@ public class ManageAlarmPresenterTest {
 
         verify(mManageAlarmView).loadAlarm(testAlarm);
         assertThat(mManageAlarmPresenter.isDataMissing(), is(false));
+        verify(mManageAlarmView).showNextStepFab(true);
     }
 
     @Test

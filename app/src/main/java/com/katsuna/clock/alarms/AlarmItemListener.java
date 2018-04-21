@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmStatus;
 
-public interface AlarmItemListener {
+interface AlarmItemListener {
 
     void onAlarmFocus(@NonNull Alarm alarm, boolean focus);
 

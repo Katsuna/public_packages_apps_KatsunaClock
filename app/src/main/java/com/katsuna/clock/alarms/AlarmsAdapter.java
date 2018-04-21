@@ -1,21 +1,25 @@
 package com.katsuna.clock.alarms;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.katsuna.clock.R;
 import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmStatus;
+import com.katsuna.clock.formatters.AlarmFormatter;
 
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class AlarmsAdapter extends BaseAdapter {
+class AlarmsAdapter extends BaseAdapter {
 
     private List<Alarm> mAlarms;
     private Alarm mAlarmFocused;
@@ -74,14 +78,21 @@ public class AlarmsAdapter extends BaseAdapter {
 
         final Alarm alarm = getItem(i);
 
+        final Context context = viewGroup.getContext();
+        AlarmFormatter alarmFormatter = new AlarmFormatter(context, alarm);
+
+        ImageView alarmTypeIcon = rowView.findViewById(R.id.alarm_type_image);
+        Drawable icon = context.getDrawable(alarmFormatter.getAlarmTypeIconResId());
+        alarmTypeIcon.setImageDrawable(icon);
+
         TextView title = rowView.findViewById(R.id.alarm_title);
-        title.setText(alarm.getDescription());
+        title.setText(alarmFormatter.getTitle());
 
         TextView description = rowView.findViewById(R.id.alarm_description);
-        description.setText(alarm.getDescription());
+        description.setText(alarmFormatter.getDescription());
 
-        TextView days = rowView.findViewById(R.id.alarm_description);
-        days.setText(alarm.getDescription() + alarm.getAlarmStatus());
+        TextView days = rowView.findViewById(R.id.alarm_days);
+        days.setText(alarmFormatter.getDays());
 
         View alarmCardInner = rowView.findViewById(R.id.alarm_container_card_inner);
         alarmCardInner.setOnClickListener(new View.OnClickListener() {

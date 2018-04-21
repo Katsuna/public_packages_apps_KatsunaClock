@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ToggleButton;
 
@@ -19,6 +20,8 @@ import com.katsuna.clock.validators.ValidationResult;
 import java.util.List;
 
 public class ManageAlarmActivity extends AppCompatActivity implements ManageAlarmContract.View {
+
+    public static final String EXTRA_ALARM_ID = "ALARM_ID";
 
     private ManageAlarmContract.Presenter mPresenter;
     private FloatingActionButton mPreviousStepFab;
@@ -36,6 +39,9 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
     private ToggleButton mFridayToggle;
     private ToggleButton mSaturdayToggle;
     private ToggleButton mSundayToggle;
+    private View mAlarmTypeRadioGroupContainer;
+    private RadioButton mReminderTypeRadioGroup;
+    private RadioButton mAlarmTypeRadioButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +50,15 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
 
         init();
 
+        String alarmId = getIntent().getStringExtra(EXTRA_ALARM_ID);
+
         // Create the presenter
-        new ManageAlarmPresenter(null, Injection.provideAlarmsDataSource(getApplicationContext()),
+        new ManageAlarmPresenter(alarmId, Injection.provideAlarmsDataSource(getApplicationContext()),
                 this, Injection.provideAlarmValidator());
     }
 
     private void init() {
+        mAlarmTypeRadioGroupContainer = findViewById(R.id.alarm_type_radio_group_container);
         mAlarmTypeRadioGroup = findViewById(R.id.alarm_type_radio_group);
         mAlarmTypeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -64,6 +73,8 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
                 }
             }
         });
+        mAlarmTypeRadioButton = findViewById(R.id.alarm_type_radio_button);
+        mReminderTypeRadioGroup = findViewById(R.id.reminder_type_radio_button);
         mDescription = findViewById(R.id.alarm_description);
 
         mAlarmTimeControl = findViewById(R.id.alarm_time_control);
@@ -121,7 +132,21 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
 
     @Override
     public void loadAlarm(Alarm alarm) {
-
+        if (alarm.getAlarmType() == AlarmType.ALARM) {
+            mAlarmTypeRadioButton.setChecked(true);
+        } else {
+            mReminderTypeRadioGroup.setChecked(true);
+        }
+        mDescription.setText(alarm.getDescription());
+        mHour.setText(String.valueOf(alarm.getHour()));
+        mMinute.setText(String.valueOf(alarm.getMinute()));
+        mMondayToggle.setChecked(alarm.isMondayEnabled());
+        mTuesdayToggle.setChecked(alarm.isTuesdayEnabled());
+        mWednesdayToggle.setChecked(alarm.isWednesdayEnabled());
+        mThursdayToggle.setChecked(alarm.isThursdayEnabled());
+        mFridayToggle.setChecked(alarm.isFridayEnabled());
+        mSaturdayToggle.setChecked(alarm.isSaturdayEnabled());
+        mSundayToggle.setChecked(alarm.isSundayEnabled());
     }
 
     @Override
@@ -146,13 +171,13 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
 
     @Override
     public void showAlarmTypeControl(boolean flag) {
-        mAlarmTypeRadioGroup.setVisibility(flag ? View.VISIBLE : View.GONE);
+        mAlarmTypeRadioGroupContainer.setVisibility(flag ? View.VISIBLE : View.GONE);
     }
 
     @Override
     public void showAlarmTypeControlUnfocused() {
         // TODO
-        mAlarmTypeRadioGroup.setVisibility(View.GONE);
+        mAlarmTypeRadioGroupContainer.setVisibility(View.GONE);
     }
 
     @Override

@@ -11,7 +11,7 @@ public class AlarmValidator implements IAlarmValidator {
 
     @Override
     public List<ValidationResult> validateAll(AlarmType alarmType, String description, String hour,
-                                       String minute) {
+                                              String minute) {
         List<ValidationResult> results = new ArrayList<>();
         results.addAll(validateAlarmType(alarmType, description));
         results.addAll(validateTime(hour, minute));
@@ -25,6 +25,10 @@ public class AlarmValidator implements IAlarmValidator {
 
         if (alarmType == null) {
             results.add(new ValidationResult(R.string.validation_alarm_type));
+        } else {
+            if (alarmType == AlarmType.ALARM && !Strings.isNullOrEmpty(description)) {
+                results.add(new ValidationResult(R.string.unsupported_operation));
+            }
         }
 
         return results;

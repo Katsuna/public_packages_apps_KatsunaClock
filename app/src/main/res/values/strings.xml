@@ -22,4 +22,6 @@
     <string name="validation_alarm_type">Please select a type.</string>
     <string name="validation_hour">Please select a valid hour.</string>
     <string name="validation_minute">Please select a valid minute.</string>
+    <string name="and">and</string>
+    <string name="unsupported_operation">Unsupported operation.</string>
 </resources>

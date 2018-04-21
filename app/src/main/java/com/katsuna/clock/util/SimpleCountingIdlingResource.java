@@ -15,7 +15,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * This class can then be used to wrap up operations that while in progress should block tests from
  * accessing the UI.
  */
-public final class SimpleCountingIdlingResource implements IdlingResource {
+final class SimpleCountingIdlingResource implements IdlingResource {
 
     private final String mResourceName;
 

@@ -119,5 +119,16 @@ public class AlarmValidatorTest {
         assertTrue(result.messageResId == R.string.validation_alarm_type);
     }
 
+    @Test
+    public void alarmTypeWithDescription_returnsValidationResult() {
+        // given invalid input
+        // validator returns result
+        List<ValidationResult> results = mValidator.validateAlarmType(AlarmType.ALARM, "desc");
+        assertTrue(results.size() == 1);
+
+        ValidationResult result = results.get(0);
+        assertTrue(result.messageResId == R.string.unsupported_operation);
+    }
+
 
 }

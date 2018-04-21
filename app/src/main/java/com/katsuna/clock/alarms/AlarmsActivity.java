@@ -40,7 +40,7 @@ public class AlarmsActivity extends AppCompatActivity implements AlarmsContract.
 
         @Override
         public void onAlarmEdit(@NonNull Alarm alarm) {
-            //mPresenter.openTaskDetails(clickedTask);
+            mPresenter.openAlarmDetails(alarm);
         }
 
         @Override
@@ -80,7 +80,7 @@ public class AlarmsActivity extends AppCompatActivity implements AlarmsContract.
         mCreateAlarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchManageActivity();
+                mPresenter.addNewAlarm();
             }
         });
 
@@ -88,18 +88,13 @@ public class AlarmsActivity extends AppCompatActivity implements AlarmsContract.
         mCreateAlarmFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchManageActivity();
+                mPresenter.addNewAlarm();
             }
         });
 
         mAlarmsAdapter = new AlarmsAdapter(new ArrayList<Alarm>(0), mItemListener);
         mAlarmsList = findViewById(R.id.alarms_list);
         mAlarmsList.setAdapter(mAlarmsAdapter);
-    }
-
-    private void launchManageActivity() {
-        Intent i = new Intent(this, ManageAlarmActivity.class);
-        startActivity(i);
     }
 
     @Override
@@ -130,12 +125,15 @@ public class AlarmsActivity extends AppCompatActivity implements AlarmsContract.
 
     @Override
     public void showAddAlarm() {
-
+        Intent i = new Intent(this, ManageAlarmActivity.class);
+        startActivity(i);
     }
 
     @Override
     public void showAlarmDetailsUi(String alarmId) {
-
+        Intent intent = new Intent(this, ManageAlarmActivity.class);
+        intent.putExtra(ManageAlarmActivity.EXTRA_ALARM_ID, alarmId);
+        startActivity(intent);
     }
 
     @Override

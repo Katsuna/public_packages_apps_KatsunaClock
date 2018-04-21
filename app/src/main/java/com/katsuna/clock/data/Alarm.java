@@ -22,40 +22,40 @@ public final class Alarm {
 
     @NonNull
     @ColumnInfo(name = "type")
-    private AlarmType mAlarmType;
+    private final AlarmType mAlarmType;
 
     @NonNull
     @ColumnInfo(name = "hour")
-    private Integer mHour;
+    private final Integer mHour;
 
     @NonNull
     @ColumnInfo(name = "minute")
-    private Integer mMinute;
+    private final Integer mMinute;
 
     @Nullable
     @ColumnInfo(name = "description")
-    private String mDescription;
+    private final String mDescription;
 
     @ColumnInfo(name = "monday_enabled")
-    private boolean mMondayEnabled;
+    private final boolean mMondayEnabled;
 
     @ColumnInfo(name = "tuesday_enabled")
-    private boolean mTuesdayEnabled;
+    private final boolean mTuesdayEnabled;
 
     @ColumnInfo(name = "wednesday_enabled")
-    private boolean mWednesdayEnabled;
+    private final boolean mWednesdayEnabled;
 
     @ColumnInfo(name = "thursday_enabled")
-    private boolean mThursdayEnabled;
+    private final boolean mThursdayEnabled;
 
     @ColumnInfo(name = "friday_enabled")
-    private boolean mFridayEnabled;
+    private final boolean mFridayEnabled;
 
     @ColumnInfo(name = "saturday_enabled")
-    private boolean mSaturdayEnabled;
+    private final boolean mSaturdayEnabled;
 
     @ColumnInfo(name = "sunday_enabled")
-    private boolean mSundayEnabled;
+    private final boolean mSundayEnabled;
 
     @NonNull
     @ColumnInfo(name = "status")
@@ -66,6 +66,7 @@ public final class Alarm {
      */
     @Ignore
     public Alarm() {
+        this(AlarmType.ALARM, null);
     }
 
     /**
@@ -157,17 +158,9 @@ public final class Alarm {
         return mAlarmType;
     }
 
-    public void setAlarmType(@NonNull AlarmType alarmType) {
-        mAlarmType = alarmType;
-    }
-
     @NonNull
     public Integer getHour() {
         return mHour;
-    }
-
-    public void setHour(Integer hour) {
-        mHour = hour;
     }
 
     @NonNull
@@ -175,17 +168,9 @@ public final class Alarm {
         return mMinute;
     }
 
-    public void setMinute(Integer minute) {
-        mMinute = minute;
-    }
-
     @Nullable
     public String getDescription() {
         return mDescription;
-    }
-
-    public void setDescription(String description) {
-        mDescription = description;
     }
 
     public boolean isMondayEnabled() {

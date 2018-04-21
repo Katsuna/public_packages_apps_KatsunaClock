@@ -13,10 +13,11 @@ import com.katsuna.clock.validators.ValidationResult;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
+class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
         AlarmsDataSource.GetAlarmCallback {
 
     @NonNull
@@ -77,7 +78,7 @@ public class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
                         description, mondayEnabled, tuesdayEnabled, wednesdayEnabled, thursdayEnabled,
                         fridayEnabled, saturdayEnabled, sundayEnabled, AlarmStatus.ACTIVE);
             } else {
-                alarm = new Alarm(mAlarmId, alarmType, Integer.parseInt(hour), Integer.parseInt(minute),
+                alarm = new Alarm(Objects.requireNonNull(mAlarmId), alarmType, Integer.parseInt(hour), Integer.parseInt(minute),
                         description, mondayEnabled, tuesdayEnabled, wednesdayEnabled, thursdayEnabled,
                         fridayEnabled, saturdayEnabled, sundayEnabled, AlarmStatus.ACTIVE);
             }
@@ -182,6 +183,7 @@ public class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
     public void onAlarmLoaded(Alarm alarm) {
         mManageAlarmView.loadAlarm(alarm);
         mIsDataMissing = false;
+        mManageAlarmView.showNextStepFab(true);
     }
 
     @Override

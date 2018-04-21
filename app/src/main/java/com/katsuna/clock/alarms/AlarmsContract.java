@@ -35,8 +35,6 @@ interface AlarmsContract {
 
         void loadAlarms();
 
-        void loadDateTime();
-
         void addNewAlarm();
 
         void openAlarmDetails(@NonNull Alarm alarm);

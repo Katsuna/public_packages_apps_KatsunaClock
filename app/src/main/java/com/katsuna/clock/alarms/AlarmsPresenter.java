@@ -40,8 +40,7 @@ public class AlarmsPresenter implements AlarmsContract.Presenter {
         loadAlarms();
     }
 
-    @Override
-    public void loadDateTime() {
+    private void loadDateTime() {
         Date now = new Date();
         Locale locale = Locale.getDefault();
         String time = new SimpleDateFormat("HH:mm", locale).format(now);

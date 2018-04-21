@@ -24,4 +24,5 @@
     <string name="validation_minute">Please select a valid minute.</string>
     <string name="and">and</string>
     <string name="unsupported_operation">Unsupported operation.</string>
+    <string name="reminder_with_no_description">A reminder should have a description.</string>
 </resources>

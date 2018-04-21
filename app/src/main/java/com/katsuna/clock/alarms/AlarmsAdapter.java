@@ -2,6 +2,8 @@ package com.katsuna.clock.alarms;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +23,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 class AlarmsAdapter extends BaseAdapter {
 
+    private final AlarmItemListener mItemListener;
     private List<Alarm> mAlarms;
     private Alarm mAlarmFocused;
-    private final AlarmItemListener mItemListener;
 
     AlarmsAdapter(List<Alarm> tasks, AlarmItemListener itemListener) {
         setList(tasks);
@@ -94,7 +96,13 @@ class AlarmsAdapter extends BaseAdapter {
         TextView days = rowView.findViewById(R.id.alarm_days);
         days.setText(alarmFormatter.getDays());
 
+        CardView alarmCard = rowView.findViewById(R.id.alarm_container_card);
+        alarmCard.setCardBackgroundColor(ContextCompat.getColor(context,
+                alarmFormatter.getCardHandleColor()));
+
         View alarmCardInner = rowView.findViewById(R.id.alarm_container_card_inner);
+        alarmCardInner.setBackgroundColor(ContextCompat.getColor(context,
+                alarmFormatter.getCardInnerColor()));
         alarmCardInner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

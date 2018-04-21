@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.katsuna.clock.R;
 import com.katsuna.clock.data.Alarm;
+import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.data.AlarmType;
 
 import java.util.ArrayList;
@@ -60,14 +61,12 @@ public class AlarmFormatter {
         return sb.toString();
     }
 
-
-
     public int getAlarmTypeIconResId() {
         int output;
         if (mAlarm.getAlarmType() == AlarmType.REMINDER) {
-            output = R.drawable.ic_notifications_black_24dp;
+            output = R.drawable.ic_notifications_24dp;
         } else {
-            output = R.drawable.ic_access_time_black_24dp;
+            output = R.drawable.ic_access_time_24dp;
         }
         return output;
     }
@@ -98,6 +97,30 @@ public class AlarmFormatter {
 
     private String showTime() {
         return String.format(Locale.getDefault(), "%02d:%02d", mAlarm.getHour(), mAlarm.getMinute());
+    }
+
+    public int getCardHandleColor() {
+        int output;
+        if (mAlarm.getAlarmStatus() == AlarmStatus.INACTIVE) {
+            output = R.color.common_grey300;
+        } else if (mAlarm.getAlarmType() == AlarmType.ALARM) {
+            output = R.color.common_blueA700;
+        } else {
+            output = R.color.common_amberA400;
+        }
+        return output;
+    }
+
+    public int getCardInnerColor() {
+        int output;
+        if (mAlarm.getAlarmStatus() == AlarmStatus.INACTIVE) {
+            output = R.color.common_grey50;
+        } else if (mAlarm.getAlarmType() == AlarmType.ALARM) {
+            output = R.color.common_solitude;
+        } else {
+            output = R.color.common_milk_punch;
+        }
+        return output;
     }
 
 }

@@ -4,11 +4,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.katsuna.clock.R;
@@ -17,6 +17,7 @@ import com.katsuna.clock.data.AlarmType;
 import com.katsuna.clock.util.Injection;
 import com.katsuna.clock.validators.ValidationResult;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class ManageAlarmActivity extends AppCompatActivity implements ManageAlarmContract.View {
@@ -151,7 +152,15 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
 
     @Override
     public void showValidationResults(List<ValidationResult> results) {
-        Log.d("AAA", results.toString());
+        StringBuilder sb = new StringBuilder();
+        for(Iterator<ValidationResult> i = results.iterator(); i.hasNext();) {
+            ValidationResult result = i.next();
+            sb.append(getString(result.messageResId));
+            if (i.hasNext()) {
+                sb.append("\n");
+            }
+        }
+        Toast.makeText(this, sb.toString(), Toast.LENGTH_SHORT).show();
     }
 
     @Override

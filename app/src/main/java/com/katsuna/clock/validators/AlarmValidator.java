@@ -28,6 +28,8 @@ public class AlarmValidator implements IAlarmValidator {
         } else {
             if (alarmType == AlarmType.ALARM && !Strings.isNullOrEmpty(description)) {
                 results.add(new ValidationResult(R.string.unsupported_operation));
+            } else if (alarmType == AlarmType.REMINDER && Strings.isNullOrEmpty(description)) {
+                results.add(new ValidationResult(R.string.reminder_with_no_description));
             }
         }
 

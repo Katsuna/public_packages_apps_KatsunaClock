@@ -44,7 +44,7 @@ public class AlarmsPresenter implements AlarmsContract.Presenter {
         Date now = new Date();
         Locale locale = Locale.getDefault();
         String time = new SimpleDateFormat("HH:mm", locale).format(now);
-        String date = new SimpleDateFormat("EEEE ,d MMMM", locale).format(now);
+        String date = new SimpleDateFormat("EEEE, d MMMM", locale).format(now);
         mAlarmsView.showDateTime(time, date);
     }
 

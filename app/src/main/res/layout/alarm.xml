@@ -9,10 +9,10 @@
         android:id="@+id/alarm_container_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
         card_view:cardCornerRadius="8dp"
         card_view:cardElevation="2dp">
 
@@ -28,8 +28,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
                 android:gravity="top"
                 tools:ignore="ContentDescription" />
 
@@ -40,6 +40,7 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="2dp"
                 android:layout_toEndOf="@id/alarm_type_image"
                 android:orientation="vertical">
 
@@ -48,9 +49,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:fontFamily="sans-serif-medium"
                     android:gravity="start|center"
                     android:minHeight="25dp"
-                    android:textColor="@color/common_black54"
+                    android:textColor="@color/common_black87"
                     android:textSize="20sp" />
 
                 <TextView
@@ -60,20 +62,20 @@
                     android:fontFamily="sans-serif-medium"
                     android:gravity="start|center"
                     android:maxLines="2"
-                    android:minHeight="28dp"
-                    android:textSize="20sp" />
+                    android:minHeight="20dp"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/alarm_days"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:fontFamily="sans-serif-medium"
+                    android:fontFamily="sans-serif"
                     android:gravity="start|center"
                     android:maxLines="1"
-                    android:minHeight="28dp"
+                    android:minHeight="25dp"
                     android:textColor="@color/common_black54"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -102,6 +104,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="8dp"
+                        android:background="@color/common_blueA400"
                         android:minWidth="@dimen/common_button_min_width"
                         android:paddingEnd="14dp"
                         android:paddingStart="14dp"
@@ -118,7 +121,9 @@
                         android:minWidth="@dimen/common_button_min_width"
                         android:paddingEnd="14dp"
                         android:paddingStart="14dp"
-                        android:text="@string/turn_off" />
+                        android:text="@string/turn_off"
+                        android:textColor="@color/common_blueA400"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/txt_delete"
@@ -132,9 +137,11 @@
                         android:ellipsize="end"
                         android:fontFamily="sans-serif-medium"
                         android:gravity="start|center"
+                        android:minHeight="25dp"
                         android:singleLine="true"
                         android:text="@string/delete"
                         android:textAllCaps="true"
+                        android:textColor="@color/common_blueA400"
                         android:textSize="14sp" />
                 </RelativeLayout>
 

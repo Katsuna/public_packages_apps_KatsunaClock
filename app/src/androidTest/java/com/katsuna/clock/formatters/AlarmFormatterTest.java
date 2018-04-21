@@ -119,7 +119,7 @@ public class AlarmFormatterTest {
 
         AlarmFormatter formatter = new AlarmFormatter(mContext, alarm);
 
-        int expected = R.drawable.ic_access_time_black_24dp;
+        int expected = R.drawable.ic_access_time_24dp;
         assertEquals(expected, formatter.getAlarmTypeIconResId());
     }
 
@@ -130,7 +130,7 @@ public class AlarmFormatterTest {
 
         AlarmFormatter formatter = new AlarmFormatter(mContext, alarm);
 
-        int expected = R.drawable.ic_notifications_black_24dp;
+        int expected = R.drawable.ic_notifications_24dp;
         assertEquals(expected, formatter.getAlarmTypeIconResId());
     }
 

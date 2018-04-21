@@ -27,7 +27,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:src="@drawable/ic_access_time_black_24dp"
+                    android:src="@drawable/ic_access_time_24dp"
                     android:visibility="gone" />
 
                 <android.support.design.widget.FloatingActionButton
@@ -35,7 +35,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:src="@drawable/ic_add_black_24dp"
+                    android:src="@drawable/ic_add_24dp"
                     android:visibility="gone" />
 
             </LinearLayout>
@@ -138,7 +138,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
                             android:drawablePadding="8dp"
-                            android:drawableStart="@drawable/ic_access_time_black_24dp"
+                            android:drawableStart="@drawable/ic_access_time_24dp"
                             android:text="@string/alarm_time"
                             android:textSize="20sp" />
 
@@ -159,7 +159,7 @@
                                 <ImageButton
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_add_black_24dp" />
+                                    android:src="@drawable/ic_add_24dp" />
 
                                 <EditText
                                     android:id="@+id/hour"
@@ -171,7 +171,7 @@
                                 <ImageButton
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_add_black_24dp" />
+                                    android:src="@drawable/ic_add_24dp" />
 
                             </LinearLayout>
 
@@ -188,7 +188,7 @@
                                 <ImageButton
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_add_black_24dp" />
+                                    android:src="@drawable/ic_add_24dp" />
 
                                 <EditText
                                     android:id="@+id/minute"
@@ -200,7 +200,7 @@
                                 <ImageButton
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_add_black_24dp" />
+                                    android:src="@drawable/ic_add_24dp" />
 
                             </LinearLayout>
 

@@ -55,77 +55,98 @@
                     android:id="@+id/alarm_container_card_inner"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="8dp"
                     android:background="@color/common_grey50"
                     android:orientation="vertical">
 
-                    <RelativeLayout
-                        android:id="@+id/alarm_type_container"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:background="@color/common_blueA700"
+                        android:elevation="4dp">
 
-                        <TextView
-                            android:id="@+id/alarm_type_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="8dp"
-                            android:drawablePadding="8dp"
-                            android:drawableStart="@drawable/ic_label_black_24dp"
-                            android:text="@string/alarm_type"
-                            android:textSize="20sp" />
-
-                        <LinearLayout
-                            android:id="@+id/alarm_type_radio_group_container"
+                        <RelativeLayout
+                            android:id="@+id/alarm_type_container"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignStart="@id/alarm_type_text"
-                            android:layout_below="@id/alarm_type_text"
-                            android:orientation="vertical">
+                            android:layout_marginStart="8dp"
+                            android:background="@color/common_white">
 
-                            <RadioGroup
-                                android:id="@+id/alarm_type_radio_group"
+                            <TextView
+                                android:id="@+id/alarm_type_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="10dp"
+                                android:drawablePadding="8dp"
+                                android:drawableStart="@drawable/ic_label_black_24dp"
+                                android:fontFamily="sans-serif-medium"
+                                android:text="@string/alarm_type"
+                                android:textColor="@color/common_black58"
+                                android:textSize="20sp" />
+
+                            <LinearLayout
+                                android:id="@+id/alarm_type_radio_group_container"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="8dp"
-                                android:layout_marginStart="32dp">
+                                android:layout_alignStart="@id/alarm_type_text"
+                                android:layout_below="@id/alarm_type_text"
+                                android:orientation="vertical">
 
-                                <RadioButton
-                                    android:id="@+id/alarm_type_radio_button"
+                                <RadioGroup
+                                    android:id="@+id/alarm_type_radio_group"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="start"
-                                    android:button="@null"
-                                    android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
-                                    android:gravity="start|center"
-                                    android:text="@string/alarm"
-                                    android:textAlignment="textStart"
-                                    android:textSize="18sp" />
+                                    android:layout_marginEnd="8dp"
+                                    android:layout_marginStart="32dp">
 
-                                <RadioButton
-                                    android:id="@+id/reminder_type_radio_button"
+                                    <RadioButton
+                                        android:id="@+id/alarm_type_radio_button"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="start"
+                                        android:button="@null"
+                                        android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
+                                        android:fontFamily="sans-serif-medium"
+                                        android:gravity="start|center"
+                                        android:text="@string/alarm"
+                                        android:textAlignment="textStart"
+                                        android:textColor="@color/common_black58"
+                                        android:textSize="16sp" />
+
+                                    <RadioButton
+                                        android:id="@+id/reminder_type_radio_button"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="start"
+                                        android:button="@null"
+                                        android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
+                                        android:fontFamily="sans-serif-medium"
+                                        android:gravity="start|center"
+                                        android:text="@string/reminder"
+                                        android:textAlignment="textStart"
+                                        android:textColor="@color/common_black58"
+                                        android:textSize="16sp" />
+
+                                </RadioGroup>
+
+                                <EditText
+                                    android:id="@+id/alarm_description"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="start"
-                                    android:button="@null"
-                                    android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
-                                    android:gravity="start|center"
-                                    android:text="@string/reminder"
-                                    android:textAlignment="textStart"
-                                    android:textSize="18sp" />
+                                    android:layout_marginBottom="36dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:layout_marginStart="28dp"
+                                    android:layout_marginTop="8dp"
+                                    android:hint="@string/description"
+                                    android:inputType="text"
+                                    android:textSize="14sp"
+                                    android:visibility="gone" />
 
-                            </RadioGroup>
+                            </LinearLayout>
 
-                            <EditText
-                                android:id="@+id/alarm_description"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/description"
-                                android:inputType="text"
-                                android:visibility="gone" />
+                        </RelativeLayout>
 
-                        </LinearLayout>
-
-                    </RelativeLayout>
+                    </LinearLayout>
 
                     <RelativeLayout
                         android:id="@+id/alarm_time_container"

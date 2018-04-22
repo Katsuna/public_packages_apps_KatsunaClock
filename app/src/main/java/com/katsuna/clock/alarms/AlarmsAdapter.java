@@ -125,7 +125,12 @@ class AlarmsAdapter extends BaseAdapter {
             }
         });
 
-        Button turnOffButton = rowView.findViewById(R.id.button_turn_off);
+        final Button turnOffButton = rowView.findViewById(R.id.button_turn_off);
+        if (alarm.getAlarmStatus() == AlarmStatus.ACTIVE) {
+            turnOffButton.setText(R.string.turn_off);
+        } else {
+            turnOffButton.setText(R.string.turn_on);
+        }
         turnOffButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -31,15 +31,11 @@ class ManageAlarmContract {
 
         void showAlarmTypeControl(boolean flag);
 
-        void showAlarmTypeControlUnfocused();
-
         void showAlarmTimeControl(boolean flag);
 
-        void showAlarmTimeControlInputMode();
-
-        void showAlarmTimeControlUnfocused();
-
         void showAlarmDaysControl(boolean flag);
+
+        void adjustFabPositions(ManageAlarmStep step);
     }
 
     interface Presenter extends BasePresenter {

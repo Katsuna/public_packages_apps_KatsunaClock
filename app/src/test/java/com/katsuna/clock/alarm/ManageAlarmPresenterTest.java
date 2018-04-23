@@ -229,8 +229,8 @@ public class ManageAlarmPresenterTest {
         Assert.assertTrue(mManageAlarmPresenter.getCurrentStep() == ManageAlarmStep.TIME);
 
         // And view calls should be made
-        verify(mManageAlarmView).showAlarmTypeControlUnfocused();
-        verify(mManageAlarmView).showAlarmTimeControlInputMode();
+        verify(mManageAlarmView).showAlarmTypeControl(false);
+        verify(mManageAlarmView).showAlarmTimeControl(true);
         verify(mManageAlarmView).showAlarmDaysControl(false);
         verify(mManageAlarmView).showPreviousStepFab(true);
 
@@ -277,8 +277,8 @@ public class ManageAlarmPresenterTest {
         Assert.assertTrue(mManageAlarmPresenter.getCurrentStep() == ManageAlarmStep.DAYS);
 
         // And view calls must be made
-        verify(mManageAlarmView, times(2)).showAlarmTypeControlUnfocused();
-        verify(mManageAlarmView).showAlarmTimeControlUnfocused();
+        verify(mManageAlarmView, times(2)).showAlarmTypeControl(false);
+        verify(mManageAlarmView).showAlarmTimeControl(false);
         verify(mManageAlarmView).showAlarmDaysControl(true);
     }
 
@@ -304,8 +304,8 @@ public class ManageAlarmPresenterTest {
         Assert.assertTrue(mManageAlarmPresenter.getCurrentStep() == ManageAlarmStep.TIME);
 
         // And view calls must be made
-        verify(mManageAlarmView, times(3)).showAlarmTypeControlUnfocused();
-        verify(mManageAlarmView, times(2)).showAlarmTimeControlInputMode();
+        verify(mManageAlarmView, times(3)).showAlarmTypeControl(false);
+        verify(mManageAlarmView, times(2)).showAlarmTimeControl(true);
         verify(mManageAlarmView, times(2)).showAlarmDaysControl(false);
         verify(mManageAlarmView, times(2)).showPreviousStepFab(true);
     }

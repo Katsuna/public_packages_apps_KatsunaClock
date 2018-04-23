@@ -150,17 +150,18 @@ class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
                 mManageAlarmView.showPreviousStepFab(false);
                 break;
             case TIME:
-                mManageAlarmView.showAlarmTypeControlUnfocused();
-                mManageAlarmView.showAlarmTimeControlInputMode();
+                mManageAlarmView.showAlarmTypeControl(false);
+                mManageAlarmView.showAlarmTimeControl(true);
                 mManageAlarmView.showAlarmDaysControl(false);
                 mManageAlarmView.showPreviousStepFab(true);
                 break;
             case DAYS:
-                mManageAlarmView.showAlarmTypeControlUnfocused();
-                mManageAlarmView.showAlarmTimeControlUnfocused();
+                mManageAlarmView.showAlarmTypeControl(false);
+                mManageAlarmView.showAlarmTimeControl(false);
                 mManageAlarmView.showAlarmDaysControl(true);
                 break;
         }
+        mManageAlarmView.adjustFabPositions(step);
         mStep = step;
     }
 

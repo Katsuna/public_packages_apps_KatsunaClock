@@ -2,10 +2,14 @@ package com.katsuna.clock.alarm;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -40,9 +44,14 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
     private ToggleButton mFridayToggle;
     private ToggleButton mSaturdayToggle;
     private ToggleButton mSundayToggle;
-    private View mAlarmTypeRadioGroupContainer;
     private RadioButton mReminderTypeRadioGroup;
     private RadioButton mAlarmTypeRadioButton;
+    private View mAlarmTypeContainer;
+    private View mAlarmTypeHandler;
+    private View mAlarmTimeHandler;
+    private View mAlarmTimeContainer;
+    private View mAlarmDaysContainer;
+    private View mAlarmDaysHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +68,8 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
     }
 
     private void init() {
-        mAlarmTypeRadioGroupContainer = findViewById(R.id.alarm_type_radio_group_container);
+        mAlarmTypeContainer = findViewById(R.id.alarm_type_container);
+        mAlarmTypeHandler = findViewById(R.id.alarm_type_handler);
         mAlarmTypeRadioGroup = findViewById(R.id.alarm_type_radio_group);
         mAlarmTypeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -78,10 +88,14 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
         mReminderTypeRadioGroup = findViewById(R.id.reminder_type_radio_button);
         mDescription = findViewById(R.id.alarm_description);
 
+        mAlarmTimeHandler = findViewById(R.id.alarm_time_handler);
+        mAlarmTimeContainer = findViewById(R.id.alarm_time_container);
         mAlarmTimeControl = findViewById(R.id.alarm_time_control);
         mHour = findViewById(R.id.hour);
         mMinute = findViewById(R.id.minute);
 
+        mAlarmDaysHandler = findViewById(R.id.alarm_days_handler);
+        mAlarmDaysContainer = findViewById(R.id.alarm_days_container);
         mAlarmDaysControl = findViewById(R.id.alarm_days_radio_group);
         mMondayToggle = findViewById(R.id.monday_tb);
         mTuesdayToggle = findViewById(R.id.tuesday_tb);
@@ -153,7 +167,7 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
     @Override
     public void showValidationResults(List<ValidationResult> results) {
         StringBuilder sb = new StringBuilder();
-        for(Iterator<ValidationResult> i = results.iterator(); i.hasNext();) {
+        for (Iterator<ValidationResult> i = results.iterator(); i.hasNext(); ) {
             ValidationResult result = i.next();
             sb.append(getString(result.messageResId));
             if (i.hasNext()) {
@@ -180,34 +194,132 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
 
     @Override
     public void showAlarmTypeControl(boolean flag) {
-        mAlarmTypeRadioGroupContainer.setVisibility(flag ? View.VISIBLE : View.GONE);
-    }
+        if (flag) {
+            mAlarmTypeContainer.setBackgroundColor(ContextCompat.getColor(this,
+                    R.color.common_white));
 
-    @Override
-    public void showAlarmTypeControlUnfocused() {
-        // TODO
-        mAlarmTypeRadioGroupContainer.setVisibility(View.GONE);
-    }
+            mAlarmTypeRadioButton.setVisibility(View.VISIBLE);
+            mReminderTypeRadioGroup.setVisibility(View.VISIBLE);
+            if (mReminderTypeRadioGroup.isChecked()) {
+                mDescription.setVisibility(View.VISIBLE);
+            }
 
-    @Override
-    public void showAlarmTimeControlInputMode() {
-        mAlarmTimeControl.setVisibility(View.VISIBLE);
-    }
+            int elevation = getResources().getDimensionPixelSize(
+                    R.dimen.common_selection_elevation);
 
-    @Override
-    public void showAlarmTimeControlUnfocused() {
-        // TODO
-        mAlarmTimeControl.setVisibility(View.GONE);
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)
+                    mAlarmTypeHandler.getLayoutParams();
+            layoutParams.bottomMargin = elevation;
+            mAlarmTypeHandler.setElevation(elevation);
+        } else {
+            mAlarmTypeContainer.setBackgroundColor(ContextCompat.getColor(this,
+                    R.color.common_grey50));
+
+            mAlarmTypeRadioButton.setVisibility(mAlarmTypeRadioButton.isChecked() ? View.VISIBLE :
+                    View.GONE);
+
+            if (mReminderTypeRadioGroup.isChecked()) {
+                mReminderTypeRadioGroup.setVisibility(View.VISIBLE);
+                mDescription.setVisibility(View.VISIBLE);
+            } else {
+                mReminderTypeRadioGroup.setVisibility(View.GONE);
+                mDescription.setVisibility(View.GONE);
+            }
+
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)
+                    mAlarmTypeHandler.getLayoutParams();
+            layoutParams.bottomMargin = 0;
+            mAlarmTypeHandler.setElevation(0);
+        }
+
+        mAlarmTypeRadioButton.setEnabled(flag);
+        mReminderTypeRadioGroup.setEnabled(flag);
+        mDescription.setEnabled(flag);
     }
 
     @Override
     public void showAlarmTimeControl(boolean flag) {
+        if (flag) {
+            mAlarmTimeContainer.setBackgroundColor(ContextCompat.getColor(this, R.color.common_white));
+            mAlarmTimeHandler.setBackgroundColor(ContextCompat.getColor(this,
+                    R.color.common_blueA700));
+
+            int elevation = getResources().getDimensionPixelSize(
+                    R.dimen.common_selection_elevation);
+
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)
+                    mAlarmTypeHandler.getLayoutParams();
+            layoutParams.bottomMargin = elevation;
+            mAlarmTimeHandler.setElevation(elevation);
+        } else {
+            mAlarmTimeContainer.setBackgroundColor(ContextCompat.getColor(this,
+                    R.color.common_grey50));
+
+            if (mPresenter.getCurrentStep() == ManageAlarmStep.TIME) {
+                mAlarmTimeHandler.setBackgroundColor(ContextCompat.getColor(this,
+                        R.color.common_blueA700));
+            } else {
+                mAlarmTimeHandler.setBackgroundColor(ContextCompat.getColor(this,
+                        R.color.common_solitude));
+            }
+
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)
+                    mAlarmTypeHandler.getLayoutParams();
+            layoutParams.bottomMargin = 0;
+            mAlarmTimeHandler.setElevation(0);
+
+        }
+
         mAlarmTimeControl.setVisibility(flag ? View.VISIBLE : View.GONE);
     }
 
     @Override
     public void showAlarmDaysControl(boolean flag) {
+        if (flag) {
+            mAlarmDaysContainer.setBackgroundColor(ContextCompat.getColor(this, R.color.common_white));
+            mAlarmDaysHandler.setBackgroundColor(ContextCompat.getColor(this,
+                    R.color.common_blueA700));
+
+            int elevation = getResources().getDimensionPixelSize(
+                    R.dimen.common_selection_elevation);
+
+            mAlarmDaysHandler.setElevation(elevation);
+
+        } else {
+            mAlarmDaysContainer.setBackgroundColor(ContextCompat.getColor(this,
+                    R.color.common_grey50));
+
+            mAlarmDaysHandler.setBackgroundColor(ContextCompat.getColor(this,
+                    R.color.common_solitude));
+
+            mAlarmDaysHandler.setElevation(0);
+        }
+
         mAlarmDaysControl.setVisibility(flag ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void adjustFabPositions(ManageAlarmStep step) {
+        CoordinatorLayout.LayoutParams nextStepFabParams =
+                (CoordinatorLayout.LayoutParams) mNextStepFab.getLayoutParams();
+        CoordinatorLayout.LayoutParams previousStepFabParams =
+                (CoordinatorLayout.LayoutParams) mPreviousStepFab.getLayoutParams();
+
+        switch (step) {
+            case TYPE:
+                nextStepFabParams.anchorGravity = Gravity.TOP | Gravity.END;
+                break;
+            case TIME:
+                previousStepFabParams.anchorGravity = Gravity.TOP | Gravity.END;
+                nextStepFabParams.setAnchorId(R.id.alarm_time_container);
+                nextStepFabParams.anchorGravity = Gravity.BOTTOM | Gravity.END;
+                break;
+            case DAYS:
+                previousStepFabParams.anchorGravity = Gravity.BOTTOM | Gravity.END;
+                nextStepFabParams.setAnchorId(R.id.alarm_days_container);
+                nextStepFabParams.anchorGravity = Gravity.BOTTOM | Gravity.END;
+                break;
+        }
     }
 
     @Override

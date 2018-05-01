@@ -3,6 +3,7 @@ package com.katsuna.clock.validators;
 import com.katsuna.clock.R;
 import com.katsuna.clock.data.AlarmType;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,8 +17,13 @@ public class AlarmValidatorTest {
     private IAlarmValidator mValidator;
 
     @Before
-    public void setup() {
+    public void start() {
         mValidator = new AlarmValidator();
+    }
+
+    @After
+    public void stop() {
+        mValidator = null;
     }
 
     @Test

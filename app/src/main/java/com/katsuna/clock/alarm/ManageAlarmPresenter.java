@@ -8,6 +8,7 @@ import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.data.AlarmType;
 import com.katsuna.clock.data.source.AlarmsDataSource;
+import com.katsuna.clock.services.utils.IAlarmScheduler;
 import com.katsuna.clock.validators.IAlarmValidator;
 import com.katsuna.clock.validators.ValidationResult;
 
@@ -32,17 +33,22 @@ class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
     @Nullable
     private final String mAlarmId;
 
+    @NonNull
+    private final IAlarmScheduler mAlarmsScheduler;
+
     private boolean mIsDataMissing = true;
     private ManageAlarmStep mStep = ManageAlarmStep.TYPE;
 
     public ManageAlarmPresenter(@Nullable String alarmId,
                                 @NonNull AlarmsDataSource alarmsDataSource,
                                 @NonNull ManageAlarmContract.View manageAlarmView,
-                                @NonNull IAlarmValidator alarmValidator) {
+                                @NonNull IAlarmValidator alarmValidator,
+                                @NonNull IAlarmScheduler alarmsScheduler) {
         mAlarmId = alarmId;
         mAlarmsDataSource = checkNotNull(alarmsDataSource, "dataSource cannot be null");
         mManageAlarmView = checkNotNull(manageAlarmView, "manageAlarmView cannot be null!");
         mAlarmValidator = checkNotNull(alarmValidator, "alarmValidator cannot be null!");
+        mAlarmsScheduler = checkNotNull(alarmsScheduler, "alarmsScheduler cannot be null!");
 
         mManageAlarmView.setPresenter(this);
     }
@@ -83,6 +89,7 @@ class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
                         fridayEnabled, saturdayEnabled, sundayEnabled, AlarmStatus.ACTIVE);
             }
             mAlarmsDataSource.saveAlarm(alarm);
+            mAlarmsScheduler.reschedule(alarm);
             mManageAlarmView.showAlarmsList();
         } else {
             mManageAlarmView.showValidationResults(results);

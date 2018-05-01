@@ -201,6 +201,11 @@ public final class Alarm {
         return mSundayEnabled;
     }
 
+    public boolean isRecurring() {
+        return mMondayEnabled || mTuesdayEnabled || mWednesdayEnabled || mThursdayEnabled
+                || mFridayEnabled || mSaturdayEnabled || mSundayEnabled;
+    }
+
     @NonNull
     public AlarmStatus getAlarmStatus() {
         return mAlarmStatus;

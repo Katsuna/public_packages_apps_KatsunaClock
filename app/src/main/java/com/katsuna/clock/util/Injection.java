@@ -6,13 +6,14 @@ import android.support.annotation.NonNull;
 import com.katsuna.clock.data.source.AlarmsDataSource;
 import com.katsuna.clock.data.source.AlarmsLocalDataSource;
 import com.katsuna.clock.data.source.ClockDatabase;
+import com.katsuna.clock.services.utils.AlarmScheduler;
+import com.katsuna.clock.services.utils.IAlarmScheduler;
+import com.katsuna.clock.services.utils.NextAlarmCalculator;
 import com.katsuna.clock.validators.AlarmValidator;
 import com.katsuna.clock.validators.IAlarmValidator;
 
 /**
- * Enables injection of mock implementations for
- * {@link AlarmsDataSource} at compile time. This is useful for testing, since it allows us to use
- * a fake instance of the class to isolate the dependencies and run a test hermetically.
+ * Enables injection of implementations for various objects.
  */
 public class Injection {
 
@@ -23,5 +24,10 @@ public class Injection {
 
     public static IAlarmValidator provideAlarmValidator() {
         return new AlarmValidator();
+    }
+
+    public static IAlarmScheduler provideAlarmScheduler(@NonNull Context context) {
+        return new AlarmScheduler(context, provideAlarmsDataSource(context),
+                new NextAlarmCalculator());
     }
 }

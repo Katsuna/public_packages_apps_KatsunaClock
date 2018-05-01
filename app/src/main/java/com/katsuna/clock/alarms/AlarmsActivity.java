@@ -15,6 +15,7 @@ import com.katsuna.clock.R;
 import com.katsuna.clock.alarm.ManageAlarmActivity;
 import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmStatus;
+import com.katsuna.clock.services.AlarmService;
 import com.katsuna.clock.util.Injection;
 
 import java.util.ArrayList;
@@ -64,12 +65,16 @@ public class AlarmsActivity extends AppCompatActivity implements AlarmsContract.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        startService(new Intent(this, AlarmService.class));
+
         setContentView(R.layout.activity_alarms);
 
         init();
 
         // Create the presenter
-        new AlarmsPresenter(Injection.provideAlarmsDataSource(getApplicationContext()), this);
+        new AlarmsPresenter(Injection.provideAlarmsDataSource(getApplicationContext()), this,
+                Injection.provideAlarmScheduler(getApplicationContext()));
     }
 
     private void init() {

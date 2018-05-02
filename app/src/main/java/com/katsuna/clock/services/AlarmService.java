@@ -5,20 +5,20 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.katsuna.clock.services.utils.IAlarmScheduler;
+import com.katsuna.clock.services.utils.IAlarmsScheduler;
 import com.katsuna.clock.util.Injection;
 
 public class AlarmService extends Service {
 
     private static final String TAG = "KastunaAlarmService";
-    private IAlarmScheduler mAlarmScheduler;
+    private IAlarmsScheduler mAlarmsScheduler;
 
     @Override
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate");
 
-        mAlarmScheduler = Injection.provideAlarmScheduler(getApplicationContext());
+        mAlarmsScheduler = Injection.provideAlarmScheduler(getApplicationContext());
     }
 
     @Override
@@ -32,7 +32,7 @@ public class AlarmService extends Service {
         // immediately after doing what I wanted it to do.
 
 
-        mAlarmScheduler.schedule(new IAlarmScheduler.CallBack() {
+        mAlarmsScheduler.schedule(new IAlarmsScheduler.CallBack() {
             @Override
             public void schedulingFinished() {
                 stopSelf();

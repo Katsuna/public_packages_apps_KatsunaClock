@@ -6,8 +6,8 @@ import android.support.annotation.NonNull;
 import com.katsuna.clock.data.source.AlarmsDataSource;
 import com.katsuna.clock.data.source.AlarmsLocalDataSource;
 import com.katsuna.clock.data.source.ClockDatabase;
-import com.katsuna.clock.services.utils.AlarmScheduler;
-import com.katsuna.clock.services.utils.IAlarmScheduler;
+import com.katsuna.clock.services.utils.AlarmsScheduler;
+import com.katsuna.clock.services.utils.IAlarmsScheduler;
 import com.katsuna.clock.services.utils.NextAlarmCalculator;
 import com.katsuna.clock.validators.AlarmValidator;
 import com.katsuna.clock.validators.IAlarmValidator;
@@ -26,8 +26,8 @@ public class Injection {
         return new AlarmValidator();
     }
 
-    public static IAlarmScheduler provideAlarmScheduler(@NonNull Context context) {
-        return new AlarmScheduler(context, provideAlarmsDataSource(context),
+    public static IAlarmsScheduler provideAlarmScheduler(@NonNull Context context) {
+        return new AlarmsScheduler(context, provideAlarmsDataSource(context),
                 new NextAlarmCalculator());
     }
 }

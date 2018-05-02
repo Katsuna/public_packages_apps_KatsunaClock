@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.data.source.AlarmsDataSource;
-import com.katsuna.clock.services.utils.IAlarmScheduler;
+import com.katsuna.clock.services.utils.IAlarmsScheduler;
 import com.katsuna.clock.util.EspressoIdlingResource;
 
 import java.text.SimpleDateFormat;
@@ -28,11 +28,11 @@ public class AlarmsPresenter implements AlarmsContract.Presenter {
     private final AlarmsContract.View mAlarmsView;
 
     @NonNull
-    private final IAlarmScheduler mAlarmsScheduler;
+    private final IAlarmsScheduler mAlarmsScheduler;
 
     AlarmsPresenter(@NonNull AlarmsDataSource alarmsDataSource,
                     @NonNull AlarmsContract.View alarmsView,
-                    @NonNull IAlarmScheduler alarmsScheduler) {
+                    @NonNull IAlarmsScheduler alarmsScheduler) {
         mAlarmsDataSource = checkNotNull(alarmsDataSource, "dataSource cannot be null");
         mAlarmsView = checkNotNull(alarmsView, "alarmsView cannot be null!");
         mAlarmsScheduler = checkNotNull(alarmsScheduler, "alarmsScheduler cannot be null!");

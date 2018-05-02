@@ -7,77 +7,132 @@ import com.katsuna.clock.data.AlarmType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDateTime;
-import org.threeten.bp.LocalTime;
-import org.threeten.bp.temporal.TemporalAdjusters;
+
+import static junit.framework.Assert.assertTrue;
 
 public class NextAlarmCalculatorTest {
 
 
     private NextAlarmCalculator mNextAlarmCalculator;
 
+    private LocalDateTime now;
+
     @Before
     public void start() {
         mNextAlarmCalculator = new NextAlarmCalculator();
+        // configure now as 2018-May-2 12:30:00  (Wednesday)
+        now = LocalDateTime.of(2018, 5, 2, 12, 30);
     }
 
     @After
     public void stop() {
         mNextAlarmCalculator = null;
+        now = null;
     }
 
     @Test
-    public void emptyHourAlarmInput_returnsValidationResult() {
-        Alarm alarm = new Alarm(AlarmType.ALARM, 13, 30, null, true,
-                false, false, false, false, false, false, AlarmStatus.ACTIVE);
+    public void nonRecurringAlarmAfterPresentTime_getScheduledInTheSameDay() {
+        // setup
+        Alarm alarm = new Alarm(AlarmType.ALARM, 14, 30, null, false, false, false, false, false,
+                false, false, AlarmStatus.ACTIVE);
+        LocalDateTime expectedTriggerTime = now.plusHours(2);
 
-        Alarm mondayAlarm = new Alarm(AlarmType.ALARM, 12, 0, null, true,
-                false, false, false, false, false, false, AlarmStatus.ACTIVE);
+        // execute
+        // calculate triggerTime
+        LocalDateTime triggerTime = mNextAlarmCalculator.getTriggerDateTime(now, alarm);
 
-        Alarm mondayAndFridayAlarm = new Alarm(AlarmType.ALARM, 12, 0, null, true,
-                false, false, false, true, false, false, AlarmStatus.ACTIVE);
-
-        Alarm sundayAlarm = new Alarm(AlarmType.ALARM, 12, 0, null, true,
-                false, false, false, false, false, false, AlarmStatus.ACTIVE);
-
-        LocalDateTime now = LocalDateTime.now();
-
-
-        System.out.println("now: " + now);
-
-        if (alarm.isRecurring()) {
-            if (alarm.isMondayEnabled()) {
-                LocalDateTime nextMonday = LocalDateTime.of(
-                        now.toLocalDate().with(TemporalAdjusters.next(DayOfWeek.MONDAY)),
-                        LocalTime.of(alarm.getHour(), alarm.getMinute()));
-                System.out.println("nextMonday: " + nextMonday);
-            }
-
-
-        } else {
-            LocalDateTime alarmDate = LocalDateTime.of(now.toLocalDate(),
-                    LocalTime.of(alarm.getHour(), alarm.getMinute()));
-            if (alarmDate.isBefore(now)) {
-                alarmDate = alarmDate.plusDays(1);
-            }
-            System.out.println("alarmDate: " + alarmDate);
-        }
-
-/*
-        System.out.println("now.getDayOfWeek(): " + now.getDayOfWeek());
-        System.out.println("now.getDayOfWeek(): " + now.with(TemporalAdjusters.previous(now.getDayOfWeek())));
-        System.out.println("nextMonday: " + nextMonday);*/
-
-
-        // given invalid input
-        // validator returns results
-/*        List<ValidationResult> results = mValidator.validateTime("", "34");
-        assertTrue(results.size() == 1);
-
-        ValidationResult result = results.get(0);
-        assertTrue(result.messageResId == R.string.validation_hour);*/
+        // evaluate
+        assertTrue(triggerTime.equals(expectedTriggerTime));
     }
 
+    @Test
+    public void nonRecurringAlarmBeforePresentTime_getScheduledNextDay() {
+        // setup
+        Alarm alarm = new Alarm(AlarmType.ALARM, 10, 30, null, false, false, false, false, false,
+                false, false, AlarmStatus.ACTIVE);
+        LocalDateTime expectedTriggerTime = now.plusDays(1).minusHours(2);
 
+        // execute
+        // calculate triggerTime
+        LocalDateTime triggerTime = mNextAlarmCalculator.getTriggerDateTime(now, alarm);
+
+        // evaluate
+        assertTrue(triggerTime.equals(expectedTriggerTime));
+    }
+
+    @Test
+    public void nonRecurringAlarmAtTheSamePresentTime_getScheduledNextDay() {
+        // setup
+        Alarm alarm = new Alarm(AlarmType.ALARM, 12, 30, null, false, false, false, false, false,
+                false, false, AlarmStatus.ACTIVE);
+        LocalDateTime expectedTriggerTime = now.plusDays(1);
+
+        // execute
+        // calculate triggerTime
+        LocalDateTime triggerTime = mNextAlarmCalculator.getTriggerDateTime(now, alarm);
+
+        // evaluate
+        assertTrue(triggerTime.equals(expectedTriggerTime));
+    }
+
+    @Test
+    public void recurringAlarmAfterPresentTime_getScheduledInTheSameDay() {
+        // setup
+        Alarm alarm = new Alarm(AlarmType.ALARM, 14, 30, null, false, false, true, false, false,
+                false, false, AlarmStatus.ACTIVE);
+        LocalDateTime expectedTriggerTime = now.plusHours(2);
+
+        // execute
+        // calculate triggerTime
+        LocalDateTime triggerTime = mNextAlarmCalculator.getTriggerDateTime(now, alarm);
+
+        // evaluate
+        assertTrue(triggerTime.equals(expectedTriggerTime));
+    }
+
+    @Test
+    public void recurringAlarmBeforePresentTime_getScheduledInTheSameDayNextWeek() {
+        // setup
+        Alarm alarm = new Alarm(AlarmType.ALARM, 10, 30, null, false, false, true, false, false,
+                false, false, AlarmStatus.ACTIVE);
+        LocalDateTime expectedTriggerTime = now.minusHours(2).plusWeeks(1);
+
+        // execute
+        // calculate triggerTime
+        LocalDateTime triggerTime = mNextAlarmCalculator.getTriggerDateTime(now, alarm);
+
+        // evaluate
+        assertTrue(triggerTime.equals(expectedTriggerTime));
+    }
+
+    @Test
+    public void recurringAlarmAtTheSamePresentTime_getScheduledInTheSameDayNextWeek() {
+        // setup
+        Alarm alarm = new Alarm(AlarmType.ALARM, 12, 30, null, false, false, true, false, false,
+                false, false, AlarmStatus.ACTIVE);
+        LocalDateTime expectedTriggerTime = now.plusWeeks(1);
+
+        // execute
+        // calculate triggerTime
+        LocalDateTime triggerTime = mNextAlarmCalculator.getTriggerDateTime(now, alarm);
+
+        // evaluate
+        assertTrue(triggerTime.equals(expectedTriggerTime));
+    }
+
+    @Test
+    public void recurringAlarmWithAllDaysAtTheSamePresentTime_getScheduledAtNextDay() {
+        // setup
+        Alarm alarm = new Alarm(AlarmType.ALARM, 12, 30, null, true, true, true, true, true,
+                true, true, AlarmStatus.ACTIVE);
+        LocalDateTime expectedTriggerTime = now.plusDays(1);
+
+        // execute
+        // calculate triggerTime
+        LocalDateTime triggerTime = mNextAlarmCalculator.getTriggerDateTime(now, alarm);
+
+        // evaluate
+        assertTrue(triggerTime.equals(expectedTriggerTime));
+    }
 }

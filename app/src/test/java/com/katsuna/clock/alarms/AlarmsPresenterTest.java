@@ -6,6 +6,7 @@ import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.data.AlarmType;
 import com.katsuna.clock.data.source.AlarmsDataSource;
 import com.katsuna.clock.data.source.AlarmsDataSource.LoadAlarmsCallback;
+import com.katsuna.clock.services.utils.IAlarmsScheduler;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +35,9 @@ public class AlarmsPresenterTest {
     @Mock
     private AlarmsContract.View mAlarmsView;
 
+    @Mock
+    private IAlarmsScheduler mAlarmsScheduler;
+
     /**
      * {@link ArgumentCaptor} is a powerful Mockito API to capture argument values and use them to
      * perform further actions or assertions on them.
@@ -53,7 +57,7 @@ public class AlarmsPresenterTest {
         MockitoAnnotations.initMocks(this);
 
         // Get a reference to the class under test
-        mAlarmsPresenter = new AlarmsPresenter(mAlarmsDataSource, mAlarmsView);
+        mAlarmsPresenter = new AlarmsPresenter(mAlarmsDataSource, mAlarmsView, mAlarmsScheduler);
 
         // We start the alarms to 3
         ALARMS = Lists.newArrayList(new Alarm(AlarmType.ALARM, "Description1"),
@@ -157,6 +161,7 @@ public class AlarmsPresenterTest {
 
         // Verify actions taken by the presenter
         verify(mAlarmsDataSource).saveAlarm(ALARMS.get(0));
+        verify(mAlarmsScheduler).reschedule(ALARMS.get(0));
         verify(mAlarmsView).reloadAlarm(ALARMS.get(0));
     }
 

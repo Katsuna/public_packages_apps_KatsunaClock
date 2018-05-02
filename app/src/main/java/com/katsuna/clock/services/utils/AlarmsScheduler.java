@@ -11,21 +11,25 @@ import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.data.source.AlarmsDataSource;
 import com.katsuna.clock.receivers.AlarmReceiver;
+import com.katsuna.clock.util.DateUtils;
+
+import org.threeten.bp.LocalDateTime;
 
 import java.util.List;
+import java.util.Objects;
 
 
-public class AlarmScheduler implements IAlarmScheduler {
+public class AlarmsScheduler implements IAlarmsScheduler {
 
-    private static final String TAG = "AlarmScheduler";
+    private static final String TAG = "AlarmsScheduler";
     public static final String ALARM_ID = "alarm_id";
 
     private final Context mContext;
     private final AlarmsDataSource mAlarmsDatasource;
     private final INextAlarmCalculator mNextAlarmCalculator;
 
-    public AlarmScheduler(@NonNull Context context, @NonNull AlarmsDataSource alarmsDataSource,
-                          @NonNull INextAlarmCalculator nextAlarmCalculator) {
+    public AlarmsScheduler(@NonNull Context context, @NonNull AlarmsDataSource alarmsDataSource,
+                           @NonNull INextAlarmCalculator nextAlarmCalculator) {
         mContext = context;
         mAlarmsDatasource = alarmsDataSource;
         mNextAlarmCalculator = nextAlarmCalculator;
@@ -69,14 +73,16 @@ public class AlarmScheduler implements IAlarmScheduler {
         PendingIntent pi = getPendingIntent(alarm);
 
         AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-        am.set(AlarmManager.RTC_WAKEUP, mNextAlarmCalculator.getTriggerTime(alarm), pi);
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime triggerDateTime = mNextAlarmCalculator.getTriggerDateTime(now, alarm);
+        Objects.requireNonNull(am).set(AlarmManager.RTC_WAKEUP, DateUtils.toEpochMillis(triggerDateTime), pi);
     }
 
     private void cancelAlarm(Alarm alarm) {
         Log.e(TAG, "cancelAlarm: " + alarm.toString());
         PendingIntent pi = getPendingIntent(alarm);
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(pi);
+        Objects.requireNonNull(alarmManager).cancel(pi);
     }
 
     private PendingIntent getPendingIntent(Alarm alarm) {

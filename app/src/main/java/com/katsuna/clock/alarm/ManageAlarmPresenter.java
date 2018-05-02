@@ -8,7 +8,7 @@ import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.data.AlarmType;
 import com.katsuna.clock.data.source.AlarmsDataSource;
-import com.katsuna.clock.services.utils.IAlarmScheduler;
+import com.katsuna.clock.services.utils.IAlarmsScheduler;
 import com.katsuna.clock.validators.IAlarmValidator;
 import com.katsuna.clock.validators.ValidationResult;
 
@@ -34,7 +34,7 @@ class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
     private final String mAlarmId;
 
     @NonNull
-    private final IAlarmScheduler mAlarmsScheduler;
+    private final IAlarmsScheduler mAlarmsScheduler;
 
     private boolean mIsDataMissing = true;
     private ManageAlarmStep mStep = ManageAlarmStep.TYPE;
@@ -43,7 +43,7 @@ class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
                                 @NonNull AlarmsDataSource alarmsDataSource,
                                 @NonNull ManageAlarmContract.View manageAlarmView,
                                 @NonNull IAlarmValidator alarmValidator,
-                                @NonNull IAlarmScheduler alarmsScheduler) {
+                                @NonNull IAlarmsScheduler alarmsScheduler) {
         mAlarmId = alarmId;
         mAlarmsDataSource = checkNotNull(alarmsDataSource, "dataSource cannot be null");
         mManageAlarmView = checkNotNull(manageAlarmView, "manageAlarmView cannot be null!");

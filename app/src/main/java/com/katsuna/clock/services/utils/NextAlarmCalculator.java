@@ -1,14 +1,10 @@
 package com.katsuna.clock.services.utils;
 
-import android.util.Log;
-
 import com.katsuna.clock.data.Alarm;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.LocalTime;
-import org.threeten.bp.ZoneId;
-import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.temporal.TemporalAdjusters;
 
 import java.util.ArrayList;
@@ -16,22 +12,8 @@ import java.util.List;
 
 public class NextAlarmCalculator implements INextAlarmCalculator {
 
-    private static final String TAG = "NextAlarmCalculator";
-
     @Override
-    public long getTriggerTime(Alarm alarm) {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime output = getTriggerDateTime(now, alarm);
-
-        Log.e(TAG, "getTriggerTime output: " + output);
-
-        ZoneId systemZone = ZoneId.systemDefault(); // my timezone
-        ZoneOffset currentOffsetForMyZone = systemZone.getRules().getOffset(now);
-
-        return output == null ? 0 : output.toInstant(currentOffsetForMyZone).toEpochMilli();
-    }
-
-    private LocalDateTime getTriggerDateTime(LocalDateTime now, Alarm alarm) {
+    public LocalDateTime getTriggerDateTime(LocalDateTime now, Alarm alarm) {
         LocalDateTime output;
 
         if (alarm.isRecurring()) {
@@ -39,11 +21,10 @@ public class NextAlarmCalculator implements INextAlarmCalculator {
         } else {
             output = LocalDateTime.of(now.toLocalDate(),
                     LocalTime.of(alarm.getHour(), alarm.getMinute()));
-            if (output.isBefore(now)) {
+            if (output.isBefore(now) || output.isEqual(now)) {
                 output = output.plusDays(1);
             }
         }
-
         return output;
     }
 
@@ -71,6 +52,7 @@ public class NextAlarmCalculator implements INextAlarmCalculator {
             nearestDays.add(getNearestDay(now, DayOfWeek.SUNDAY, alarm));
         }
 
+        // get nearest datetime
         LocalDateTime output = null;
         for (LocalDateTime dateTime : nearestDays) {
             if (output == null) {
@@ -84,9 +66,16 @@ public class NextAlarmCalculator implements INextAlarmCalculator {
     }
 
     private LocalDateTime getNearestDay(LocalDateTime now, DayOfWeek dayOfWeek, Alarm alarm) {
-        LocalDateTime output = LocalDateTime.of(now.toLocalDate(),
-                LocalTime.of(alarm.getHour(), alarm.getMinute()));
-        if (output.isBefore(now)) {
+        LocalDateTime output;
+        if (now.getDayOfWeek() == dayOfWeek) {
+            output = LocalDateTime.of(now.toLocalDate(),
+                    LocalTime.of(alarm.getHour(), alarm.getMinute()));
+            if (output.isBefore(now) || output.isEqual(now)) {
+                output = LocalDateTime.of(
+                        now.toLocalDate().plusDays(1).with(TemporalAdjusters.next(dayOfWeek)),
+                        LocalTime.of(alarm.getHour(), alarm.getMinute()));
+            }
+        } else {
             output = LocalDateTime.of(
                     now.toLocalDate().with(TemporalAdjusters.next(dayOfWeek)),
                     LocalTime.of(alarm.getHour(), alarm.getMinute()));

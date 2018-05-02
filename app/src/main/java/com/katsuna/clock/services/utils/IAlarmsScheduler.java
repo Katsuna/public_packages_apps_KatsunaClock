@@ -2,7 +2,7 @@ package com.katsuna.clock.services.utils;
 
 import com.katsuna.clock.data.Alarm;
 
-public interface IAlarmScheduler {
+public interface IAlarmsScheduler {
 
     void schedule(CallBack callBack);
 

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.katsuna.clock.AlarmActivationActivity;
 import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.data.source.AlarmsDataSource;
@@ -53,6 +54,10 @@ public class AlarmReceiver extends BroadcastReceiver {
                     alarm.setAlarmStatus(AlarmStatus.INACTIVE);
                     mAlarmsDataSource.saveAlarm(alarm);
                 }
+
+                Intent i = new Intent(context, AlarmActivationActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
             }
 
             @Override

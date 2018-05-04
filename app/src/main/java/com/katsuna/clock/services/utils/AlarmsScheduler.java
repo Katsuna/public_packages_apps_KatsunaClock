@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.katsuna.clock.alarm.ManageAlarmActivity;
 import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.data.source.AlarmsDataSource;
@@ -17,6 +18,8 @@ import org.threeten.bp.LocalDateTime;
 
 import java.util.List;
 import java.util.Objects;
+
+import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 
 
 public class AlarmsScheduler implements IAlarmsScheduler {
@@ -70,26 +73,36 @@ public class AlarmsScheduler implements IAlarmsScheduler {
         if (alarm.getAlarmStatus() != AlarmStatus.ACTIVE) return;
 
         Log.e(TAG, "setAlarm: " + alarm.toString());
-        PendingIntent pi = getPendingIntent(alarm);
 
         AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime triggerDateTime = mNextAlarmCalculator.getTriggerDateTime(now, alarm);
-        Objects.requireNonNull(am).set(AlarmManager.RTC_WAKEUP, DateUtils.toEpochMillis(triggerDateTime), pi);
+
+        AlarmManager.AlarmClockInfo alarmClockInfo = new AlarmManager.AlarmClockInfo(
+                DateUtils.toEpochMillis(triggerDateTime),
+                getPendindEditIntent(alarm));
+        Objects.requireNonNull(am).setAlarmClock(alarmClockInfo, getPendingTriggerIntent(alarm));
+
+        Log.e(TAG, String.format("Alarm %s scheduled at (%s)", alarm, triggerDateTime));
     }
 
     private void cancelAlarm(Alarm alarm) {
         Log.e(TAG, "cancelAlarm: " + alarm.toString());
-        PendingIntent pi = getPendingIntent(alarm);
+        PendingIntent pi = getPendingTriggerIntent(alarm);
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         Objects.requireNonNull(alarmManager).cancel(pi);
     }
 
-    private PendingIntent getPendingIntent(Alarm alarm) {
+    private PendingIntent getPendingTriggerIntent(Alarm alarm) {
         Intent i = new Intent(mContext, AlarmReceiver.class);
         i.putExtra(ALARM_ID, alarm.getId());
-        return PendingIntent.getBroadcast(mContext, 0, i, 0);
+        return PendingIntent.getBroadcast(mContext, 0, i, FLAG_UPDATE_CURRENT);
+    }
 
+    private PendingIntent getPendindEditIntent(Alarm alarm) {
+        Intent i = new Intent(mContext, ManageAlarmActivity.class);
+        i.putExtra(ManageAlarmActivity.EXTRA_ALARM_ID, alarm.getId());
+        return PendingIntent.getActivity(mContext, 0, i, 0);
     }
 
 }

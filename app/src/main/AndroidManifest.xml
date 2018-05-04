@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.katsuna.clock">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -23,9 +24,20 @@
             android:name=".alarm.ManageAlarmActivity"
             android:parentActivityName=".alarms.AlarmsActivity" />
 
+        <activity
+            android:name=".AlarmActivationActivity"
+            android:directBootAware="true"
+            android:excludeFromRecents="true"
+            android:resizeableActivity="false"
+            android:showOnLockScreen="true"
+            android:taskAffinity=""
+            android:windowSoftInputMode="stateAlwaysHidden"
+            tools:targetApi="n" />
+
         <receiver
             android:name=".receivers.AlarmInitReceiver"
-            android:directBootAware="true">
+            android:directBootAware="true"
+            tools:targetApi="n">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.LOCALE_CHANGED" />
@@ -41,7 +53,8 @@
 
         <service
             android:name=".services.AlarmService"
-            android:directBootAware="true" />
+            android:directBootAware="true"
+            tools:targetApi="n" />
 
     </application>
 

@@ -364,9 +364,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:backgroundTint="@color/common_white"
         android:src="@drawable/ic_arrow_upward_24dp"
         android:visibility="gone"
+        app:backgroundTint="@color/common_white"
         app:layout_anchor="@id/alarm_time_container"
         app:layout_anchorGravity="top|end" />
 
@@ -375,9 +375,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:backgroundTint="@color/common_white"
         android:src="@drawable/ic_check_24dp"
         android:visibility="gone"
+        app:backgroundTint="@color/common_white"
         app:layout_anchor="@id/alarm_time_container"
         app:layout_anchorGravity="top|end" />
 

@@ -25,7 +25,7 @@ public class AlarmActivationActivity extends AppCompatActivity {
         hideActionBar();
         hideNavigationBar();
 
-        setContentView(R.layout.lock_screen);
+        setContentView(R.layout.activation);
     }
 
     private void enableLaunchingWhenLocked() {

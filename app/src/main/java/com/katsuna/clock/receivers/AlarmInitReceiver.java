@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.katsuna.clock.Utils;
 import com.katsuna.clock.services.AlarmService;
-import com.katsuna.clock.util.Device;
 
 public class AlarmInitReceiver extends BroadcastReceiver {
 
@@ -16,7 +16,7 @@ public class AlarmInitReceiver extends BroadcastReceiver {
      * When running on N devices, we're interested in the boot completed event that is sent while
      * the user is still locked, so that we can schedule alarms.
      */
-    private static final String ACTION_BOOT_COMPLETED = Device.isNOrLater()
+    private static final String ACTION_BOOT_COMPLETED = Utils.isNOrLater()
             ? Intent.ACTION_LOCKED_BOOT_COMPLETED : Intent.ACTION_BOOT_COMPLETED;
 
     @Override

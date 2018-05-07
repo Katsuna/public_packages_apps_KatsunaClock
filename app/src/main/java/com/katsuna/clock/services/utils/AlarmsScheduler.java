@@ -86,6 +86,23 @@ public class AlarmsScheduler implements IAlarmsScheduler {
         Log.e(TAG, String.format("Alarm %s scheduled at (%s)", alarm, triggerDateTime));
     }
 
+    @Override
+    public void snooze(Alarm alarm) {
+        if (alarm.getAlarmStatus() != AlarmStatus.ACTIVE) return;
+
+        Log.e(TAG, "snooze: " + alarm.toString());
+
+        AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+        LocalDateTime now = LocalDateTime.now();
+
+        AlarmManager.AlarmClockInfo alarmClockInfo = new AlarmManager.AlarmClockInfo(
+                DateUtils.toEpochMillis(now.plusMinutes(1)),
+                getPendindEditIntent(alarm));
+        Objects.requireNonNull(am).setAlarmClock(alarmClockInfo, getPendingTriggerIntent(alarm));
+
+        Log.e(TAG, String.format("Alarm %s snoozed and  scheduled at (%s)", alarm, now.plusMinutes(1)));
+    }
+
     private void cancelAlarm(Alarm alarm) {
         Log.e(TAG, "cancelAlarm: " + alarm.toString());
         PendingIntent pi = getPendingTriggerIntent(alarm);

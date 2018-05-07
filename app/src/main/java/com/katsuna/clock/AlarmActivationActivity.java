@@ -1,5 +1,6 @@
 package com.katsuna.clock;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -8,12 +9,26 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+
+import com.katsuna.clock.data.Alarm;
+import com.katsuna.clock.data.AlarmStatus;
+import com.katsuna.clock.data.source.AlarmsDataSource;
+import com.katsuna.clock.services.utils.AlarmsScheduler;
+import com.katsuna.clock.services.utils.IAlarmsScheduler;
+import com.katsuna.clock.util.Injection;
 
 import java.util.Objects;
 
 public class AlarmActivationActivity extends AppCompatActivity {
 
     private final static String TAG = AlarmActivationActivity.class.getSimpleName();
+    private Button mSnoozeButton;
+    private Button mDismissButton;
+    private IAlarmsScheduler mAlarmsScheduler;
+    private AlarmsDataSource mAlarmsDataSource;
+    private Alarm mAlarm;
+    private boolean handled = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,6 +41,96 @@ public class AlarmActivationActivity extends AppCompatActivity {
         hideNavigationBar();
 
         setContentView(R.layout.activation);
+
+        Intent i = getIntent();
+        String alarmId;
+        if (i.getExtras() != null) {
+            alarmId = i.getExtras().getString(AlarmsScheduler.ALARM_ID);
+        } else {
+            return;
+        }
+
+        mAlarmsDataSource = Injection.provideAlarmsDataSource(this);
+        mAlarmsScheduler = Injection.provideAlarmScheduler(this);
+
+        //noinspection ConstantConditions
+        mAlarmsDataSource.getAlarm(alarmId, new AlarmsDataSource.GetAlarmCallback() {
+            @Override
+            public void onAlarmLoaded(Alarm alarm) {
+                mAlarm = alarm;
+                init();
+                soundTheAlarm();
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                // TODO
+            }
+        });
+
+    }
+
+    private void init() {
+        mAlarmsScheduler = Injection.provideAlarmScheduler(this);
+
+        mSnoozeButton = findViewById(R.id.snooze_button);
+        mSnoozeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snoozeAlarm();
+            }
+        });
+
+        mDismissButton = findViewById(R.id.dismiss_button);
+        mDismissButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismissAlarm();
+            }
+        });
+    }
+
+    private void dismissAlarm() {
+        stopAlarm();
+
+        if (mAlarm.isRecurring()) {
+            // reshedule
+            Log.e(TAG, "onReceive rescheduling");
+            mAlarmsScheduler.reschedule(mAlarm);
+        } else {
+            // deactivate
+            Log.e(TAG, "onReceive deactivating");
+            mAlarm.setAlarmStatus(AlarmStatus.INACTIVE);
+            mAlarmsDataSource.saveAlarm(mAlarm);
+        }
+        handled = true;
+        finish();
+    }
+
+    private void snoozeAlarm() {
+        stopAlarm();
+        // reschedule alarm in 1 minute
+        mAlarmsScheduler.snooze(mAlarm);
+        handled = true;
+        finish();
+    }
+
+    private void soundTheAlarm() {
+        AlarmKlaxon.start(this);
+    }
+
+
+    private void stopAlarm() {
+        AlarmKlaxon.stop(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.e(TAG, "onStop called: handled=" + handled);
+        if (!handled) {
+            snoozeAlarm();
+        }
     }
 
     private void enableLaunchingWhenLocked() {

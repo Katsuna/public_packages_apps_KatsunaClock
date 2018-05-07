@@ -5,6 +5,8 @@
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:name="ClockApplication"
         android:allowBackup="false"
@@ -28,6 +30,7 @@
             android:name=".AlarmActivationActivity"
             android:directBootAware="true"
             android:excludeFromRecents="true"
+            android:launchMode="singleTask"
             android:resizeableActivity="false"
             android:showOnLockScreen="true"
             android:taskAffinity=""

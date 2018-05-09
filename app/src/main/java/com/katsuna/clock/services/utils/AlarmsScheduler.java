@@ -62,7 +62,7 @@ public class AlarmsScheduler implements IAlarmsScheduler {
 
     @Override
     public void reschedule(Alarm alarm) {
-        cancelAlarm(alarm);
+        cancel(alarm);
 
         if (alarm.getAlarmStatus() == AlarmStatus.ACTIVE) {
             setAlarm(alarm);
@@ -87,23 +87,24 @@ public class AlarmsScheduler implements IAlarmsScheduler {
     }
 
     @Override
-    public void snooze(Alarm alarm) {
+    public void snooze(Alarm alarm, long delay) {
         if (alarm.getAlarmStatus() != AlarmStatus.ACTIVE) return;
 
         Log.e(TAG, "snooze: " + alarm.toString());
 
         AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime rescheduledTime = LocalDateTime.now().plusSeconds(delay);
 
         AlarmManager.AlarmClockInfo alarmClockInfo = new AlarmManager.AlarmClockInfo(
-                DateUtils.toEpochMillis(now.plusMinutes(1)),
+                DateUtils.toEpochMillis(rescheduledTime),
                 getPendindEditIntent(alarm));
         Objects.requireNonNull(am).setAlarmClock(alarmClockInfo, getPendingTriggerIntent(alarm));
 
-        Log.e(TAG, String.format("Alarm %s snoozed and  scheduled at (%s)", alarm, now.plusMinutes(1)));
+        Log.e(TAG, String.format("Alarm %s snoozed and  scheduled at (%s)", alarm, rescheduledTime));
     }
 
-    private void cancelAlarm(Alarm alarm) {
+    @Override
+    public void cancel(Alarm alarm) {
         Log.e(TAG, "cancelAlarm: " + alarm.toString());
         PendingIntent pi = getPendingTriggerIntent(alarm);
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
@@ -112,14 +113,14 @@ public class AlarmsScheduler implements IAlarmsScheduler {
 
     private PendingIntent getPendingTriggerIntent(Alarm alarm) {
         Intent i = new Intent(mContext, AlarmReceiver.class);
-        i.putExtra(ALARM_ID, alarm.getId());
-        return PendingIntent.getBroadcast(mContext, 0, i, FLAG_UPDATE_CURRENT);
+        i.putExtra(ALARM_ID, alarm.getAlarmId());
+        return PendingIntent.getBroadcast(mContext, alarm.hashCode(), i, FLAG_UPDATE_CURRENT);
     }
 
     private PendingIntent getPendindEditIntent(Alarm alarm) {
         Intent i = new Intent(mContext, ManageAlarmActivity.class);
-        i.putExtra(ManageAlarmActivity.EXTRA_ALARM_ID, alarm.getId());
-        return PendingIntent.getActivity(mContext, 0, i, 0);
+        i.putExtra(ManageAlarmActivity.EXTRA_ALARM_ID, alarm.getAlarmId());
+        return PendingIntent.getActivity(mContext, alarm.hashCode(), i, 0);
     }
 
 }

@@ -76,7 +76,7 @@ public class AlarmsLocalDataSource implements AlarmsDataSource {
      * found.
      */
     @Override
-    public void getAlarm(@NonNull final String alarmId, @NonNull final GetAlarmCallback callback) {
+    public void getAlarm(final long alarmId, @NonNull final GetAlarmCallback callback) {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -103,14 +103,19 @@ public class AlarmsLocalDataSource implements AlarmsDataSource {
         Runnable saveRunnable = new Runnable() {
             @Override
             public void run() {
-                mAlarmsDao.insertAlarm(alarm);
+                if (alarm.getAlarmId() == 0) {
+                    long alarmId = mAlarmsDao.insertAlarm(alarm);
+                    alarm.setAlarmId(alarmId);
+                } else {
+                    mAlarmsDao.updateAlarm(alarm);
+                }
             }
         };
         mAppExecutors.diskIO().execute(saveRunnable);
     }
 
     @Override
-    public void deleteAlarm(@NonNull final String alarmId) {
+    public void deleteAlarm(final long alarmId) {
         Runnable deleteRunnable = new Runnable() {
             @Override
             public void run() {

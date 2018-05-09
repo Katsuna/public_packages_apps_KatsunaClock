@@ -135,7 +135,7 @@ public class AlarmsActivity extends AppCompatActivity implements AlarmsContract.
     }
 
     @Override
-    public void showAlarmDetailsUi(String alarmId) {
+    public void showAlarmDetailsUi(long alarmId) {
         Intent intent = new Intent(this, ManageAlarmActivity.class);
         intent.putExtra(ManageAlarmActivity.EXTRA_ALARM_ID, alarmId);
         startActivity(intent);

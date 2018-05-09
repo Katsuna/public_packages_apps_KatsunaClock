@@ -86,12 +86,13 @@ public class AlarmsPresenter implements AlarmsContract.Presenter {
 
     @Override
     public void openAlarmDetails(@NonNull Alarm requestedAlarm) {
-        mAlarmsView.showAlarmDetailsUi(requestedAlarm.getId());
+        mAlarmsView.showAlarmDetailsUi(requestedAlarm.getAlarmId());
     }
 
     @Override
     public void deleteAlarm(@NonNull Alarm alarm) {
-        mAlarmsDataSource.deleteAlarm(alarm.getId());
+        mAlarmsDataSource.deleteAlarm(alarm.getAlarmId());
+        mAlarmsScheduler.cancel(alarm);
         loadAlarms();
     }
 

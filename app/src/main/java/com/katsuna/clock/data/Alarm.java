@@ -10,15 +10,12 @@ import android.support.annotation.Nullable;
 import com.google.common.base.Objects;
 import com.google.gson.Gson;
 
-import java.util.UUID;
-
 @Entity(tableName = "alarms")
 public final class Alarm {
 
-    @PrimaryKey
-    @NonNull
-    @ColumnInfo(name = "entryid")
-    private String mId;
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "alarmId")
+    private long mAlarmId;
 
     @NonNull
     @ColumnInfo(name = "type")
@@ -78,7 +75,7 @@ public final class Alarm {
      */
     @Ignore
     public Alarm(@NonNull AlarmType alarmType, @Nullable String description) {
-        this(UUID.randomUUID().toString(), alarmType, 0, 0, description, false, false, false,
+        this(0, alarmType, 0, 0, description, false, false, false,
                 false, false, false, false, AlarmStatus.ACTIVE);
     }
 
@@ -104,13 +101,13 @@ public final class Alarm {
                  boolean tuesdayEnabled, boolean wednesdayEnabled, boolean thursdayEnabled,
                  boolean fridayEnabled, boolean saturdayEnabled, boolean sundayEnabled,
                  @NonNull AlarmStatus alarmStatus) {
-        this(UUID.randomUUID().toString(), alarmType, hour, minute, description, mondayEnabled,
+        this(0, alarmType, hour, minute, description, mondayEnabled,
                 tuesdayEnabled, wednesdayEnabled, thursdayEnabled, fridayEnabled, saturdayEnabled,
                 sundayEnabled, alarmStatus);
     }
 
     /**
-     * @param id               id of the alarm
+     * @param alarmId          id of the alarm
      * @param alarmType        type of the alarm
      * @param hour             hour of the alarm
      * @param minute           minute of the alarm
@@ -124,12 +121,12 @@ public final class Alarm {
      * @param sundayEnabled    enable flag for sunday
      * @param alarmStatus      status of the alarm
      */
-    public Alarm(@NonNull String id, @NonNull AlarmType alarmType, @NonNull Integer hour,
+    public Alarm(long alarmId, @NonNull AlarmType alarmType, @NonNull Integer hour,
                  @NonNull Integer minute, @Nullable String description, boolean mondayEnabled,
                  boolean tuesdayEnabled, boolean wednesdayEnabled, boolean thursdayEnabled,
                  boolean fridayEnabled, boolean saturdayEnabled, boolean sundayEnabled,
                  @NonNull AlarmStatus alarmStatus) {
-        mId = id;
+        mAlarmId = alarmId;
         mAlarmType = alarmType;
         mHour = hour;
         mMinute = minute;
@@ -144,13 +141,8 @@ public final class Alarm {
         mAlarmStatus = alarmStatus;
     }
 
-    @NonNull
-    public String getId() {
-        return mId;
-    }
-
-    public void setId(String id) {
-        mId = id;
+    public long getAlarmId() {
+        return mAlarmId;
     }
 
     @NonNull
@@ -215,12 +207,16 @@ public final class Alarm {
         this.mAlarmStatus = alarmStatus;
     }
 
+    public void setAlarmId(long mAlarmId) {
+        this.mAlarmId = mAlarmId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Alarm alarm = (Alarm) o;
-        return Objects.equal(mId, alarm.mId) &&
+        return Objects.equal(mAlarmId, alarm.mAlarmId) &&
                 Objects.equal(mAlarmType, alarm.mAlarmType) &&
                 Objects.equal(mHour, alarm.mHour) &&
                 Objects.equal(mMinute, alarm.mMinute) &&
@@ -237,9 +233,8 @@ public final class Alarm {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(mId, mDescription);
+        return Long.valueOf(mAlarmId).hashCode();
     }
-
 
     @Override
     public String toString() {

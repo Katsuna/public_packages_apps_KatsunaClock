@@ -39,9 +39,10 @@ public class AlarmDaoTest {
 
     @Test
     public void insertTaskAndGetById() {
-        mDatabase.alarmsDao().insertAlarm(ALARM);
+        long alarmId = mDatabase.alarmsDao().insertAlarm(ALARM);
+        ALARM.setAlarmId(alarmId);
 
-        Alarm loaded = mDatabase.alarmsDao().getAlarmById(ALARM.getId());
+        Alarm loaded = mDatabase.alarmsDao().getAlarmById(alarmId);
 
         assertEquals(ALARM, loaded);
     }
@@ -49,15 +50,16 @@ public class AlarmDaoTest {
     @Test
     public void insertTaskReplacesOnConflict() {
         //Given that an alarm is inserted
-        mDatabase.alarmsDao().insertAlarm(ALARM);
+        long alarmId = mDatabase.alarmsDao().insertAlarm(ALARM);
+        ALARM.setAlarmId(alarmId);
 
         // When an alarm with the same id is inserted
-        Alarm newAlarm = new Alarm(ALARM.getId(), AlarmType.ALARM, 0, 0, "description2", false,
+        Alarm newAlarm = new Alarm(alarmId, AlarmType.ALARM, 0, 0, "description2", false,
                 false, false, false, false, false, false, AlarmStatus.ACTIVE);
         mDatabase.alarmsDao().insertAlarm(newAlarm);
 
         // When getting the alarm by id from the database
-        Alarm loaded = mDatabase.alarmsDao().getAlarmById(ALARM.getId());
+        Alarm loaded = mDatabase.alarmsDao().getAlarmById(ALARM.getAlarmId());
 
         // The loaded data contains the expected values
         assertEquals(loaded, newAlarm);
@@ -66,15 +68,17 @@ public class AlarmDaoTest {
     @Test
     public void updateAlarmAndGetById() {
         // When inserting an alarm
-        mDatabase.alarmsDao().insertAlarm(ALARM);
+        long alarmId = mDatabase.alarmsDao().insertAlarm(ALARM);
+        ALARM.setAlarmId(alarmId);
+
 
         // When the alarm is updated
-        Alarm updatedAlarm = new Alarm(ALARM.getId(), AlarmType.ALARM, 0, 0, "description2", false,
+        Alarm updatedAlarm = new Alarm(ALARM.getAlarmId(), AlarmType.ALARM, 0, 0, "description2", false,
                 false, false, false, false, false, false, AlarmStatus.ACTIVE);
         mDatabase.alarmsDao().updateAlarm(updatedAlarm);
 
         // When getting the alarm by id from the database
-        Alarm loaded = mDatabase.alarmsDao().getAlarmById(ALARM.getId());
+        Alarm loaded = mDatabase.alarmsDao().getAlarmById(ALARM.getAlarmId());
 
         // The loaded data contains the expected values
         assertEquals(loaded, updatedAlarm);
@@ -86,7 +90,7 @@ public class AlarmDaoTest {
         mDatabase.alarmsDao().insertAlarm(ALARM);
 
         //When deleting a task by id
-        mDatabase.alarmsDao().deleteAlarmById(ALARM.getId());
+        mDatabase.alarmsDao().deleteAlarmById(ALARM.getAlarmId());
 
         //When getting the alarms
         List<Alarm> alarms = mDatabase.alarmsDao().getAlarms();

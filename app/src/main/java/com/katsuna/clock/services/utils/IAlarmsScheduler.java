@@ -8,7 +8,9 @@ public interface IAlarmsScheduler {
 
     void reschedule(Alarm alarm);
 
-    void snooze(Alarm alarm);
+    void snooze(Alarm alarm, long delay);
+
+    void cancel(Alarm alarm);
 
     interface CallBack {
         void schedulingFinished();

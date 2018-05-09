@@ -16,11 +16,11 @@ public interface AlarmsDataSource {
 
     void getAlarms(@NonNull LoadAlarmsCallback callback);
 
-    void getAlarm(@NonNull String alarmId, @NonNull GetAlarmCallback callback);
+    void getAlarm(long alarmId, @NonNull GetAlarmCallback callback);
 
     void saveAlarm(@NonNull Alarm alarm);
 
-    void deleteAlarm(@NonNull String alarmId);
+    void deleteAlarm(long alarmId);
 
     interface LoadAlarmsCallback {
 

@@ -112,7 +112,7 @@ public class AlarmsPresenterTest {
         mAlarmsPresenter.openAlarmDetails(requestedAlarm);
 
         // Then task detail UI is shown
-        verify(mAlarmsView).showAlarmDetailsUi(any(String.class));
+        verify(mAlarmsView).showAlarmDetailsUi(any(long.class));
     }
 
     @Test
@@ -142,7 +142,7 @@ public class AlarmsPresenterTest {
         mAlarmsPresenter.deleteAlarm(ALARMS.get(0));
 
         // Verify actions taken by the presenter
-        verify(mAlarmsDataSource).deleteAlarm(ALARMS.get(0).getId());
+        verify(mAlarmsDataSource).deleteAlarm(ALARMS.get(0).getAlarmId());
         verify(mAlarmsView).showAlarms(anyListOf(Alarm.class));
     }
 

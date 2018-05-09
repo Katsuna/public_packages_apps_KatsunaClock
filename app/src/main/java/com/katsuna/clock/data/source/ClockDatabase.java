@@ -10,7 +10,7 @@ import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.source.converters.AlarmStatusConverter;
 import com.katsuna.clock.data.source.converters.AlarmTypeConverter;
 
-@Database(entities = {Alarm.class}, version = 3)
+@Database(entities = {Alarm.class}, version = 4)
 @TypeConverters({AlarmTypeConverter.class, AlarmStatusConverter.class})
 public abstract class ClockDatabase extends RoomDatabase {
 

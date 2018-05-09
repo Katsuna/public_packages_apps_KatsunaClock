@@ -55,7 +55,7 @@ public class ManageAlarmPresenterTest {
     @Test
     public void createPresenter_setsThePresenterToView(){
         // Get a reference to the class under test
-        mManageAlarmPresenter = new ManageAlarmPresenter(null, mAlarmsDataSource, mManageAlarmView,
+        mManageAlarmPresenter = new ManageAlarmPresenter(0, mAlarmsDataSource, mManageAlarmView,
                 mAlarmValidator, mAlarmsScheduler);
 
         // Then the presenter is set to the view
@@ -65,7 +65,7 @@ public class ManageAlarmPresenterTest {
     @Test
     public void startPresenterForExistingAlarm_LoadsAlarm() {
         // Get a reference to the class under test
-        String id = "123";
+        long id = 123;
         mManageAlarmPresenter = new ManageAlarmPresenter(id, mAlarmsDataSource, mManageAlarmView,
                 mAlarmValidator, mAlarmsScheduler);
 
@@ -76,7 +76,7 @@ public class ManageAlarmPresenterTest {
 
     @Test(expected = RuntimeException.class)
     public void populateAlarmForNonExistingAlarm_ThrowsException() {
-        mManageAlarmPresenter = new ManageAlarmPresenter(null, mAlarmsDataSource, mManageAlarmView,
+        mManageAlarmPresenter = new ManageAlarmPresenter(0, mAlarmsDataSource, mManageAlarmView,
                 mAlarmValidator, mAlarmsScheduler);
         mManageAlarmPresenter.populateAlarm();
     }
@@ -84,7 +84,7 @@ public class ManageAlarmPresenterTest {
     @Test
     public void saveNewAlarmToRepository_showsSuccessMessageUi() {
         // Get a reference to the class under test
-        mManageAlarmPresenter = new ManageAlarmPresenter(null, mAlarmsDataSource, mManageAlarmView,
+        mManageAlarmPresenter = new ManageAlarmPresenter(0, mAlarmsDataSource, mManageAlarmView,
                 mAlarmValidator, mAlarmsScheduler);
 
         mManageAlarmPresenter.start();
@@ -105,7 +105,7 @@ public class ManageAlarmPresenterTest {
     @Test
     public void saveNewAlarmWithValidationErrors_showsTheErrors() {
         // Get a reference to the class under test
-        mManageAlarmPresenter = new ManageAlarmPresenter(null, mAlarmsDataSource, mManageAlarmView,
+        mManageAlarmPresenter = new ManageAlarmPresenter(0, mAlarmsDataSource, mManageAlarmView,
                 new AlarmValidator(), mAlarmsScheduler);
 
         mManageAlarmPresenter.start();
@@ -124,16 +124,16 @@ public class ManageAlarmPresenterTest {
     @Test
     public void saveExistingTaskToRepository_showsSuccessMessageUi() {
         Alarm testAlarm = new Alarm();
-        testAlarm.setId("1");
+        testAlarm.setAlarmId(1);
 
         // Get a reference to the class under test
-        mManageAlarmPresenter = new ManageAlarmPresenter(testAlarm.getId(), mAlarmsDataSource,
+        mManageAlarmPresenter = new ManageAlarmPresenter(testAlarm.getAlarmId(), mAlarmsDataSource,
                 mManageAlarmView, mAlarmValidator, mAlarmsScheduler);
 
         // When the presenter is asked to save an existing task
         mManageAlarmPresenter.start();
 
-        verify(mAlarmsDataSource).getAlarm(eq(testAlarm.getId()),
+        verify(mAlarmsDataSource).getAlarm(eq(testAlarm.getAlarmId()),
                 mGetAlarmCallbackCaptor.capture());
         mGetAlarmCallbackCaptor.getValue().onAlarmLoaded(testAlarm);
 
@@ -155,15 +155,16 @@ public class ManageAlarmPresenterTest {
     @Test
     public void populateAlarm_callsDataSourceAndUpdatesView() {
         Alarm testAlarm = new Alarm(AlarmType.ALARM, "DESCRIPTION");
+        testAlarm.setAlarmId(1);
         // Get a reference to the class under test
-        mManageAlarmPresenter = new ManageAlarmPresenter(testAlarm.getId(), mAlarmsDataSource,
+        mManageAlarmPresenter = new ManageAlarmPresenter(testAlarm.getAlarmId(), mAlarmsDataSource,
                 mManageAlarmView, mAlarmValidator, mAlarmsScheduler);
 
         // When the presenter is asked to populate an existing task
         mManageAlarmPresenter.populateAlarm();
 
         // Then the task repository is queried and the view updated
-        verify(mAlarmsDataSource).getAlarm(eq(testAlarm.getId()), mGetAlarmCallbackCaptor.capture());
+        verify(mAlarmsDataSource).getAlarm(eq(testAlarm.getAlarmId()), mGetAlarmCallbackCaptor.capture());
         assertThat(mManageAlarmPresenter.isDataMissing(), is(true));
 
         // Simulate callback
@@ -177,15 +178,16 @@ public class ManageAlarmPresenterTest {
     @Test
     public void populateNonExistingAlarm_callsOnDataNotAvailable() {
         Alarm testAlarm = new Alarm(AlarmType.ALARM, "DESCRIPTION");
+        testAlarm.setAlarmId(1);
         // Get a reference to the class under test
-        mManageAlarmPresenter = new ManageAlarmPresenter(testAlarm.getId(), mAlarmsDataSource,
+        mManageAlarmPresenter = new ManageAlarmPresenter(testAlarm.getAlarmId(), mAlarmsDataSource,
                 mManageAlarmView, mAlarmValidator, mAlarmsScheduler);
 
         // When the presenter is asked to populate an existing task
         mManageAlarmPresenter.populateAlarm();
 
         // Then the task repository is queried and the view updated
-        verify(mAlarmsDataSource).getAlarm(eq(testAlarm.getId()),
+        verify(mAlarmsDataSource).getAlarm(eq(testAlarm.getAlarmId()),
                 mGetAlarmCallbackCaptor.capture());
 
         // Simulate callback
@@ -195,7 +197,7 @@ public class ManageAlarmPresenterTest {
 
     @Test
     public void alarmTypeSelection_showsNextStepFab() {
-        mManageAlarmPresenter = new ManageAlarmPresenter(null, mAlarmsDataSource, mManageAlarmView,
+        mManageAlarmPresenter = new ManageAlarmPresenter(0, mAlarmsDataSource, mManageAlarmView,
                 new AlarmValidator(), mAlarmsScheduler);
 
         // When an alarm type is selected
@@ -210,7 +212,7 @@ public class ManageAlarmPresenterTest {
 
     @Test
     public void reminderTypeSelection_showsDescriptionControl() {
-        mManageAlarmPresenter = new ManageAlarmPresenter(null, mAlarmsDataSource, mManageAlarmView,
+        mManageAlarmPresenter = new ManageAlarmPresenter(0, mAlarmsDataSource, mManageAlarmView,
                 new AlarmValidator(), mAlarmsScheduler);
 
         // When an alarm type is selected
@@ -222,7 +224,7 @@ public class ManageAlarmPresenterTest {
 
     @Test
     public void alarmTypeStepCompleted_showsTimeSelectionStep() {
-        mManageAlarmPresenter = new ManageAlarmPresenter(null, mAlarmsDataSource, mManageAlarmView,
+        mManageAlarmPresenter = new ManageAlarmPresenter(0, mAlarmsDataSource, mManageAlarmView,
                 new AlarmValidator(), mAlarmsScheduler);
 
         mManageAlarmPresenter.start();
@@ -244,7 +246,7 @@ public class ManageAlarmPresenterTest {
 
     @Test
     public void returnFromAlarmTimeStep_showsAlarmTypeStep() {
-        mManageAlarmPresenter = new ManageAlarmPresenter(null, mAlarmsDataSource, mManageAlarmView,
+        mManageAlarmPresenter = new ManageAlarmPresenter(0, mAlarmsDataSource, mManageAlarmView,
                 new AlarmValidator(), mAlarmsScheduler);
 
         mManageAlarmPresenter.start();
@@ -267,7 +269,7 @@ public class ManageAlarmPresenterTest {
 
     @Test
     public void alarmTimeStepCompleted_showsAlarmDaysStep() {
-        mManageAlarmPresenter = new ManageAlarmPresenter(null, mAlarmsDataSource, mManageAlarmView,
+        mManageAlarmPresenter = new ManageAlarmPresenter(0, mAlarmsDataSource, mManageAlarmView,
                 new AlarmValidator(), mAlarmsScheduler);
 
         mManageAlarmPresenter.start();
@@ -291,7 +293,7 @@ public class ManageAlarmPresenterTest {
 
     @Test
     public void returnFromAlarmDaysTimeStep_showsAlarmTimeStep() {
-        mManageAlarmPresenter = new ManageAlarmPresenter(null, mAlarmsDataSource, mManageAlarmView,
+        mManageAlarmPresenter = new ManageAlarmPresenter(0, mAlarmsDataSource, mManageAlarmView,
                 new AlarmValidator(), mAlarmsScheduler);
 
         mManageAlarmPresenter.start();

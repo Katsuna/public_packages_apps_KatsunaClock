@@ -19,8 +19,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
         // Put here YOUR code.
-        String alarmId = Objects.requireNonNull(intent.getExtras())
-                .getString(AlarmsScheduler.ALARM_ID);
+        long alarmId = Objects.requireNonNull(intent.getExtras()).getLong(AlarmsScheduler.ALARM_ID);
         Log.e(TAG, "onReceive: " + alarmId);
 
         Toast.makeText(context, "Alarm with id: " + alarmId, Toast.LENGTH_LONG).show();

@@ -27,8 +27,8 @@ public interface AlarmsDao {
      * @param alarmId the task id.
      * @return the task with taskId.
      */
-    @Query("SELECT * FROM alarms WHERE entryid = :alarmId")
-    Alarm getAlarmById(String alarmId);
+    @Query("SELECT * FROM alarms WHERE alarmId = :alarmId")
+    Alarm getAlarmById(long alarmId);
 
     /**
      * Insert an alarm in the database. If the alarm already exists, replace it.
@@ -36,23 +36,20 @@ public interface AlarmsDao {
      * @param alarm the alarm to be inserted.
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAlarm(Alarm alarm);
+    long insertAlarm(Alarm alarm);
 
     /**
      * Update an alarm.
      *
      * @param alarm alarm to be updated
-     * @return the number of alarms updated. This should always be 1.
      */
     @Update
-    int updateAlarm(Alarm alarm);
+    void updateAlarm(Alarm alarm);
 
     /**
      * Delete an alarm by id.
-     *
-     * @return the number of alarms deleted. This should always be 1.
      */
-    @Query("DELETE FROM alarms WHERE entryid = :alarmId")
-    int deleteAlarmById(String alarmId);
+    @Query("DELETE FROM alarms WHERE alarmId = :alarmId")
+    void deleteAlarmById(long alarmId);
 
 }

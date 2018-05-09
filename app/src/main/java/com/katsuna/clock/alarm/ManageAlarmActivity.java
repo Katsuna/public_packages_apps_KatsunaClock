@@ -60,7 +60,7 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
 
         init();
 
-        String alarmId = getIntent().getStringExtra(EXTRA_ALARM_ID);
+        long alarmId = getIntent().getLongExtra(EXTRA_ALARM_ID, 0);
 
         // Create the presenter
         new ManageAlarmPresenter(alarmId,

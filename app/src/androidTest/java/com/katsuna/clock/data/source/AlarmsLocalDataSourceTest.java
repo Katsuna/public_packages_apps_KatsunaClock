@@ -66,7 +66,7 @@ public class AlarmsLocalDataSourceTest {
         mLocalDataSource.saveAlarm(newAlarm);
 
         // Then the alarm can be retrieved from the persistent repository
-        mLocalDataSource.getAlarm(newAlarm.getId(), new AlarmsDataSource.GetAlarmCallback() {
+        mLocalDataSource.getAlarm(newAlarm.getAlarmId(), new AlarmsDataSource.GetAlarmCallback() {
             @Override
             public void onAlarmLoaded(Alarm alarm) {
                 assertThat(alarm, is(newAlarm));
@@ -97,10 +97,10 @@ public class AlarmsLocalDataSourceTest {
                 boolean newAlarm1IdFound = false;
                 boolean newAlarm2IdFound = false;
                 for (Alarm alarm : alarms) {
-                    if (alarm.getId().equals(newAlarm1.getId())) {
+                    if (alarm.getAlarmId()== newAlarm1.getAlarmId()) {
                         newAlarm1IdFound = true;
                     }
-                    if (alarm.getId().equals(newAlarm2.getId())) {
+                    if (alarm.getAlarmId() == newAlarm2.getAlarmId()) {
                         newAlarm2IdFound = true;
                     }
                 }

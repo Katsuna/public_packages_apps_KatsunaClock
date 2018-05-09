@@ -22,7 +22,7 @@ interface AlarmsContract {
 
         void showAddAlarm();
 
-        void showAlarmDetailsUi(String alarmId);
+        void showAlarmDetailsUi(long alarmId);
 
         void showNoAlarms();
 

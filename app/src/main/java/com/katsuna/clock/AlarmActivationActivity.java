@@ -23,12 +23,17 @@ import java.util.Objects;
 public class AlarmActivationActivity extends AppCompatActivity {
 
     private final static String TAG = AlarmActivationActivity.class.getSimpleName();
+    // 3 minutes default snooze
+    private final static int SNOOZE_DELAY = 3 * 60;
+    // 1 minute auto snooze if we have alarms launching at the same time
+    private final static int SNOOZE_DELAY_OVERLAPPING = 60;
     private Button mSnoozeButton;
     private Button mDismissButton;
     private IAlarmsScheduler mAlarmsScheduler;
     private AlarmsDataSource mAlarmsDataSource;
     private Alarm mAlarm;
     private boolean handled = false;
+    private boolean alarmKlaxonOn = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,13 +47,7 @@ public class AlarmActivationActivity extends AppCompatActivity {
 
         setContentView(R.layout.activation);
 
-        Intent i = getIntent();
-        String alarmId;
-        if (i.getExtras() != null) {
-            alarmId = i.getExtras().getString(AlarmsScheduler.ALARM_ID);
-        } else {
-            return;
-        }
+        Long alarmId = getAlarmId();
 
         mAlarmsDataSource = Injection.provideAlarmsDataSource(this);
         mAlarmsScheduler = Injection.provideAlarmScheduler(this);
@@ -70,6 +69,41 @@ public class AlarmActivationActivity extends AppCompatActivity {
 
     }
 
+    private Long getAlarmId() {
+        Long alarmId = null;
+        Intent i = getIntent();
+        if (i.getExtras() != null) {
+            alarmId = i.getExtras().getLong(AlarmsScheduler.ALARM_ID);
+        }
+        return alarmId;
+    }
+
+    @Override
+    public Intent getIntent() {
+        Log.e(TAG, "getIntent called");
+
+        // another alarm is on
+        if (alarmKlaxonOn) {
+            Long alarmId = getAlarmId();
+            Log.e(TAG, "alarmKlaxonOn check snooze alarm with id: " + alarmId);
+            //noinspection ConstantConditions
+            mAlarmsDataSource.getAlarm(alarmId, new AlarmsDataSource.GetAlarmCallback() {
+                @Override
+                public void onAlarmLoaded(Alarm alarm) {
+                    Log.e(TAG, "snoozing overlapped alarm: " + alarm);
+                    mAlarmsScheduler.snooze(mAlarm, SNOOZE_DELAY_OVERLAPPING);
+                }
+
+                @Override
+                public void onDataNotAvailable() {
+                    // TODO
+                }
+            });
+        }
+
+        return super.getIntent();
+    }
+
     private void init() {
         mAlarmsScheduler = Injection.provideAlarmScheduler(this);
 
@@ -77,7 +111,7 @@ public class AlarmActivationActivity extends AppCompatActivity {
         mSnoozeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                snoozeAlarm();
+                snoozeAlarm(SNOOZE_DELAY);
             }
         });
 
@@ -107,21 +141,22 @@ public class AlarmActivationActivity extends AppCompatActivity {
         finish();
     }
 
-    private void snoozeAlarm() {
+    private void snoozeAlarm(long delay) {
         stopAlarm();
-        // reschedule alarm in 1 minute
-        mAlarmsScheduler.snooze(mAlarm);
+        mAlarmsScheduler.snooze(mAlarm, delay);
         handled = true;
         finish();
     }
 
     private void soundTheAlarm() {
         AlarmKlaxon.start(this);
+        alarmKlaxonOn = true;
     }
 
 
     private void stopAlarm() {
         AlarmKlaxon.stop(this);
+        alarmKlaxonOn = false;
     }
 
     @Override
@@ -129,7 +164,7 @@ public class AlarmActivationActivity extends AppCompatActivity {
         super.onStop();
         Log.e(TAG, "onStop called: handled=" + handled);
         if (!handled) {
-            snoozeAlarm();
+            snoozeAlarm(SNOOZE_DELAY);
         }
     }
 

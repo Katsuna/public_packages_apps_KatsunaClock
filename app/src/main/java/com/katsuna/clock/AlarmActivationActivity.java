@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.katsuna.clock.data.Alarm;
+import com.katsuna.clock.data.AlarmStateManager;
 import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.data.source.AlarmsDataSource;
 import com.katsuna.clock.services.utils.AlarmsScheduler;
@@ -25,15 +26,14 @@ public class AlarmActivationActivity extends AppCompatActivity {
     private final static String TAG = AlarmActivationActivity.class.getSimpleName();
     // 3 minutes default snooze
     private final static int SNOOZE_DELAY = 3 * 60;
-    // 1 minute auto snooze if we have alarms launching at the same time
-    private final static int SNOOZE_DELAY_OVERLAPPING = 60;
+
     private Button mSnoozeButton;
     private Button mDismissButton;
     private IAlarmsScheduler mAlarmsScheduler;
     private AlarmsDataSource mAlarmsDataSource;
     private Alarm mAlarm;
     private boolean handled = false;
-    private boolean alarmKlaxonOn = false;
+    private boolean mFocusDuringOnPause;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,32 +78,6 @@ public class AlarmActivationActivity extends AppCompatActivity {
         return alarmId;
     }
 
-    @Override
-    public Intent getIntent() {
-        Log.e(TAG, "getIntent called");
-
-        // another alarm is on
-        if (alarmKlaxonOn) {
-            Long alarmId = getAlarmId();
-            Log.e(TAG, "alarmKlaxonOn check snooze alarm with id: " + alarmId);
-            //noinspection ConstantConditions
-            mAlarmsDataSource.getAlarm(alarmId, new AlarmsDataSource.GetAlarmCallback() {
-                @Override
-                public void onAlarmLoaded(Alarm alarm) {
-                    Log.e(TAG, "snoozing overlapped alarm: " + alarm);
-                    mAlarmsScheduler.snooze(mAlarm, SNOOZE_DELAY_OVERLAPPING);
-                }
-
-                @Override
-                public void onDataNotAvailable() {
-                    // TODO
-                }
-            });
-        }
-
-        return super.getIntent();
-    }
-
     private void init() {
         mAlarmsScheduler = Injection.provideAlarmScheduler(this);
 
@@ -138,10 +112,13 @@ public class AlarmActivationActivity extends AppCompatActivity {
             mAlarmsDataSource.saveAlarm(mAlarm);
         }
         handled = true;
+
+        AlarmStateManager.getInstance().removeAlarm(mAlarm);
         finish();
     }
 
     private void snoozeAlarm(long delay) {
+        AlarmStateManager.getInstance().removeAlarm(mAlarm);
         stopAlarm();
         mAlarmsScheduler.snooze(mAlarm, delay);
         handled = true;
@@ -150,22 +127,32 @@ public class AlarmActivationActivity extends AppCompatActivity {
 
     private void soundTheAlarm() {
         AlarmKlaxon.start(this);
-        alarmKlaxonOn = true;
     }
 
 
     private void stopAlarm() {
         AlarmKlaxon.stop(this);
-        alarmKlaxonOn = false;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mFocusDuringOnPause = hasWindowFocus();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         Log.e(TAG, "onStop called: handled=" + handled);
-        if (!handled) {
-            snoozeAlarm(SNOOZE_DELAY);
+        if (mFocusDuringOnPause) {
+            if (!handled) {
+                snoozeAlarm(SNOOZE_DELAY);
+            }
         }
+        /* else {
+                // activity was started when screen was off / screen was on with keygaurd displayed
+                // see https://stackoverflow.com/a/25474853
+           } */
     }
 
     private void enableLaunchingWhenLocked() {

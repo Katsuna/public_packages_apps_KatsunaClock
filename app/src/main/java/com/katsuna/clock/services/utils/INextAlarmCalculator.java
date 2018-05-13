@@ -4,7 +4,7 @@ import com.katsuna.clock.data.Alarm;
 
 import org.threeten.bp.LocalDateTime;
 
-interface INextAlarmCalculator {
+public interface INextAlarmCalculator {
 
     LocalDateTime getTriggerDateTime(LocalDateTime now, Alarm alarm);
 }

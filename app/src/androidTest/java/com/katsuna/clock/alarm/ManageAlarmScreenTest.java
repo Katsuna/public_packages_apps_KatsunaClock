@@ -1,7 +1,6 @@
 package com.katsuna.clock.alarm;
 
 import android.content.Intent;
-import android.support.annotation.Nullable;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
@@ -34,7 +33,7 @@ public class ManageAlarmScreenTest {
     @Test
     public void emptyDescriptionOfReminder_showsToastMessage() {
         // Launch activity to add a new alarm
-        launchNewManageAlarmActivity(null);
+        launchNewManageAlarmActivity();
 
         // Add invalid alarm type and description combination
         onView(withId(R.id.reminder_type_radio_button)).perform(click());
@@ -51,11 +50,9 @@ public class ManageAlarmScreenTest {
                 .check(matches(isDisplayed()));
     }
 
-    private void launchNewManageAlarmActivity(@Nullable String alarmId) {
+    private void launchNewManageAlarmActivity() {
         Intent intent = new Intent(InstrumentationRegistry.getInstrumentation().getTargetContext(),
                 ManageAlarmActivity.class);
-
-        intent.putExtra(ManageAlarmActivity.EXTRA_ALARM_ID, alarmId);
         mActivityRule.launchActivity(intent);
     }
 }

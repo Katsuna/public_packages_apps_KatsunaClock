@@ -19,6 +19,7 @@ import org.threeten.bp.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+import static android.app.PendingIntent.FLAG_NO_CREATE;
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 
 
@@ -69,7 +70,8 @@ public class AlarmsScheduler implements IAlarmsScheduler {
         }
     }
 
-    private void setAlarm(Alarm alarm) {
+    @Override
+    public void setAlarm(Alarm alarm) {
         if (alarm.getAlarmStatus() != AlarmStatus.ACTIVE) return;
 
         Log.e(TAG, "setAlarm: " + alarm.toString());
@@ -81,7 +83,9 @@ public class AlarmsScheduler implements IAlarmsScheduler {
         AlarmManager.AlarmClockInfo alarmClockInfo = new AlarmManager.AlarmClockInfo(
                 DateUtils.toEpochMillis(triggerDateTime),
                 getPendindEditIntent(alarm));
-        Objects.requireNonNull(am).setAlarmClock(alarmClockInfo, getPendingTriggerIntent(alarm));
+
+        Objects.requireNonNull(am).setAlarmClock(alarmClockInfo, getPendingTriggerIntent(alarm,
+                FLAG_UPDATE_CURRENT));
 
         Log.e(TAG, String.format("Alarm %s scheduled at (%s)", alarm, triggerDateTime));
     }
@@ -98,7 +102,8 @@ public class AlarmsScheduler implements IAlarmsScheduler {
         AlarmManager.AlarmClockInfo alarmClockInfo = new AlarmManager.AlarmClockInfo(
                 DateUtils.toEpochMillis(rescheduledTime),
                 getPendindEditIntent(alarm));
-        Objects.requireNonNull(am).setAlarmClock(alarmClockInfo, getPendingTriggerIntent(alarm));
+        Objects.requireNonNull(am).setAlarmClock(alarmClockInfo, getPendingTriggerIntent(alarm,
+                FLAG_UPDATE_CURRENT));
 
         Log.e(TAG, String.format("Alarm %s snoozed and  scheduled at (%s)", alarm, rescheduledTime));
     }
@@ -106,15 +111,17 @@ public class AlarmsScheduler implements IAlarmsScheduler {
     @Override
     public void cancel(Alarm alarm) {
         Log.e(TAG, "cancelAlarm: " + alarm.toString());
-        PendingIntent pi = getPendingTriggerIntent(alarm);
+        PendingIntent pi = getPendingTriggerIntent(alarm, FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         Objects.requireNonNull(alarmManager).cancel(pi);
+
+        pi.cancel();
     }
 
-    private PendingIntent getPendingTriggerIntent(Alarm alarm) {
+    private PendingIntent getPendingTriggerIntent(Alarm alarm, int flag) {
         Intent i = new Intent(mContext, AlarmReceiver.class);
         i.putExtra(ALARM_ID, alarm.getAlarmId());
-        return PendingIntent.getBroadcast(mContext, alarm.hashCode(), i, FLAG_UPDATE_CURRENT);
+        return PendingIntent.getBroadcast(mContext, alarm.hashCode(), i, flag);
     }
 
     private PendingIntent getPendindEditIntent(Alarm alarm) {
@@ -123,4 +130,8 @@ public class AlarmsScheduler implements IAlarmsScheduler {
         return PendingIntent.getActivity(mContext, alarm.hashCode(), i, 0);
     }
 
+    public boolean isAlarmSet(Alarm alarm) {
+        PendingIntent pi = getPendingTriggerIntent(alarm, FLAG_NO_CREATE);
+        return pi != null;
+    }
 }

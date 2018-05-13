@@ -58,7 +58,7 @@ public class AlarmsLocalDataSourceTest {
     }
 
     @Test
-    public void saveAlarm_retrievesTask() {
+    public void saveAlarm_retrievesAlarm() {
         // Given a new alarm
         final Alarm newAlarm = new Alarm(AlarmType.ALARM, "desc");
 
@@ -80,7 +80,7 @@ public class AlarmsLocalDataSourceTest {
     }
 
     @Test
-    public void getTasks_retrieveSavedTasks() {
+    public void getAlarms_retrieveSavedAlarms() {
         // Given 2 new alarms in the persistent repository
         final Alarm newAlarm1 = new Alarm(AlarmType.ALARM, "desc1");
         mLocalDataSource.saveAlarm(newAlarm1);

@@ -8,10 +8,7 @@ import com.katsuna.clock.data.source.AlarmsDataSource;
 import com.katsuna.clock.services.utils.IAlarmsScheduler;
 import com.katsuna.clock.util.EspressoIdlingResource;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -42,16 +39,7 @@ public class AlarmsPresenter implements AlarmsContract.Presenter {
 
     @Override
     public void start() {
-        loadDateTime();
         loadAlarms();
-    }
-
-    private void loadDateTime() {
-        Date now = new Date();
-        Locale locale = Locale.getDefault();
-        String time = new SimpleDateFormat("HH:mm", locale).format(now);
-        String date = new SimpleDateFormat("EEEE, d MMMM", locale).format(now);
-        mAlarmsView.showDateTime(time, date);
     }
 
     @Override

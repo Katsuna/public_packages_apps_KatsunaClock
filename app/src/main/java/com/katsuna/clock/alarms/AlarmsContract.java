@@ -18,8 +18,6 @@ interface AlarmsContract {
 
         void showAlarms(List<Alarm> alarms);
 
-        void showDateTime(String time, String date);
-
         void showAddAlarm();
 
         void showAlarmDetailsUi(long alarmId);

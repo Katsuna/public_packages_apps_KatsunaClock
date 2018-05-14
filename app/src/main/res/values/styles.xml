@@ -1,13 +1,3 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/common_grey50</item>
-        <item name="colorPrimaryDark">@color/common_black</item>
-        <item name="colorAccent">@color/common_blueA700</item>
-        <item name="android:windowBackground">@color/common_white</item>
-        <item name="android:letterSpacing">0.06</item>
-    </style>
-
 </resources>

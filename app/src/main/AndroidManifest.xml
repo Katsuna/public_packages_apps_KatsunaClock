@@ -3,6 +3,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.katsuna.clock">
 
+    <compatible-screens>
+
+        <!-- all normal size screens -->
+        <screen
+            android:screenDensity="mdpi"
+            android:screenSize="normal" /> <!-- 160 -->
+        <screen
+            android:screenDensity="hdpi"
+            android:screenSize="normal" /> <!-- 240 -->
+        <screen
+            android:screenDensity="280"
+            android:screenSize="normal" /> <!-- Workaround -->
+        <screen
+            android:screenDensity="xhdpi"
+            android:screenSize="normal" /> <!-- 320 -->
+        <screen
+            android:screenDensity="360"
+            android:screenSize="normal" /> <!-- Workaround -->
+        <screen
+            android:screenDensity="420"
+            android:screenSize="normal" /> <!-- Workaround Google Pixel, Nexus 5x -->
+        <screen
+            android:screenDensity="xxhdpi"
+            android:screenSize="normal" /> <!-- 480 -->
+        <screen
+            android:screenDensity="560"
+            android:screenSize="normal" /> <!-- Workaround Google Pixel XL, Nexus 6, Nexus 6P -->
+        <screen
+            android:screenDensity="xxxhdpi"
+            android:screenSize="normal" /> <!-- 640 -->
+    </compatible-screens>
+
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -14,8 +46,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".alarms.AlarmsActivity">
+        android:theme="@style/CommonAppTheme">
+        <activity
+            android:name=".alarms.AlarmsActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,19 +58,33 @@
         </activity>
         <activity
             android:name=".alarm.ManageAlarmActivity"
-            android:parentActivityName=".alarms.AlarmsActivity" />
+            android:parentActivityName=".alarms.AlarmsActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".AlarmActivationActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:directBootAware="true"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:resizeableActivity="false"
+            android:screenOrientation="portrait"
             android:showOnLockScreen="true"
             android:taskAffinity=""
             android:windowSoftInputMode="stateAlwaysHidden"
-            android:configChanges="keyboardHidden|orientation|screenSize"
             tools:targetApi="n" />
+
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:label="@string/common_settings"
+            android:parentActivityName=".alarms.AlarmsActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".info.InfoActivity"
+            android:label="@string/common_app_info"
+            android:parentActivityName=".alarms.AlarmsActivity"
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name=".receivers.AlarmInitReceiver"

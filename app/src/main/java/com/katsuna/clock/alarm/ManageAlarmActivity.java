@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -20,11 +19,12 @@ import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmType;
 import com.katsuna.clock.util.Injection;
 import com.katsuna.clock.validators.ValidationResult;
+import com.katsuna.commons.ui.KatsunaActivity;
 
 import java.util.Iterator;
 import java.util.List;
 
-public class ManageAlarmActivity extends AppCompatActivity implements ManageAlarmContract.View {
+public class ManageAlarmActivity extends KatsunaActivity implements ManageAlarmContract.View {
 
     public static final String EXTRA_ALARM_ID = "ALARM_ID";
 
@@ -122,6 +122,8 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
                 onNextStep();
             }
         });
+
+        initToolbar(R.drawable.common_ic_close_black54_24dp);
     }
 
 
@@ -129,6 +131,11 @@ public class ManageAlarmActivity extends AppCompatActivity implements ManageAlar
     protected void onResume() {
         super.onResume();
         mPresenter.start();
+    }
+
+    @Override
+    protected void showPopup(boolean flag) {
+        // no op
     }
 
     @Override

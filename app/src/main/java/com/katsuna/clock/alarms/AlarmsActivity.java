@@ -1,11 +1,15 @@
 package com.katsuna.clock.alarms;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -15,18 +19,24 @@ import com.katsuna.clock.R;
 import com.katsuna.clock.alarm.ManageAlarmActivity;
 import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmStatus;
+import com.katsuna.clock.info.InfoActivity;
 import com.katsuna.clock.services.AlarmService;
+import com.katsuna.clock.settings.SettingsActivity;
 import com.katsuna.clock.util.Injection;
+import com.katsuna.commons.controls.KatsunaNavigationView;
+import com.katsuna.commons.ui.KatsunaActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.katsuna.commons.utils.Constants.KATSUNA_PRIVACY_URL;
 
 
 /**
  * Display a list of {@link Alarm}s. User can choose to view all active and inactive alarms,
  * and create and edit alarms.
  */
-public class AlarmsActivity extends AppCompatActivity implements AlarmsContract.View {
+public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.View {
 
     private static final String TAG = "AlarmsActivity";
     private AlarmsContract.Presenter mPresenter;
@@ -54,13 +64,12 @@ public class AlarmsActivity extends AppCompatActivity implements AlarmsContract.
             mPresenter.deleteAlarm(alarm);
         }
     };
-    private TextView mTime;
-    private TextView mDate;
     private TextView mNoAlarmsText;
     private Button mCreateAlarmButton;
     private FloatingActionButton mCreateAlarmFab;
     private ListView mAlarmsList;
     private AlarmsAdapter mAlarmsAdapter;
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +87,6 @@ public class AlarmsActivity extends AppCompatActivity implements AlarmsContract.
     }
 
     private void init() {
-        mTime = findViewById(R.id.time);
-        mDate = findViewById(R.id.date);
         mNoAlarmsText = findViewById(R.id.no_alarms);
         mCreateAlarmButton = findViewById(R.id.create_alarm_button);
         mCreateAlarmButton.setOnClickListener(new View.OnClickListener() {
@@ -100,12 +107,62 @@ public class AlarmsActivity extends AppCompatActivity implements AlarmsContract.
         mAlarmsAdapter = new AlarmsAdapter(new ArrayList<Alarm>(0), mItemListener);
         mAlarmsList = findViewById(R.id.alarms_list);
         mAlarmsList.setAdapter(mAlarmsAdapter);
+
+        initToolbar();
+        initDrawer();
     }
+
+    private void initDrawer() {
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawerLayout, mToolbar, R.string.common_navigation_drawer_open,
+                R.string.common_navigation_drawer_close);
+        assert mDrawerLayout != null;
+        mDrawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        setupDrawerLayout();
+    }
+
+    private void setupDrawerLayout() {
+        KatsunaNavigationView mKatsunaNavigationView = findViewById(R.id.katsuna_navigation_view);
+        mKatsunaNavigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                        mDrawerLayout.closeDrawers();
+
+                        switch (menuItem.getItemId()) {
+                            case R.id.drawer_settings:
+                                startActivity(new Intent(AlarmsActivity.this,
+                                        SettingsActivity.class));
+                                break;
+                            case R.id.drawer_info:
+                                startActivity(new Intent(AlarmsActivity.this, InfoActivity.class));
+                                break;
+                            case R.id.drawer_privacy:
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                                        Uri.parse(KATSUNA_PRIVACY_URL));
+                                startActivity(browserIntent);
+                                break;
+                        }
+
+                        return true;
+                    }
+                });
+    }
+
 
     @Override
     protected void onResume() {
         super.onResume();
         mPresenter.start();
+    }
+
+    @Override
+    protected void showPopup(boolean flag) {
+        // no op
     }
 
     @Override
@@ -120,12 +177,6 @@ public class AlarmsActivity extends AppCompatActivity implements AlarmsContract.
         mAlarmsList.setVisibility(View.VISIBLE);
         mNoAlarmsText.setVisibility(View.GONE);
         Log.d(TAG, "alarms fetched: " + alarms.size());
-    }
-
-    @Override
-    public void showDateTime(String time, String date) {
-        mTime.setText(time);
-        mDate.setText(date);
     }
 
     @Override

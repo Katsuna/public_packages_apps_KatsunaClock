@@ -5,8 +5,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
+import com.katsuna.clock.LogUtils;
 import com.katsuna.clock.alarm.ManageAlarmActivity;
 import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmStatus;
@@ -72,9 +72,9 @@ public class AlarmsScheduler implements IAlarmsScheduler {
 
     @Override
     public void setAlarm(Alarm alarm) {
-        if (alarm.getAlarmStatus() != AlarmStatus.ACTIVE) return;
+        LogUtils.d(TAG, "setAlarm called. alarm: " + alarm.toString());
 
-        Log.e(TAG, "setAlarm: " + alarm.toString());
+        if (alarm.getAlarmStatus() != AlarmStatus.ACTIVE) return;
 
         AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         LocalDateTime now = LocalDateTime.now();
@@ -87,14 +87,14 @@ public class AlarmsScheduler implements IAlarmsScheduler {
         Objects.requireNonNull(am).setAlarmClock(alarmClockInfo, getPendingTriggerIntent(alarm,
                 FLAG_UPDATE_CURRENT));
 
-        Log.e(TAG, String.format("Alarm %s scheduled at (%s)", alarm, triggerDateTime));
+        LogUtils.i(TAG, String.format("Alarm %s scheduled at (%s)", alarm, triggerDateTime));
     }
 
     @Override
     public void snooze(Alarm alarm, long delay) {
-        if (alarm.getAlarmStatus() != AlarmStatus.ACTIVE) return;
+        LogUtils.d(TAG, "snooze: " + alarm.toString());
 
-        Log.e(TAG, "snooze: " + alarm.toString());
+        if (alarm.getAlarmStatus() != AlarmStatus.ACTIVE) return;
 
         AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         LocalDateTime rescheduledTime = LocalDateTime.now().plusSeconds(delay);
@@ -105,12 +105,12 @@ public class AlarmsScheduler implements IAlarmsScheduler {
         Objects.requireNonNull(am).setAlarmClock(alarmClockInfo, getPendingTriggerIntent(alarm,
                 FLAG_UPDATE_CURRENT));
 
-        Log.e(TAG, String.format("Alarm %s snoozed and  scheduled at (%s)", alarm, rescheduledTime));
+        LogUtils.i(TAG, String.format("Alarm %s snoozed and  scheduled at (%s)", alarm, rescheduledTime));
     }
 
     @Override
     public void cancel(Alarm alarm) {
-        Log.e(TAG, "cancelAlarm: " + alarm.toString());
+        LogUtils.d(TAG, "cancelAlarm: " + alarm.toString());
         PendingIntent pi = getPendingTriggerIntent(alarm, FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         Objects.requireNonNull(alarmManager).cancel(pi);

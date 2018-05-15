@@ -3,8 +3,8 @@ package com.katsuna.clock.services;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
 
+import com.katsuna.clock.LogUtils;
 import com.katsuna.clock.services.utils.IAlarmsScheduler;
 import com.katsuna.clock.util.Injection;
 
@@ -16,7 +16,7 @@ public class AlarmService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG, "onCreate");
+        LogUtils.d(TAG, "onCreate");
 
         mAlarmsScheduler = Injection.provideAlarmScheduler(getApplicationContext());
     }
@@ -24,7 +24,7 @@ public class AlarmService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-        Log.e(TAG, "onStartCommand");
+        LogUtils.d(TAG, "onStartCommand");
 
         // Query the database and show alarm if it applies
 
@@ -49,7 +49,7 @@ public class AlarmService extends Service {
 
     @Override
     public void onDestroy() {
-        Log.e(TAG, "onDestroy");
+        LogUtils.d(TAG, "onDestroy");
         super.onDestroy();
     }
 

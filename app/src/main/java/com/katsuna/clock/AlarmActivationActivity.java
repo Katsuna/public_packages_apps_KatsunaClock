@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -37,7 +36,7 @@ public class AlarmActivationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.e(TAG, "onCreate");
+        LogUtils.d(TAG, "onCreate");
 
         super.onCreate(savedInstanceState);
 
@@ -103,11 +102,11 @@ public class AlarmActivationActivity extends AppCompatActivity {
 
         if (mAlarm.isRecurring()) {
             // reshedule
-            Log.e(TAG, "onReceive rescheduling");
+            LogUtils.i(TAG, "onReceive rescheduling alarm: " + mAlarm);
             mAlarmsScheduler.reschedule(mAlarm);
         } else {
             // deactivate
-            Log.e(TAG, "onReceive deactivating");
+            LogUtils.i(TAG, "onReceive deactivating alarm: " + mAlarm);
             mAlarm.setAlarmStatus(AlarmStatus.INACTIVE);
             mAlarmsDataSource.saveAlarm(mAlarm);
         }
@@ -143,7 +142,7 @@ public class AlarmActivationActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        Log.e(TAG, "onStop called: handled=" + handled);
+        LogUtils.d(TAG, "onStop called: handled=" + handled);
         if (mFocusDuringOnPause) {
             if (!handled) {
                 snoozeAlarm(SNOOZE_DELAY);

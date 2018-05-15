@@ -8,13 +8,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.katsuna.clock.LogUtils;
 import com.katsuna.clock.R;
 import com.katsuna.clock.alarm.ManageAlarmActivity;
 import com.katsuna.clock.data.Alarm;
@@ -176,7 +176,7 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
 
         mAlarmsList.setVisibility(View.VISIBLE);
         mNoAlarmsText.setVisibility(View.GONE);
-        Log.d(TAG, "alarms fetched: " + alarms.size());
+        LogUtils.d(TAG, "alarms fetched: " + alarms.size());
     }
 
     @Override

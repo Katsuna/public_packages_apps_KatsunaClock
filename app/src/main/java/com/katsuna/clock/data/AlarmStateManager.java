@@ -1,6 +1,6 @@
 package com.katsuna.clock.data;
 
-import android.util.Log;
+import com.katsuna.clock.LogUtils;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -33,12 +33,12 @@ public class AlarmStateManager {
     }
 
     public synchronized void setAlarmState(Alarm alarm, AlarmState state) {
-        Log.e(TAG, "setAlarmState: " + alarm);
+        LogUtils.i(TAG, "setAlarmState: " + alarm);
         map.put(alarm.getAlarmId(), state);
     }
 
     public synchronized void removeAlarm(Alarm alarm) {
-        Log.e(TAG, "removeAlarm: " + alarm);
+        LogUtils.i(TAG, "removeAlarm: " + alarm);
         map.remove(alarm.getAlarmId());
     }
 }

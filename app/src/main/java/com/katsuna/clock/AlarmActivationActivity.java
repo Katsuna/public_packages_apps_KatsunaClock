@@ -3,10 +3,9 @@ package com.katsuna.clock;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
@@ -17,8 +16,13 @@ import com.katsuna.clock.data.source.AlarmsDataSource;
 import com.katsuna.clock.services.utils.AlarmsScheduler;
 import com.katsuna.clock.services.utils.IAlarmsScheduler;
 import com.katsuna.clock.util.Injection;
-
-import java.util.Objects;
+import com.katsuna.commons.entities.ColorProfile;
+import com.katsuna.commons.entities.ColorProfileKeyV2;
+import com.katsuna.commons.entities.UserProfile;
+import com.katsuna.commons.entities.UserProfileContainer;
+import com.katsuna.commons.utils.ColorCalcV2;
+import com.katsuna.commons.utils.ProfileReader;
+import com.katsuna.commons.utils.Shape;
 
 public class AlarmActivationActivity extends AppCompatActivity {
 
@@ -41,10 +45,12 @@ public class AlarmActivationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         enableLaunchingWhenLocked();
-        hideActionBar();
         hideNavigationBar();
 
         setContentView(R.layout.activation);
+
+        mSnoozeButton = findViewById(R.id.snooze_button);
+        mDismissButton = findViewById(R.id.dismiss_button);
 
         Long alarmId = getAlarmId();
 
@@ -68,6 +74,36 @@ public class AlarmActivationActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        adjustProfiles();
+    }
+
+    private void adjustProfiles() {
+        UserProfileContainer userProfileContainer = ProfileReader.getKatsunaUserProfile(this);
+        UserProfile userProfile = userProfileContainer.getActiveUserProfile();
+
+        // color adjustments
+        int primaryColor1 = ColorCalcV2.getColor(this, ColorProfileKeyV2.PRIMARY_COLOR_1,
+                userProfile.colorProfile);
+        int white = ContextCompat.getColor(this, R.color.common_white);
+
+        if (userProfile.colorProfile == ColorProfile.CONTRAST) {
+            int grey300 = ContextCompat.getColor(this, R.color.common_grey300);
+            getWindow().getDecorView().setBackgroundColor(grey300);
+        } else {
+            getWindow().getDecorView().setBackgroundColor(primaryColor1);
+        }
+
+        int primaryColor2 = ColorCalcV2.getColor(this, ColorProfileKeyV2.PRIMARY_COLOR_2,
+                userProfile.colorProfile);
+        float radius = getResources().getDimension(R.dimen.common_8dp);
+        Shape.setRoundedBackground(mDismissButton, primaryColor2, radius);
+        Shape.setRoundedBackground(mSnoozeButton, white , radius);
+    }
+
     private Long getAlarmId() {
         Long alarmId = null;
         Intent i = getIntent();
@@ -80,15 +116,12 @@ public class AlarmActivationActivity extends AppCompatActivity {
     private void init() {
         mAlarmsScheduler = Injection.provideAlarmScheduler(this);
 
-        mSnoozeButton = findViewById(R.id.snooze_button);
         mSnoozeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 snoozeAlarm(SNOOZE_DELAY);
             }
         });
-
-        mDismissButton = findViewById(R.id.dismiss_button);
         mDismissButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,13 +193,6 @@ public class AlarmActivationActivity extends AppCompatActivity {
                 | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
-    }
-
-    private void hideActionBar() {
-        // hide action bar
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        ActionBar actionBar = getSupportActionBar();
-        Objects.requireNonNull(actionBar).hide();
     }
 
     private void hideNavigationBar() {

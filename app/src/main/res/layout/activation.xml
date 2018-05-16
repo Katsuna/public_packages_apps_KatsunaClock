@@ -1,20 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="30dp"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/snooze_button"
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/snooze" />
+        android:layout_gravity="center"
+        android:layout_marginTop="51dp"
+        android:src="@drawable/ic_alarm_black_40dp" />
 
-    <Button
-        android:id="@+id/dismiss_button"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="46dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="26dp"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:text="@string/alarm"
+        android:textSize="26sp" />
+
+    <TextClock
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="158dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="18dp"
+        android:fontFamily="sans-serif-light"
+        android:format12Hour="kk:mm"
+        android:format24Hour="kk:mm"
+        android:gravity="center"
+        android:letterSpacing="0"
+        android:textColor="@color/common_black"
+        android:textSize="112sp" />
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/dismiss" />
+        android:layout_gravity="center"
+        android:layout_marginTop="65dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/dismiss_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:minHeight="42dp"
+            android:minWidth="138dp"
+            android:padding="16dp"
+            android:text="@string/turn_off"
+            android:textAllCaps="true"
+            android:textColor="@color/common_white87"
+            android:textSize="21sp"
+            tools:ignore="ButtonStyle" />
+
+        <Button
+            android:id="@+id/snooze_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="sans-serif-medium"
+            android:minHeight="42dp"
+            android:minWidth="138dp"
+            android:padding="16dp"
+            android:text="@string/snooze"
+            android:textAllCaps="true"
+            android:textColor="@color/common_black87"
+            android:textSize="21sp"
+            tools:ignore="ButtonStyle" />
+
+    </LinearLayout>
 
 </LinearLayout>

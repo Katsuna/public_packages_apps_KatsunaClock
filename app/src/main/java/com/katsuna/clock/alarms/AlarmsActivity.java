@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,7 +22,9 @@ import com.katsuna.clock.services.AlarmService;
 import com.katsuna.clock.settings.SettingsActivity;
 import com.katsuna.clock.util.Injection;
 import com.katsuna.commons.controls.KatsunaNavigationView;
+import com.katsuna.commons.entities.UserProfile;
 import com.katsuna.commons.ui.KatsunaActivity;
+import com.katsuna.commons.utils.IUserProfileProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,8 @@ import static com.katsuna.commons.utils.Constants.KATSUNA_PRIVACY_URL;
  * Display a list of {@link Alarm}s. User can choose to view all active and inactive alarms,
  * and create and edit alarms.
  */
-public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.View {
+public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.View,
+        IUserProfileProvider {
 
     private static final String TAG = "AlarmsActivity";
     private AlarmsContract.Presenter mPresenter;
@@ -65,8 +66,6 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
         }
     };
     private TextView mNoAlarmsText;
-    private Button mCreateAlarmButton;
-    private FloatingActionButton mCreateAlarmFab;
     private ListView mAlarmsList;
     private AlarmsAdapter mAlarmsAdapter;
     private DrawerLayout mDrawerLayout;
@@ -88,23 +87,23 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
 
     private void init() {
         mNoAlarmsText = findViewById(R.id.no_alarms);
-        mCreateAlarmButton = findViewById(R.id.create_alarm_button);
-        mCreateAlarmButton.setOnClickListener(new View.OnClickListener() {
+        mPopupButton2 = findViewById(R.id.create_alarm_button);
+        mPopupButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mPresenter.addNewAlarm();
             }
         });
 
-        mCreateAlarmFab = findViewById(R.id.create_alarm_fab);
-        mCreateAlarmFab.setOnClickListener(new View.OnClickListener() {
+        mFab2 = findViewById(R.id.create_alarm_fab);
+        mFab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mPresenter.addNewAlarm();
             }
         });
 
-        mAlarmsAdapter = new AlarmsAdapter(new ArrayList<Alarm>(0), mItemListener);
+        mAlarmsAdapter = new AlarmsAdapter(new ArrayList<Alarm>(0), mItemListener, this);
         mAlarmsList = findViewById(R.id.alarms_list);
         mAlarmsList.setAdapter(mAlarmsAdapter);
 
@@ -176,6 +175,7 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
 
         mAlarmsList.setVisibility(View.VISIBLE);
         mNoAlarmsText.setVisibility(View.GONE);
+        mPopupButton2.setVisibility(View.GONE);
         LogUtils.d(TAG, "alarms fetched: " + alarms.size());
     }
 
@@ -195,7 +195,8 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
     @Override
     public void showNoAlarms() {
         mNoAlarmsText.setVisibility(View.VISIBLE);
-        mCreateAlarmButton.setVisibility(View.VISIBLE);
+        mFab2.setVisibility(View.VISIBLE);
+        mPopupButton2.setVisibility(View.VISIBLE);
         mAlarmsList.setVisibility(View.GONE);
     }
 
@@ -209,4 +210,8 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
         mAlarmsAdapter.reloadAlarm(alarm);
     }
 
+    @Override
+    public UserProfile getProfile() {
+        return mUserProfileContainer.getActiveUserProfile();
+    }
 }

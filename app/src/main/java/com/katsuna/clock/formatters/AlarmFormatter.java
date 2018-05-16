@@ -7,6 +7,9 @@ import com.katsuna.clock.R;
 import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.data.AlarmType;
+import com.katsuna.commons.entities.ColorProfileKeyV2;
+import com.katsuna.commons.entities.UserProfile;
+import com.katsuna.commons.utils.ColorCalcV2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,28 +102,28 @@ public class AlarmFormatter {
         return String.format(Locale.getDefault(), "%02d:%02d", mAlarm.getHour(), mAlarm.getMinute());
     }
 
-    public int getCardHandleColor() {
-        int output;
+    public int getCardHandleColor(UserProfile profile) {
+        ColorProfileKeyV2 profileKey;
         if (mAlarm.getAlarmStatus() == AlarmStatus.INACTIVE) {
-            output = R.color.common_grey300;
+            profileKey = ColorProfileKeyV2.PRIMARY_GREY_1;
         } else if (mAlarm.getAlarmType() == AlarmType.ALARM) {
-            output = R.color.common_blueA700;
+            profileKey = ColorProfileKeyV2.PRIMARY_COLOR_2;
         } else {
-            output = R.color.common_amberA400;
+            profileKey = ColorProfileKeyV2.PRIMARY_COLOR_1;
         }
-        return output;
+        return ColorCalcV2.getColorResId(profileKey, profile.colorProfile);
     }
 
-    public int getCardInnerColor() {
-        int output;
+    public int getCardInnerColor(UserProfile profile) {
+        ColorProfileKeyV2 profileKey;
         if (mAlarm.getAlarmStatus() == AlarmStatus.INACTIVE) {
-            output = R.color.common_grey50;
+            profileKey = ColorProfileKeyV2.SECONDARY_GREY_2;
         } else if (mAlarm.getAlarmType() == AlarmType.ALARM) {
-            output = R.color.common_solitude;
+            profileKey = ColorProfileKeyV2.SECONDARY_COLOR_2;
         } else {
-            output = R.color.common_milk_punch;
+            profileKey = ColorProfileKeyV2.SECONDARY_COLOR_1;
         }
-        return output;
+        return ColorCalcV2.getColorResId(profileKey, profile.colorProfile);
     }
 
 }

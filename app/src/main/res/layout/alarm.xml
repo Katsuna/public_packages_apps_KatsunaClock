@@ -63,6 +63,7 @@
                     android:gravity="start|center"
                     android:maxLines="2"
                     android:minHeight="20dp"
+                    android:textColor="@color/common_black54"
                     android:textSize="16sp" />
 
                 <TextView
@@ -106,9 +107,12 @@
                         android:layout_marginEnd="8dp"
                         android:background="@color/common_blueA400"
                         android:minWidth="@dimen/common_button_min_width"
+                        android:maxWidth="140dp"
+                        android:lines="2"
                         android:paddingEnd="14dp"
                         android:paddingStart="14dp"
                         android:text="@string/edit"
+                        android:textAllCaps="true"
                         android:textColor="@color/common_white" />
 
                     <Button
@@ -119,9 +123,13 @@
                         android:layout_toStartOf="@id/button_edit"
                         android:background="@color/common_white"
                         android:minWidth="@dimen/common_button_min_width"
-                        android:paddingEnd="14dp"
-                        android:paddingStart="14dp"
+                        android:maxWidth="140dp"
+                        android:paddingEnd="8dp"
+                        android:paddingStart="8dp"
                         android:text="@string/turn_off"
+                        android:lines="2"
+                        android:ellipsize="end"
+                        android:textAllCaps="true"
                         android:textColor="@color/common_blueA400"
                         android:textSize="14sp" />
 

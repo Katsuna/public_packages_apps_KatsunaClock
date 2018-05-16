@@ -16,6 +16,13 @@ import com.katsuna.clock.R;
 import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.formatters.AlarmFormatter;
+import com.katsuna.commons.entities.OpticalParams;
+import com.katsuna.commons.entities.SizeProfileKeyV2;
+import com.katsuna.commons.entities.UserProfile;
+import com.katsuna.commons.utils.ColorAdjusterV2;
+import com.katsuna.commons.utils.IUserProfileProvider;
+import com.katsuna.commons.utils.SizeAdjuster;
+import com.katsuna.commons.utils.SizeCalcV2;
 
 import java.util.List;
 
@@ -24,12 +31,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
 class AlarmsAdapter extends BaseAdapter {
 
     private final AlarmItemListener mItemListener;
+    private final IUserProfileProvider mUserProfileProvider;
     private List<Alarm> mAlarms;
     private Alarm mAlarmFocused;
 
-    AlarmsAdapter(List<Alarm> tasks, AlarmItemListener itemListener) {
+    AlarmsAdapter(List<Alarm> tasks, AlarmItemListener itemListener,
+                  IUserProfileProvider userProfileProvider) {
         setList(tasks);
         mItemListener = itemListener;
+        mUserProfileProvider = userProfileProvider;
     }
 
     public void focusOnAlarm(Alarm alarm, boolean focus) {
@@ -96,13 +106,15 @@ class AlarmsAdapter extends BaseAdapter {
         TextView days = rowView.findViewById(R.id.alarm_days);
         days.setText(alarmFormatter.getDays());
 
+        UserProfile userProfile = mUserProfileProvider.getProfile();
+
         CardView alarmCard = rowView.findViewById(R.id.alarm_container_card);
         alarmCard.setCardBackgroundColor(ContextCompat.getColor(context,
-                alarmFormatter.getCardHandleColor()));
+                alarmFormatter.getCardHandleColor(userProfile)));
 
         View alarmCardInner = rowView.findViewById(R.id.alarm_container_card_inner);
         alarmCardInner.setBackgroundColor(ContextCompat.getColor(context,
-                alarmFormatter.getCardInnerColor()));
+                alarmFormatter.getCardInnerColor(userProfile)));
         alarmCardInner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,6 +161,20 @@ class AlarmsAdapter extends BaseAdapter {
                 mItemListener.onAlarmDelete(alarm);
             }
         });
+
+        // adjust buttons
+        OpticalParams opticalParams = SizeCalcV2.getOpticalParams(SizeProfileKeyV2.BUTTON,
+                userProfile.opticalSizeProfile);
+        SizeAdjuster.adjustText(context, editButton, opticalParams);
+        SizeAdjuster.adjustText(context, turnOffButton, opticalParams);
+
+        // more text
+        opticalParams = SizeCalcV2.getOpticalParams(SizeProfileKeyV2.BUTTON,
+                userProfile.opticalSizeProfile);
+        SizeAdjuster.adjustText(context, deleteText, opticalParams);
+
+        ColorAdjusterV2.adjustButtons(context, userProfile, editButton, turnOffButton, deleteText);
+
 
         return rowView;
     }

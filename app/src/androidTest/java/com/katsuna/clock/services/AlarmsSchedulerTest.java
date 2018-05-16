@@ -27,18 +27,15 @@ import static junit.framework.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class AlarmsSchedulerTest {
 
-    private Context mContext;
-
     private AlarmsDataSource mAlarmsDatasource;
 
-    private INextAlarmCalculator mNextAlarmCalculator;
     private AlarmsScheduler mAlarmsScheduler;
 
     @Before
     public void init() {
-        mContext = InstrumentationRegistry.getTargetContext();
+        Context mContext = InstrumentationRegistry.getTargetContext();
         mAlarmsDatasource = Injection.provideAlarmsDataSource(mContext);
-        mNextAlarmCalculator = new NextAlarmCalculator();
+        INextAlarmCalculator mNextAlarmCalculator = new NextAlarmCalculator();
         mAlarmsScheduler = new AlarmsScheduler(mContext, mAlarmsDatasource, mNextAlarmCalculator);
     }
 
@@ -60,6 +57,8 @@ public class AlarmsSchedulerTest {
         // action
         mAlarmsScheduler.setAlarm(alarm);
 
+        waitFor(200);
+
         // verify scheduled
         assertTrue(mAlarmsScheduler.isAlarmSet(alarm));
 
@@ -73,7 +72,7 @@ public class AlarmsSchedulerTest {
     @Test
     public void newAlarm_scheduledAndSnoozed() {
         // setup
-        LocalDateTime after5minutes = LocalDateTime.now().plusMinutes(10);
+        LocalDateTime after5minutes = LocalDateTime.now().plusMinutes(5);
 
         Alarm alarm = new Alarm(AlarmType.ALARM, after5minutes.getHour(), after5minutes.getMinute(),
                 "", false, false, false, false, false, true, false, AlarmStatus.ACTIVE);
@@ -124,11 +123,7 @@ public class AlarmsSchedulerTest {
 
         // a more elegant solution is needed to wait for async calls
         while(!moveOn[0]) {
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            waitFor(50);
         }
 
         // verify
@@ -147,6 +142,14 @@ public class AlarmsSchedulerTest {
 
         // verify cancel
         assertTrue(!mAlarmsScheduler.isAlarmSet(alarmTwo));
+    }
+
+    private void waitFor(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

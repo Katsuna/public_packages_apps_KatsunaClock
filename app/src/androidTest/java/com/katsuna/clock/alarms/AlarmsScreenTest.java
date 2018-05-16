@@ -7,13 +7,15 @@ import android.support.test.filters.LargeTest;
 import android.support.test.internal.util.Checks;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ListView;
 
 import com.katsuna.clock.R;
 import com.katsuna.clock.data.AlarmType;
+import com.katsuna.commons.entities.ColorProfileKeyV2;
+import com.katsuna.commons.entities.UserProfile;
+import com.katsuna.commons.utils.ColorCalcV2;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -111,8 +113,9 @@ public class AlarmsScreenTest {
                 .perform(click());
 
         //onView(withText(DESCRIPTION)).
-        int expectedColor = ContextCompat.getColor(InstrumentationRegistry.getTargetContext(),
-                R.color.common_grey50);
+        UserProfile userProfile = mActivityRule.getActivity().getProfile();
+        int expectedColor = ColorCalcV2.getColor(InstrumentationRegistry.getTargetContext(),
+                ColorProfileKeyV2.SECONDARY_GREY_2, userProfile.colorProfile);
         onView(allOf(withId(R.id.alarm_container_card_inner), hasDescendant(withText(DESCRIPTION))))
                 .check(matches(withBackgroundColor(expectedColor)));
 

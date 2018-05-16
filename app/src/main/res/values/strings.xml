@@ -27,5 +27,4 @@
     <string name="unsupported_operation">Unsupported operation.</string>
     <string name="reminder_with_no_description">A reminder should have a description.</string>
     <string name="snooze">Snooze</string>
-    <string name="dismiss">Dismiss</string>
 </resources>

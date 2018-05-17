@@ -148,6 +148,7 @@ class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
 
     @VisibleForTesting
     private void showStep(ManageAlarmStep step) {
+        mStep = step;
         switch (step) {
             case TYPE:
                 mManageAlarmView.showAlarmTypeControl(true);
@@ -167,7 +168,6 @@ class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
                 break;
         }
         mManageAlarmView.adjustFabPositions(step);
-        mStep = step;
     }
 
     @Override

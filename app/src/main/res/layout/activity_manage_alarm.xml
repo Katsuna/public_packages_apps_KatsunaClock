@@ -9,16 +9,18 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="?attr/actionBarSize">
+        android:layout_marginTop="?attr/actionBarSize"
+        android:clipToPadding="false"
+        android:paddingBottom="30dp">
 
         <android.support.v7.widget.CardView
             android:id="@+id/alarm_container_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="16dp"
             app:cardCornerRadius="8dp"
             app:cardElevation="2dp">
 
@@ -69,14 +71,15 @@
                                 android:id="@+id/alarm_type_radio_group"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="8dp"
-                                android:layout_marginStart="32dp">
+                                android:layout_marginStart="32dp"
+                                android:orientation="vertical">
 
                                 <RadioButton
                                     android:id="@+id/alarm_type_radio_button"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="start"
+                                    android:layout_marginEnd="8dp"
                                     android:button="@null"
                                     android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
                                     android:fontFamily="sans-serif-medium"
@@ -86,11 +89,19 @@
                                     android:textColor="@color/common_black58"
                                     android:textSize="16sp" />
 
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_marginBottom="10dp"
+                                    android:layout_marginTop="10dp"
+                                    android:background="@color/common_black12" />
+
                                 <RadioButton
                                     android:id="@+id/reminder_type_radio_button"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="start"
+                                    android:layout_marginEnd="8dp"
                                     android:button="@null"
                                     android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
                                     android:fontFamily="sans-serif-medium"
@@ -127,7 +138,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/common_selection_elevation"
                     android:layout_marginTop="@dimen/wizard_margin_top"
-                    android:background="@color/common_solitude"
                     android:elevation="0dp">
 
                     <RelativeLayout
@@ -135,7 +145,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:background="@color/common_grey50">
+                        android:background="@color/common_grey50"
+                        android:paddingTop="8dp">
 
                         <TextView
                             android:id="@+id/alarm_time_text"
@@ -144,6 +155,7 @@
                             android:layout_margin="8dp"
                             android:drawablePadding="8dp"
                             android:drawableStart="@drawable/ic_access_time_24dp"
+                            android:fontFamily="sans-serif-medium"
                             android:text="@string/alarm_time"
                             android:textSize="20sp" />
 
@@ -219,15 +231,16 @@
                     android:id="@+id/alarm_days_handler"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/wizard_margin_top"
-                    android:background="@color/common_solitude">
+                    android:layout_marginTop="@dimen/wizard_margin_top">
 
                     <RelativeLayout
                         android:id="@+id/alarm_days_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:background="@color/common_grey50">
+                        android:background="@color/common_grey50"
+                        android:paddingBottom="8dp"
+                        android:paddingTop="8dp">
 
                         <TextView
                             android:id="@+id/alarm_days_text"
@@ -238,6 +251,7 @@
                             android:layout_marginTop="8dp"
                             android:drawablePadding="8dp"
                             android:drawableStart="@drawable/ic_insert_invitation_black_24dp"
+                            android:fontFamily="sans-serif-medium"
                             android:text="@string/alarm_day"
                             android:textSize="20sp" />
 
@@ -247,7 +261,6 @@
                             android:layout_height="wrap_content"
                             android:layout_alignStart="@id/alarm_days_text"
                             android:layout_below="@id/alarm_days_text"
-                            android:layout_marginEnd="8dp"
                             android:layout_marginStart="28dp"
                             android:orientation="vertical"
                             android:visibility="gone">
@@ -257,95 +270,121 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="start"
+                                android:layout_marginEnd="8dp"
                                 android:background="@null"
                                 android:drawableStart="?android:attr/listChoiceIndicatorSingle"
                                 android:gravity="start|center"
                                 android:text="@string/monday"
                                 android:textAllCaps="false"
+                                android:textColor="@color/common_black58"
                                 android:textOff="@string/monday"
                                 android:textOn="@string/monday"
                                 android:textSize="18sp" />
+
+                            <include layout="@layout/divider" />
 
                             <ToggleButton
                                 android:id="@+id/tuesday_tb"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="start"
+                                android:layout_marginEnd="8dp"
                                 android:background="@null"
                                 android:drawableStart="?android:attr/listChoiceIndicatorSingle"
                                 android:gravity="start|center"
                                 android:text="@string/tuesday"
                                 android:textAllCaps="false"
+                                android:textColor="@color/common_black58"
                                 android:textOff="@string/tuesday"
                                 android:textOn="@string/tuesday"
                                 android:textSize="18sp" />
+
+                            <include layout="@layout/divider" />
 
                             <ToggleButton
                                 android:id="@+id/wednesday_tb"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="start"
+                                android:layout_marginEnd="8dp"
                                 android:background="@null"
                                 android:drawableStart="?android:attr/listChoiceIndicatorSingle"
                                 android:gravity="start|center"
                                 android:text="@string/wednesday"
                                 android:textAllCaps="false"
+                                android:textColor="@color/common_black58"
                                 android:textOff="@string/wednesday"
                                 android:textOn="@string/wednesday"
                                 android:textSize="18sp" />
+
+                            <include layout="@layout/divider" />
 
                             <ToggleButton
                                 android:id="@+id/thursday_tb"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="start"
+                                android:layout_marginEnd="8dp"
                                 android:background="@null"
                                 android:drawableStart="?android:attr/listChoiceIndicatorSingle"
                                 android:gravity="start|center"
                                 android:text="@string/thursday"
                                 android:textAllCaps="false"
+                                android:textColor="@color/common_black58"
                                 android:textOff="@string/thursday"
                                 android:textOn="@string/thursday"
                                 android:textSize="18sp" />
+
+                            <include layout="@layout/divider" />
 
                             <ToggleButton
                                 android:id="@+id/friday_tb"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="start"
+                                android:layout_marginEnd="8dp"
                                 android:background="@null"
                                 android:drawableStart="?android:attr/listChoiceIndicatorSingle"
                                 android:gravity="start|center"
                                 android:text="@string/friday"
                                 android:textAllCaps="false"
+                                android:textColor="@color/common_black58"
                                 android:textOff="@string/friday"
                                 android:textOn="@string/friday"
                                 android:textSize="18sp" />
+
+                            <include layout="@layout/divider" />
 
                             <ToggleButton
                                 android:id="@+id/saturday_tb"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="start"
+                                android:layout_marginEnd="8dp"
                                 android:background="@null"
                                 android:drawableStart="?android:attr/listChoiceIndicatorSingle"
                                 android:gravity="start|center"
                                 android:text="@string/saturday"
                                 android:textAllCaps="false"
+                                android:textColor="@color/common_black58"
                                 android:textOff="@string/saturday"
                                 android:textOn="@string/saturday"
                                 android:textSize="18sp" />
+
+                            <include layout="@layout/divider" />
 
                             <ToggleButton
                                 android:id="@+id/sunday_tb"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="start"
+                                android:layout_marginEnd="8dp"
                                 android:background="@null"
                                 android:drawableStart="?android:attr/listChoiceIndicatorSingle"
                                 android:gravity="start|center"
                                 android:text="@string/sunday"
                                 android:textAllCaps="false"
+                                android:textColor="@color/common_black58"
                                 android:textOff="@string/sunday"
                                 android:textOn="@string/sunday"
                                 android:textSize="18sp" />

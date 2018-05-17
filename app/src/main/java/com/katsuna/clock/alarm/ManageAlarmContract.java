@@ -19,6 +19,10 @@ class ManageAlarmContract {
 
         void setTime(String hour, String minute);
 
+        void setHour(String hour);
+
+        void setMinute(String minute);
+
         void loadAlarm(Alarm alarm);
 
         void showValidationResults(List<ValidationResult> results);
@@ -58,6 +62,10 @@ class ManageAlarmContract {
         ManageAlarmStep getCurrentStep();
 
         void alarmTypeSelected(AlarmType alarmType);
+
+        void addHours(String hour, int hours);
+
+        void addMinutes(String minute, int minutes);
     }
 
 }

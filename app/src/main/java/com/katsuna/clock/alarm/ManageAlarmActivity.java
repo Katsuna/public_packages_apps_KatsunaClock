@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -67,6 +68,10 @@ public class ManageAlarmActivity extends KatsunaActivity implements ManageAlarmC
     private int mWhiteColor;
     private TextView mAlarmDaysTitle;
     private TextView mAlarmTypeTitle;
+    private ImageButton mAddHourButton;
+    private ImageButton mSubtractHourButton;
+    private ImageButton mAddMinuteButton;
+    private ImageButton mSubtractMinuteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +119,35 @@ public class ManageAlarmActivity extends KatsunaActivity implements ManageAlarmC
 
         mHour = findViewById(R.id.hour);
         mMinute = findViewById(R.id.minute);
+
+        mAddHourButton = findViewById(R.id.add_hour_button);
+        mAddHourButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.addHours(mHour.getText().toString(), 1);
+            }
+        });
+        mSubtractHourButton = findViewById(R.id.subtract_hour_button);
+        mSubtractHourButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.addHours(mHour.getText().toString(), -1);
+            }
+        });
+        mAddMinuteButton = findViewById(R.id.add_minute_button);
+        mAddMinuteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.addMinutes(mMinute.getText().toString(), 1);
+            }
+        });
+        mSubtractMinuteButton = findViewById(R.id.subtract_minute_button);
+        mSubtractMinuteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.addMinutes(mMinute.getText().toString(), -1);
+            }
+        });
 
         mAlarmDaysHandler = findViewById(R.id.alarm_days_handler);
         mAlarmDaysContainer = findViewById(R.id.alarm_days_container);
@@ -318,6 +352,16 @@ public class ManageAlarmActivity extends KatsunaActivity implements ManageAlarmC
     @Override
     public void setTime(String hour, String minute) {
         mHour.setText(hour);
+        mMinute.setText(minute);
+    }
+
+    @Override
+    public void setHour(String hour) {
+        mHour.setText(hour);
+    }
+
+    @Override
+    public void setMinute(String minute) {
         mMinute.setText(minute);
     }
 

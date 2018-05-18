@@ -11,9 +11,10 @@ import com.katsuna.clock.services.utils.IAlarmsScheduler;
 import com.katsuna.clock.validators.IAlarmValidator;
 import com.katsuna.clock.validators.ValidationResult;
 
+import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.LocalTime;
+import org.threeten.bp.format.DateTimeFormatter;
 
-import java.util.Calendar;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -63,10 +64,9 @@ class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
     }
 
     private void initTime() {
-        Calendar now = Calendar.getInstance();
-        int currentHour = now.get(Calendar.HOUR_OF_DAY);
-        int currentMinute = now.get(Calendar.MINUTE);
-        mManageAlarmView.setTime(String.valueOf(currentHour), String.valueOf(currentMinute));
+        LocalDateTime now = LocalDateTime.now();
+        mManageAlarmView.setTime(now.format(DateTimeFormatter.ofPattern("HH")),
+                now.format(DateTimeFormatter.ofPattern("mm")));
     }
 
     @Override
@@ -188,14 +188,14 @@ class ManageAlarmPresenter implements ManageAlarmContract.Presenter,
     public void addHours(String hour, int hours) {
         int h = Integer.parseInt(hour);
         LocalTime time = LocalTime.of(h, 0).plusHours(hours);
-        mManageAlarmView.setHour(String.valueOf(time.getHour()));
+        mManageAlarmView.setHour(time.format(DateTimeFormatter.ofPattern("HH")));
     }
 
     @Override
     public void addMinutes(String minute, int minutes) {
         int min = Integer.parseInt(minute);
         LocalTime time = LocalTime.of(0, min).plusMinutes(minutes);
-        mManageAlarmView.setMinute(String.valueOf(time.getMinute()));
+        mManageAlarmView.setMinute(time.format(DateTimeFormatter.ofPattern("mm")));
     }
 
     private boolean isNewAlarm() {

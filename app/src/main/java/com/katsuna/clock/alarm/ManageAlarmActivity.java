@@ -1,6 +1,7 @@
 package com.katsuna.clock.alarm;
 
 import android.content.res.ColorStateList;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -10,7 +11,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -28,6 +29,9 @@ import com.katsuna.commons.entities.UserProfile;
 import com.katsuna.commons.ui.KatsunaActivity;
 import com.katsuna.commons.utils.ColorAdjusterV2;
 import com.katsuna.commons.utils.ColorCalcV2;
+
+import org.threeten.bp.LocalTime;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.Iterator;
 import java.util.List;
@@ -68,10 +72,10 @@ public class ManageAlarmActivity extends KatsunaActivity implements ManageAlarmC
     private int mWhiteColor;
     private TextView mAlarmDaysTitle;
     private TextView mAlarmTypeTitle;
-    private ImageButton mAddHourButton;
-    private ImageButton mSubtractHourButton;
-    private ImageButton mAddMinuteButton;
-    private ImageButton mSubtractMinuteButton;
+    private ImageView mAddHourButton;
+    private ImageView mSubtractHourButton;
+    private ImageView mAddMinuteButton;
+    private ImageView mSubtractMinuteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +122,28 @@ public class ManageAlarmActivity extends KatsunaActivity implements ManageAlarmC
         mAlarmDaysTitle = findViewById(R.id.alarm_days_text);
 
         mHour = findViewById(R.id.hour);
+        mHour.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    mHour.setTextColor(mPrimaryColor2);
+                } else {
+                    mHour.setTextColor(mBlack58Color);
+                }
+            }
+        });
+
         mMinute = findViewById(R.id.minute);
+        mMinute.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    mMinute.setTextColor(mPrimaryColor2);
+                } else {
+                    mMinute.setTextColor(mBlack58Color);
+                }
+            }
+        });
 
         mAddHourButton = findViewById(R.id.add_hour_button);
         mAddHourButton.setOnClickListener(new View.OnClickListener() {
@@ -219,7 +244,39 @@ public class ManageAlarmActivity extends KatsunaActivity implements ManageAlarmC
         mSecondaryColor2 = ColorCalcV2.getColor(this, ColorProfileKeyV2.SECONDARY_COLOR_2,
                 userProfile.colorProfile);
 
+        adjustTimeControls();
         adjustSteps();
+    }
+
+    private void adjustTimeControls() {
+        GradientDrawable gD = new GradientDrawable();
+        gD.setColor(mPrimaryColor2);
+        gD.setShape(GradientDrawable.OVAL);
+        mAddHourButton.setBackground(gD);
+        mAddMinuteButton.setBackground(gD);
+        mSubtractHourButton.setBackground(gD);
+        mSubtractMinuteButton.setBackground(gD);
+
+
+        final GradientDrawable shape =  new GradientDrawable();
+        float radius = getResources().getDimension(R.dimen.time_controls_radius);
+        shape.setCornerRadius(radius);
+        shape.setColor(mSecondaryColor2);
+
+        mHour.post(new Runnable() {
+            @Override
+            public void run() {
+
+                mHour.setBackground(shape);
+            }
+        });
+
+        mMinute.post(new Runnable() {
+            @Override
+            public void run() {
+                mMinute.setBackground(shape);
+            }
+        });
     }
 
     private void adjustSteps() {
@@ -238,6 +295,7 @@ public class ManageAlarmActivity extends KatsunaActivity implements ManageAlarmC
             colorToApply = mBlack58Color;
         }
         mAlarmTypeTitle.setTextColor(colorToApply);
+        mDescription.setBackgroundTintList(ColorStateList.valueOf(colorToApply));
         ColorAdjusterV2.setTextViewDrawableColor(mAlarmTypeTitle, colorToApply);
         ColorAdjusterV2.setTextViewDrawableColor(mAlarmTypeRadioButton, colorToApply);
         ColorAdjusterV2.setTextViewDrawableColor(mReminderTypeRadioGroup, colorToApply);
@@ -373,8 +431,9 @@ public class ManageAlarmActivity extends KatsunaActivity implements ManageAlarmC
             mReminderTypeRadioGroup.setChecked(true);
         }
         mDescription.setText(alarm.getDescription());
-        mHour.setText(String.valueOf(alarm.getHour()));
-        mMinute.setText(String.valueOf(alarm.getMinute()));
+        LocalTime alarmTime = LocalTime.of(alarm.getHour(), alarm.getMinute());
+        mHour.setText(alarmTime.format(DateTimeFormatter.ofPattern("HH")));
+        mMinute.setText(alarmTime.format(DateTimeFormatter.ofPattern("mm")));
         mMondayToggle.setChecked(alarm.isMondayEnabled());
         mTuesdayToggle.setChecked(alarm.isTuesdayEnabled());
         mWednesdayToggle.setChecked(alarm.isWednesdayEnabled());

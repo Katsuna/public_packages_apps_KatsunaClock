@@ -164,6 +164,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/alarm_time_text"
+                            android:layout_marginTop="16dp"
                             android:gravity="center"
                             android:orientation="horizontal"
                             android:visibility="gone">
@@ -173,55 +174,79 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
-                                <ImageButton
+                                <ImageView
                                     android:id="@+id/add_hour_button"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_add_24dp" />
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginBottom="24dp"
+                                    android:padding="7dp"
+                                    android:src="@drawable/kts_plus" />
 
                                 <EditText
                                     android:id="@+id/hour"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="80dp"
                                     android:layout_height="wrap_content"
                                     android:inputType="number"
-                                    android:maxLength="2" />
+                                    android:maxLength="2"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/common_black58"
+                                    android:textSize="46sp" />
 
-                                <ImageButton
+                                <ImageView
                                     android:id="@+id/subtract_hour_button"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_add_24dp" />
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginBottom="24dp"
+                                    android:layout_marginTop="24dp"
+                                    android:padding="7dp"
+                                    android:src="@drawable/kts_minus" />
 
                             </LinearLayout>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/time_separator" />
+                                android:layout_marginEnd="12dp"
+                                android:layout_marginStart="12dp"
+                                android:text="@string/time_separator"
+                                android:textColor="@color/common_black54"
+                                android:textSize="46sp" />
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
-                                <ImageButton
+                                <ImageView
                                     android:id="@+id/add_minute_button"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_add_24dp" />
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginBottom="24dp"
+                                    android:padding="7dp"
+                                    android:src="@drawable/kts_plus" />
 
                                 <EditText
                                     android:id="@+id/minute"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="80dp"
                                     android:layout_height="wrap_content"
                                     android:inputType="number"
-                                    android:maxLength="2" />
+                                    android:maxLength="2"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/common_black58"
+                                    android:textSize="46sp" />
 
-                                <ImageButton
+                                <ImageView
                                     android:id="@+id/subtract_minute_button"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_add_24dp" />
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginBottom="24dp"
+                                    android:layout_marginTop="24dp"
+                                    android:padding="7dp"
+                                    android:src="@drawable/kts_minus" />
 
                             </LinearLayout>
 

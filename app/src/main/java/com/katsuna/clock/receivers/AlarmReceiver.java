@@ -3,7 +3,6 @@ package com.katsuna.clock.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import com.katsuna.clock.AlarmActivationActivity;
 import com.katsuna.clock.LogUtils;
@@ -30,7 +29,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         final long alarmId = Objects.requireNonNull(intent.getExtras()).getLong(AlarmsScheduler.ALARM_ID);
         LogUtils.i(TAG, "onReceive, alarmId: " + alarmId);
 
-        Toast.makeText(context, "Alarm with id: " + alarmId, Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, "Alarm with id: " + alarmId, Toast.LENGTH_LONG).show();
 
         AlarmsDataSource alarmsDataSource = Injection.provideAlarmsDataSource(context);
         alarmsDataSource.getAlarm(alarmId, new AlarmsDataSource.GetAlarmCallback() {

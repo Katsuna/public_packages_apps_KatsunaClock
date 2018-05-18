@@ -8,10 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmStateManager;
 import com.katsuna.clock.data.AlarmStatus;
+import com.katsuna.clock.data.AlarmType;
 import com.katsuna.clock.data.source.AlarmsDataSource;
 import com.katsuna.clock.services.utils.AlarmsScheduler;
 import com.katsuna.clock.services.utils.IAlarmsScheduler;
@@ -37,6 +39,7 @@ public class AlarmActivationActivity extends AppCompatActivity {
     private Alarm mAlarm;
     private boolean handled = false;
     private boolean mFocusDuringOnPause;
+    private TextView mDescription;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,6 +54,7 @@ public class AlarmActivationActivity extends AppCompatActivity {
 
         mSnoozeButton = findViewById(R.id.snooze_button);
         mDismissButton = findViewById(R.id.dismiss_button);
+        mDescription = findViewById(R.id.alarm_description);
 
         Long alarmId = getAlarmId();
 
@@ -62,6 +66,10 @@ public class AlarmActivationActivity extends AppCompatActivity {
             @Override
             public void onAlarmLoaded(Alarm alarm) {
                 mAlarm = alarm;
+                if (mAlarm.getAlarmType() == AlarmType.REMINDER) {
+                    mDescription.setText(mAlarm.getDescription());
+                }
+
                 init();
                 soundTheAlarm();
             }

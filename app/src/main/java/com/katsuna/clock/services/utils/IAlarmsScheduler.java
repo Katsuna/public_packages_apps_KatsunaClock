@@ -16,5 +16,7 @@ public interface IAlarmsScheduler {
 
     interface CallBack {
         void schedulingFinished();
+
+        void schedulingFailed(Exception ex);
     }
 }

@@ -59,14 +59,6 @@ public final class Alarm {
     private AlarmStatus mAlarmStatus = AlarmStatus.ACTIVE;
 
     /**
-     * Use this constructor to create easily a new empty Alarm.
-     */
-    @Ignore
-    public Alarm() {
-        this(AlarmType.ALARM, null);
-    }
-
-    /**
      * Use this constructor to create easily a new active Alarm without day recurrence.
      * All the other alarm values get the default one.
      *

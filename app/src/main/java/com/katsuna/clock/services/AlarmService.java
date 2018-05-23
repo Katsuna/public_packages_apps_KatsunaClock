@@ -37,6 +37,12 @@ public class AlarmService extends Service {
             public void schedulingFinished() {
                 stopSelf();
             }
+
+            @Override
+            public void schedulingFailed(Exception ex) {
+                LogUtils.e(TAG, ex.toString());
+                stopSelf();
+            }
         });
 
         return START_NOT_STICKY;

@@ -46,16 +46,18 @@ public class AlarmsScheduler implements IAlarmsScheduler {
             @Override
             public void onAlarmsLoaded(List<Alarm> alarms) {
 
-                for (Alarm alarm : alarms) {
-                    setAlarm(alarm);
+                try {
+                    for (Alarm alarm : alarms) {
+                        setAlarm(alarm);
+                    }
+                    callBack.schedulingFinished();
+                } catch (Exception ex) {
+                    callBack.schedulingFailed(ex);
                 }
-
-                callBack.schedulingFinished();
             }
 
             @Override
             public void onDataNotAvailable() {
-                // TODO
                 callBack.schedulingFinished();
             }
         });

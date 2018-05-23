@@ -123,7 +123,8 @@ public class ManageAlarmPresenterTest {
 
     @Test
     public void saveExistingTaskToRepository_showsSuccessMessageUi() {
-        Alarm testAlarm = new Alarm();
+        Alarm testAlarm = new Alarm(AlarmType.ALARM, null);
+
         testAlarm.setAlarmId(1);
 
         // Get a reference to the class under test
@@ -316,6 +317,78 @@ public class ManageAlarmPresenterTest {
         verify(mManageAlarmView, times(2)).showAlarmTimeControl(true);
         verify(mManageAlarmView, times(2)).showAlarmDaysControl(false);
         verify(mManageAlarmView, times(2)).showPreviousStepFab(true);
+    }
+
+    @Test
+    public void addHourAction_increasesHour() {
+        mManageAlarmPresenter = new ManageAlarmPresenter(0, mAlarmsDataSource, mManageAlarmView,
+                new AlarmValidator(), mAlarmsScheduler);
+
+        mManageAlarmPresenter.start();
+
+        // When an alarm type is selected and set
+        mManageAlarmPresenter.alarmTypeSelected(AlarmType.ALARM);
+        mManageAlarmPresenter.validateAlarmTypeInfo(AlarmType.ALARM, "");
+
+        // And add hour button is pressed
+        mManageAlarmPresenter.addHours("23", 1);
+
+        // view call must be made
+        verify(mManageAlarmView).setHour("00");
+    }
+
+    @Test
+    public void subtractHourAction_decreasesHour() {
+        mManageAlarmPresenter = new ManageAlarmPresenter(0, mAlarmsDataSource, mManageAlarmView,
+                new AlarmValidator(), mAlarmsScheduler);
+
+        mManageAlarmPresenter.start();
+
+        // When an alarm type is selected and set
+        mManageAlarmPresenter.alarmTypeSelected(AlarmType.ALARM);
+        mManageAlarmPresenter.validateAlarmTypeInfo(AlarmType.ALARM, "");
+
+        // And add hour button is pressed
+        mManageAlarmPresenter.addHours("00", -1);
+
+        // view call must be made
+        verify(mManageAlarmView).setHour("23");
+    }
+
+    @Test
+    public void addMinuteAction_increasesMinute() {
+        mManageAlarmPresenter = new ManageAlarmPresenter(0, mAlarmsDataSource, mManageAlarmView,
+                new AlarmValidator(), mAlarmsScheduler);
+
+        mManageAlarmPresenter.start();
+
+        // When an alarm type is selected and set
+        mManageAlarmPresenter.alarmTypeSelected(AlarmType.ALARM);
+        mManageAlarmPresenter.validateAlarmTypeInfo(AlarmType.ALARM, "");
+
+        // And add hour button is pressed
+        mManageAlarmPresenter.addMinutes("59", 1);
+
+        // view call must be made
+        verify(mManageAlarmView).setMinute("00");
+    }
+
+    @Test
+    public void subtractMinuteAction_decreasesMinute() {
+        mManageAlarmPresenter = new ManageAlarmPresenter(0, mAlarmsDataSource, mManageAlarmView,
+                new AlarmValidator(), mAlarmsScheduler);
+
+        mManageAlarmPresenter.start();
+
+        // When an alarm type is selected and set
+        mManageAlarmPresenter.alarmTypeSelected(AlarmType.ALARM);
+        mManageAlarmPresenter.validateAlarmTypeInfo(AlarmType.ALARM, "");
+
+        // And add hour button is pressed
+        mManageAlarmPresenter.addMinutes("00", -1);
+
+        // view call must be made
+        verify(mManageAlarmView).setMinute("59");
     }
 }
 

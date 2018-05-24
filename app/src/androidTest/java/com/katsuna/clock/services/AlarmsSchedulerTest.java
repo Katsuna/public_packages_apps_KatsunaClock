@@ -14,7 +14,6 @@ import com.katsuna.clock.services.utils.INextAlarmCalculator;
 import com.katsuna.clock.services.utils.NextAlarmCalculator;
 import com.katsuna.clock.util.Injection;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,11 +37,6 @@ public class AlarmsSchedulerTest {
         mAlarmsScheduler = new AlarmsScheduler(mContext, mAlarmsDatasource, mNextAlarmCalculator);
     }
 
-    @After
-    public void stop() {
-        // no op yet
-    }
-
     @Test
     public void newAlarmSaved_scheduledAndCancelled() {
         // setup
@@ -52,18 +46,13 @@ public class AlarmsSchedulerTest {
                 "", false, false, false, false, false, true, false, AlarmStatus.ACTIVE);
         mAlarmsDatasource.saveAlarm(alarm);
 
+        // action set
+        final boolean[] moveOn = new boolean[1];
         // action
         mAlarmsScheduler.schedule(new IAlarmsScheduler.CallBack() {
             @Override
             public void schedulingFinished() {
-                // verify scheduled
-                assertTrue(mAlarmsScheduler.isAlarmSet(alarm));
-
-                // action
-                mAlarmsScheduler.cancel(alarm);
-
-                // verify not scheduled
-                assertTrue(!mAlarmsScheduler.isAlarmSet(alarm));
+                moveOn[0] = true;
             }
 
             @Override
@@ -71,6 +60,19 @@ public class AlarmsSchedulerTest {
                 fail();
             }
         });
+
+        while(!moveOn[0]) {
+            waitFor(50);
+        }
+
+        // verify scheduled
+        assertTrue(mAlarmsScheduler.isAlarmSet(alarm));
+
+        // action
+        mAlarmsScheduler.cancel(alarm);
+
+        // verify not scheduled
+        assertTrue(!mAlarmsScheduler.isAlarmSet(alarm));
     }
 
     @Test
@@ -83,23 +85,12 @@ public class AlarmsSchedulerTest {
         mAlarmsDatasource.saveAlarm(alarm);
 
         // action set
+        final boolean[] moveOn = new boolean[1];
+
         mAlarmsScheduler.schedule(new IAlarmsScheduler.CallBack() {
             @Override
             public void schedulingFinished() {
-                // verify
-                assertTrue(mAlarmsScheduler.isAlarmSet(alarm));
-
-                // action schedule
-                mAlarmsScheduler.snooze(alarm, 60);
-
-                // verify
-                assertTrue(mAlarmsScheduler.isAlarmSet(alarm));
-
-                // action cancel
-                mAlarmsScheduler.cancel(alarm);
-
-                // verify cancel
-                assertTrue(!mAlarmsScheduler.isAlarmSet(alarm));
+                moveOn[0] = true;
             }
 
             @Override
@@ -107,6 +98,25 @@ public class AlarmsSchedulerTest {
                 fail();
             }
         });
+
+        while(!moveOn[0]) {
+            waitFor(50);
+        }
+
+        // verify
+        assertTrue(mAlarmsScheduler.isAlarmSet(alarm));
+
+        // action schedule
+        mAlarmsScheduler.snooze(alarm, 60);
+
+        // verify
+        assertTrue(mAlarmsScheduler.isAlarmSet(alarm));
+
+        // action cancel
+        mAlarmsScheduler.cancel(alarm);
+
+        // verify cancel
+        assertTrue(!mAlarmsScheduler.isAlarmSet(alarm));
     }
 
     @Test
@@ -122,26 +132,13 @@ public class AlarmsSchedulerTest {
                 "", false, false, false, false, false, true, false, AlarmStatus.ACTIVE);
         mAlarmsDatasource.saveAlarm(alarmTwo);
 
-        // schedule  alarms
+        // action set alarms
+        final boolean[] moveOn = new boolean[1];
+
         mAlarmsScheduler.schedule(new IAlarmsScheduler.CallBack() {
             @Override
             public void schedulingFinished() {
-                // verify
-                assertTrue(mAlarmsScheduler.isAlarmSet(alarmOne));
-                assertTrue(mAlarmsScheduler.isAlarmSet(alarmTwo));
-
-                // action cancel first alarm
-                mAlarmsScheduler.cancel(alarmOne);
-
-                // verify
-                assertTrue(!mAlarmsScheduler.isAlarmSet(alarmOne));
-                assertTrue(mAlarmsScheduler.isAlarmSet(alarmTwo));
-
-                // action cancel second to cleanup
-                mAlarmsScheduler.cancel(alarmTwo);
-
-                // verify cancel
-                assertTrue(!mAlarmsScheduler.isAlarmSet(alarmTwo));
+                moveOn[0] = true;
             }
 
             @Override
@@ -149,5 +146,35 @@ public class AlarmsSchedulerTest {
                 fail();
             }
         });
+
+        while(!moveOn[0]) {
+            waitFor(50);
+        }
+
+        // verify
+        assertTrue(mAlarmsScheduler.isAlarmSet(alarmOne));
+        assertTrue(mAlarmsScheduler.isAlarmSet(alarmTwo));
+
+        // action cancel first alarm
+        mAlarmsScheduler.cancel(alarmOne);
+
+        // verify
+        assertTrue(!mAlarmsScheduler.isAlarmSet(alarmOne));
+        assertTrue(mAlarmsScheduler.isAlarmSet(alarmTwo));
+
+        // action cancel second to cleanup
+        mAlarmsScheduler.cancel(alarmTwo);
+
+        // verify cancel
+        assertTrue(!mAlarmsScheduler.isAlarmSet(alarmTwo));
+
+    }
+
+    private void waitFor(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

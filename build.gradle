@@ -46,4 +46,5 @@ ext {
     espressoVersion = '3.0.1'
     roomVersion = '1.1.0'
     gson = '2.8.2'
+    uiautomatorVersion = '2.1.3'
 }

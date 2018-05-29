@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class AlarmStateManager {
 
-    private static final String TAG = "AlarmStateManager";
+    private static final String TAG = AlarmStateManager.class.getSimpleName();
 
     private static final AlarmStateManager instance = new AlarmStateManager();
     private final LinkedHashMap<Long, AlarmState> map = new LinkedHashMap<>();
@@ -33,12 +33,12 @@ public class AlarmStateManager {
     }
 
     public synchronized void setAlarmState(Alarm alarm, AlarmState state) {
-        LogUtils.i(TAG, "setAlarmState: " + alarm);
+        LogUtils.i("%s setAlarmState:  %s", TAG, alarm);
         map.put(alarm.getAlarmId(), state);
     }
 
     public synchronized void removeAlarm(Alarm alarm) {
-        LogUtils.i(TAG, "removeAlarm: " + alarm);
+        LogUtils.i("%s removeAlarm: %s", TAG, alarm);
         map.remove(alarm.getAlarmId());
     }
 }

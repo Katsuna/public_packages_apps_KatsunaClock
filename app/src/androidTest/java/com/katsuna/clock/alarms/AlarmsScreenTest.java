@@ -1,18 +1,21 @@
 package com.katsuna.clock.alarms;
 
 import android.graphics.drawable.ColorDrawable;
+import android.os.RemoteException;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.filters.LargeTest;
 import android.support.test.internal.util.Checks;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.UiDevice;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ListView;
 
 import com.katsuna.clock.R;
 import com.katsuna.clock.data.AlarmType;
+import com.katsuna.clock.util.Keyguard;
 import com.katsuna.commons.entities.ColorProfileKeyV2;
 import com.katsuna.commons.entities.UserProfile;
 import com.katsuna.commons.utils.ColorCalcV2;
@@ -20,6 +23,7 @@ import com.katsuna.commons.utils.ColorCalcV2;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,6 +54,19 @@ public class AlarmsScreenTest {
     @Rule
     public ActivityTestRule<AlarmsActivity> mActivityRule =
             new ActivityTestRule<>(AlarmsActivity.class);
+
+    private UiDevice mDevice;
+
+    @Before
+    public void init() {
+        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        try {
+            mDevice.wakeUp();
+            Keyguard.disableKeyguard(InstrumentationRegistry.getTargetContext());
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void clickAddAlarmFab_opensAddAlarmUi() {

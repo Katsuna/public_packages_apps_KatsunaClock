@@ -10,13 +10,13 @@ import com.katsuna.clock.util.Injection;
 
 public class AlarmService extends Service {
 
-    private static final String TAG = "KastunaAlarmService";
+    private static final String TAG = AlarmService.class.getSimpleName();
     private IAlarmsScheduler mAlarmsScheduler;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        LogUtils.d(TAG, "onCreate");
+        LogUtils.d("%s %s", TAG, "onCreate");
 
         mAlarmsScheduler = Injection.provideAlarmScheduler(getApplicationContext());
     }
@@ -24,7 +24,7 @@ public class AlarmService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-        LogUtils.d(TAG, "onStartCommand");
+        LogUtils.d("%s %s", TAG, "onStartCommand");
 
         // Query the database and show alarm if it applies
 
@@ -40,7 +40,7 @@ public class AlarmService extends Service {
 
             @Override
             public void schedulingFailed(Exception ex) {
-                LogUtils.e(TAG, ex.toString());
+                LogUtils.e("%s exception while scheduling alarms:  %s", ex.toString());
                 stopSelf();
             }
         });
@@ -55,7 +55,7 @@ public class AlarmService extends Service {
 
     @Override
     public void onDestroy() {
-        LogUtils.d(TAG, "onDestroy");
+        LogUtils.d("%s %s", TAG, "onDestroy");
         super.onDestroy();
     }
 

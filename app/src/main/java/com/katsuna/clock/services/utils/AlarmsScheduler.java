@@ -25,9 +25,9 @@ import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 
 public class AlarmsScheduler implements IAlarmsScheduler {
 
-    private static final String TAG = "AlarmsScheduler";
     public static final String ALARM_ID = "alarm_id";
 
+    private static final String TAG = AlarmsScheduler.class.getSimpleName();
     private final Context mContext;
     private final AlarmsDataSource mAlarmsDatasource;
     private final INextAlarmCalculator mNextAlarmCalculator;
@@ -74,7 +74,7 @@ public class AlarmsScheduler implements IAlarmsScheduler {
 
     @Override
     public void setAlarm(Alarm alarm) {
-        LogUtils.d(TAG, "setAlarm called. alarm: " + alarm.toString());
+        LogUtils.d("%s setAlarm called for alarm: %s", TAG, alarm.toString());
 
         if (alarm.getAlarmStatus() != AlarmStatus.ACTIVE) return;
 
@@ -89,12 +89,12 @@ public class AlarmsScheduler implements IAlarmsScheduler {
         Objects.requireNonNull(am).setAlarmClock(alarmClockInfo, getPendingTriggerIntent(alarm,
                 FLAG_UPDATE_CURRENT));
 
-        LogUtils.i(TAG, String.format("Alarm %s scheduled at (%s)", alarm, triggerDateTime));
+        LogUtils.i("%s Alarm %s scheduled at (%s)",TAG, alarm, triggerDateTime);
     }
 
     @Override
     public void snooze(Alarm alarm, long delay) {
-        LogUtils.d(TAG, "snooze: " + alarm.toString());
+        LogUtils.d("%s snooze: %s", TAG, alarm);
 
         if (alarm.getAlarmStatus() != AlarmStatus.ACTIVE) return;
 
@@ -107,12 +107,12 @@ public class AlarmsScheduler implements IAlarmsScheduler {
         Objects.requireNonNull(am).setAlarmClock(alarmClockInfo, getPendingTriggerIntent(alarm,
                 FLAG_UPDATE_CURRENT));
 
-        LogUtils.i(TAG, String.format("Alarm %s snoozed and  scheduled at (%s)", alarm, rescheduledTime));
+        LogUtils.i("%s Alarm %s snoozed and  scheduled at (%s)", TAG, alarm, rescheduledTime);
     }
 
     @Override
     public void cancel(Alarm alarm) {
-        LogUtils.d(TAG, "cancelAlarm: " + alarm.toString());
+        LogUtils.d("%s cancelAlarm: %s", TAG, alarm.toString());
         PendingIntent pi = getPendingTriggerIntent(alarm, FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         Objects.requireNonNull(alarmManager).cancel(pi);

@@ -27,7 +27,7 @@ public class InfoActivity extends KatsunaInfoActivity {
             mAppName.setText(R.string.app_name);
             mAppVersion.setText(getString(R.string.common_version_info, pInfo.versionName));
         } catch (PackageManager.NameNotFoundException e) {
-            LogUtils.e(TAG, e.getMessage());
+            LogUtils.e("%s %s", TAG, e.getMessage());
         }
     }
 }

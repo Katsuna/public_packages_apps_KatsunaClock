@@ -18,7 +18,7 @@ import java.util.Objects;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
-    private static final String TAG = "AlarmReceiver";
+    private static final String TAG = AlarmReceiver.class.getSimpleName();
 
     // 1 minute auto snooze if we have alarms launching at the same time
     private final static int SNOOZE_DELAY_OVERLAPPING = 60;
@@ -27,7 +27,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
         // Put here YOUR code.
         final long alarmId = Objects.requireNonNull(intent.getExtras()).getLong(AlarmsScheduler.ALARM_ID);
-        LogUtils.i(TAG, "onReceive, alarmId: " + alarmId);
+        LogUtils.i("%s onReceive, alarmId: %s", TAG, alarmId);
 
         //Toast.makeText(context, "Alarm with id: " + alarmId, Toast.LENGTH_LONG).show();
 
@@ -41,13 +41,13 @@ public class AlarmReceiver extends BroadcastReceiver {
                 AlarmStateManager alarmStateManager = AlarmStateManager.getInstance();
 
                 AlarmState alarmState = alarmStateManager.getAlarmState(alarm);
-                LogUtils.i(TAG, "onReceive alarmState: " + alarmState);
+                LogUtils.i("%s onReceive alarmState: %s", TAG, alarmState);
                 if (alarmState == null) {
                     if (alarmStateManager.alarmActive()) {
-                        LogUtils.i(TAG, "onReceive another alarm is active.");
+                        LogUtils.i("%s onReceive another alarm is active.", TAG);
                         alarmsScheduler.snooze(alarm, SNOOZE_DELAY_OVERLAPPING);
                     } else {
-                        LogUtils.i(TAG, "onReceive alarm activated.");
+                        LogUtils.i("%s onReceive alarm activated.", TAG);
                         AlarmStateManager.getInstance().setAlarmState(alarm, AlarmState.ACTIVATED);
                         Intent i = new Intent(context, AlarmActivationActivity.class);
                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -59,7 +59,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
             @Override
             public void onDataNotAvailable() {
-                LogUtils.i(TAG, "alarm not found with alarmId: " + alarmId);
+                LogUtils.i("%s alarm not found with alarmId: %s", TAG, alarmId);
             }
         });
     }

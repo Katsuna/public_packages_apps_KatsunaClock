@@ -39,7 +39,7 @@ import static com.katsuna.commons.utils.Constants.KATSUNA_PRIVACY_URL;
 public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.View,
         IUserProfileProvider {
 
-    private static final String TAG = "AlarmsActivity";
+    private static final String TAG = AlarmsActivity.class.getSimpleName();
     private AlarmsContract.Presenter mPresenter;
     /**
      * Listener for clicks on alarms in the ListView.
@@ -176,7 +176,7 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
         mAlarmsList.setVisibility(View.VISIBLE);
         mNoAlarmsText.setVisibility(View.GONE);
         mPopupButton2.setVisibility(View.GONE);
-        LogUtils.d(TAG, "alarms fetched: " + alarms.size());
+        LogUtils.d("%s alarms fetched: %s", TAG, alarms.size());
     }
 
     @Override

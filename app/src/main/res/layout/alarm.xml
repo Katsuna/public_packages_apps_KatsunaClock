@@ -73,7 +73,6 @@
                     android:layout_marginBottom="8dp"
                     android:fontFamily="sans-serif"
                     android:gravity="start|center"
-                    android:maxLines="1"
                     android:minHeight="25dp"
                     android:textColor="@color/common_black54"
                     android:textSize="14sp" />

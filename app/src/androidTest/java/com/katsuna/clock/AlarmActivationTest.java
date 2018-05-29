@@ -18,7 +18,9 @@ import com.katsuna.clock.services.utils.IAlarmsScheduler;
 import com.katsuna.clock.services.utils.INextAlarmCalculator;
 import com.katsuna.clock.services.utils.NextAlarmCalculator;
 import com.katsuna.clock.util.Injection;
+import com.katsuna.clock.util.Keyguard;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +28,7 @@ import org.threeten.bp.LocalDateTime;
 
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -46,20 +49,24 @@ public class AlarmActivationTest {
 
 
     @Before
-    public void startMainActivityFromHomeScreen() {
+    public void start() {
         // Initialize UiDevice instance
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        try {
-            mDevice.wakeUp();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
 
         // init scheduler
         Context mContext = InstrumentationRegistry.getTargetContext();
         mAlarmsDatasource = Injection.provideAlarmsDataSource(mContext);
         INextAlarmCalculator mNextAlarmCalculator = new NextAlarmCalculator();
         mAlarmsScheduler = new AlarmsScheduler(mContext, mAlarmsDatasource, mNextAlarmCalculator);
+    }
+
+    @After
+    public void stop() {
+        // clean up
+        if (mAlarm != null) {
+            mAlarmsDatasource.deleteAlarm(mAlarm.getAlarmId());
+        }
+        mAlarm = null;
     }
 
     @Test
@@ -81,14 +88,12 @@ public class AlarmActivationTest {
 
         result = mDevice.wait(Until.gone(By.pkg(COM_KATSUNA_CLOCK)), LAUNCH_TIMEOUT);
         assertTrue(result);
+        assertThat(mAlarmsScheduler.isAlarmSet(mAlarm), is(false));
     }
 
     @Test
     public void alarmSchedulingOnLockedScreen_opensAlarmsActivity() {
         scheduleAlarm();
-
-        // Start from the home screen
-        mDevice.pressHome();
 
         try {
             mDevice.sleep();
@@ -106,7 +111,35 @@ public class AlarmActivationTest {
 
         result = mDevice.wait(Until.gone(By.pkg(COM_KATSUNA_CLOCK)), LAUNCH_TIMEOUT);
         assertTrue(result);
+
+        try {
+            mDevice.wakeUp();
+            Keyguard.disableKeyguard(InstrumentationRegistry.getTargetContext());
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+        assertThat(mAlarmsScheduler.isAlarmSet(mAlarm), is(false));
     }
+
+    @Test
+    public void alarmSnooze_leavesAlarmSet() {
+        scheduleAlarm();
+
+        boolean result = mDevice.wait(Until.hasObject(By.pkg(COM_KATSUNA_CLOCK).depth(0)),
+                ONE_MINUTE);
+
+        assertTrue(result);
+
+        UiObject2 dismissButton = mDevice.findObject(By.res(COM_KATSUNA_CLOCK, "snooze_button"));
+        dismissButton.click();
+
+        result = mDevice.wait(Until.gone(By.pkg(COM_KATSUNA_CLOCK)), LAUNCH_TIMEOUT);
+        assertTrue(result);
+
+        assertTrue(mAlarmsScheduler.isAlarmSet(mAlarm));
+    }
+
 
     private void scheduleAlarm() {
         // setup

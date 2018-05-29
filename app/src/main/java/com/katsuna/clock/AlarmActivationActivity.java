@@ -43,7 +43,7 @@ public class AlarmActivationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        LogUtils.d(TAG, "onCreate");
+        LogUtils.d("%s onCreate", TAG);
 
         super.onCreate(savedInstanceState);
 
@@ -109,7 +109,7 @@ public class AlarmActivationActivity extends AppCompatActivity {
                 userProfile.colorProfile);
         float radius = getResources().getDimension(R.dimen.common_8dp);
         Shape.setRoundedBackground(mDismissButton, primaryColor2, radius);
-        Shape.setRoundedBackground(mSnoozeButton, white , radius);
+        Shape.setRoundedBackground(mSnoozeButton, white, radius);
     }
 
     private Long getAlarmId() {
@@ -143,11 +143,11 @@ public class AlarmActivationActivity extends AppCompatActivity {
 
         if (mAlarm.isRecurring()) {
             // reshedule
-            LogUtils.i(TAG, "onReceive rescheduling alarm: " + mAlarm);
+            LogUtils.i("%s onReceive rescheduling alarm: %s", TAG, mAlarm);
             mAlarmsScheduler.reschedule(mAlarm);
         } else {
             // deactivate
-            LogUtils.i(TAG, "onReceive deactivating alarm: " + mAlarm);
+            LogUtils.i("%s onReceive deactivating alarm: %s", TAG, mAlarm);
             mAlarm.setAlarmStatus(AlarmStatus.INACTIVE);
             mAlarmsDataSource.saveAlarm(mAlarm);
         }
@@ -183,7 +183,7 @@ public class AlarmActivationActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        LogUtils.d(TAG, "onStop called: handled=" + handled);
+        LogUtils.d("%s onStop called: handled= %s", TAG, handled);
         if (mFocusDuringOnPause) {
             if (!handled) {
                 snoozeAlarm(SNOOZE_DELAY);

@@ -22,15 +22,21 @@ public class AlarmInitReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
-        LogUtils.i(TAG, "AlarmInitReceiver action: " + action);
+        LogUtils.i("%s AlarmInitReceiver action: %s", TAG, action);
 
-        if (ACTION_BOOT_COMPLETED.equals(action)
-                || Intent.ACTION_TIME_CHANGED.equals(action)) {
-            LogUtils.i(TAG, "BOOT COMPLETED action received:" + ACTION_BOOT_COMPLETED);
+        if (isActionSupported(action)) {
             // Stopwatch and timer data need to be updated on time change so the reboot
             // functionality works as expected.
             Intent myIntent = new Intent(context, AlarmService.class);
             context.startService(myIntent);
         }
+    }
+
+    private boolean isActionSupported(String action) {
+        return ACTION_BOOT_COMPLETED.equals(action)
+                || Intent.ACTION_LOCALE_CHANGED.equals(action)
+                || Intent.ACTION_MY_PACKAGE_REPLACED.equals(action)
+                || Intent.ACTION_TIME_CHANGED.equals(action)
+                || Intent.ACTION_TIMEZONE_CHANGED.equals(action);
     }
 }

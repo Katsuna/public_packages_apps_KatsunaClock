@@ -93,64 +93,11 @@
                     android:background="@color/common_black12" />
 
                 <RelativeLayout
+                    android:id="@+id/action_buttons_wrapper"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:layout_marginTop="16dp">
-
-                    <Button
-                        android:id="@+id/button_edit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="8dp"
-                        android:background="@color/common_blueA400"
-                        android:minWidth="@dimen/common_button_min_width"
-                        android:maxWidth="140dp"
-                        android:lines="2"
-                        android:paddingEnd="14dp"
-                        android:paddingStart="14dp"
-                        android:text="@string/edit"
-                        android:textAllCaps="true"
-                        android:textColor="@color/common_white" />
-
-                    <Button
-                        android:id="@+id/button_turn_off"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_toStartOf="@id/button_edit"
-                        android:background="@color/common_white"
-                        android:minWidth="@dimen/common_button_min_width"
-                        android:maxWidth="140dp"
-                        android:paddingEnd="8dp"
-                        android:paddingStart="8dp"
-                        android:text="@string/turn_off"
-                        android:lines="2"
-                        android:ellipsize="end"
-                        android:textAllCaps="true"
-                        android:textColor="@color/common_blueA400"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/txt_delete"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_toStartOf="@id/button_turn_off"
-                        android:ellipsize="end"
-                        android:fontFamily="sans-serif-medium"
-                        android:gravity="start|center"
-                        android:minHeight="25dp"
-                        android:singleLine="true"
-                        android:text="@string/delete"
-                        android:textAllCaps="true"
-                        android:textColor="@color/common_blueA400"
-                        android:textSize="14sp" />
-                </RelativeLayout>
+                    android:layout_marginTop="16dp" />
 
             </LinearLayout>
 

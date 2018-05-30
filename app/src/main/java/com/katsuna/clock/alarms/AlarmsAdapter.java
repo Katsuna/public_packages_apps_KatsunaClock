@@ -83,8 +83,9 @@ class AlarmsAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         View rowView = view;
+        LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         if (rowView == null) {
-            LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+            inflater = LayoutInflater.from(viewGroup.getContext());
             rowView = inflater.inflate(R.layout.alarm, viewGroup, false);
         }
 
@@ -127,6 +128,19 @@ class AlarmsAdapter extends BaseAdapter {
             actionsContainer.setVisibility(View.VISIBLE);
         } else {
             actionsContainer.setVisibility(View.GONE);
+        }
+
+        ViewGroup buttonsWrapper = rowView.findViewById(R.id.action_buttons_wrapper);
+        if (userProfile.isRightHanded) {
+            View buttonsView = inflater.inflate(R.layout.action_buttons_rh, buttonsWrapper,
+                    false);
+            buttonsWrapper.removeAllViews();
+            buttonsWrapper.addView(buttonsView);
+        } else {
+            View buttonsView = inflater.inflate(R.layout.action_buttons_lh, buttonsWrapper,
+                    false);
+            buttonsWrapper.removeAllViews();
+            buttonsWrapper.addView(buttonsView);
         }
 
         Button editButton = rowView.findViewById(R.id.button_edit);

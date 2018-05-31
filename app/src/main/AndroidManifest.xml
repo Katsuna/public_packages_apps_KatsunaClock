@@ -105,11 +105,6 @@
             android:name=".receivers.AlarmReceiver"
             android:enabled="true" />
 
-        <service
-            android:name=".services.AlarmService"
-            android:directBootAware="true"
-            tools:targetApi="n" />
-
     </application>
 
 </manifest>

@@ -18,7 +18,6 @@ import com.katsuna.clock.alarm.ManageAlarmActivity;
 import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.info.InfoActivity;
-import com.katsuna.clock.services.AlarmService;
 import com.katsuna.clock.settings.SettingsActivity;
 import com.katsuna.clock.util.Injection;
 import com.katsuna.commons.controls.KatsunaNavigationView;
@@ -73,8 +72,6 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        startService(new Intent(this, AlarmService.class));
 
         setContentView(R.layout.activity_alarms);
 

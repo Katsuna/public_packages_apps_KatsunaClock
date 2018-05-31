@@ -6,7 +6,8 @@ import android.content.Intent;
 
 import com.katsuna.clock.LogUtils;
 import com.katsuna.clock.Utils;
-import com.katsuna.clock.services.AlarmService;
+import com.katsuna.clock.services.utils.IAlarmsScheduler;
+import com.katsuna.clock.util.Injection;
 
 public class AlarmInitReceiver extends BroadcastReceiver {
 
@@ -25,10 +26,20 @@ public class AlarmInitReceiver extends BroadcastReceiver {
         LogUtils.i("%s AlarmInitReceiver action: %s", TAG, action);
 
         if (isActionSupported(action)) {
-            // Stopwatch and timer data need to be updated on time change so the reboot
-            // functionality works as expected.
-            Intent myIntent = new Intent(context, AlarmService.class);
-            context.startService(myIntent);
+
+            IAlarmsScheduler alarmsScheduler = Injection.provideAlarmScheduler(context);
+            alarmsScheduler.schedule(new IAlarmsScheduler.CallBack() {
+                @Override
+                public void schedulingFinished() {
+                    LogUtils.i("%s alarms scheduling completed", TAG);
+                }
+
+                @Override
+                public void schedulingFailed(Exception ex) {
+                    LogUtils.e("%s exception while scheduling alarms:  %s", TAG, ex.toString());
+                }
+            });
+
         }
     }
 

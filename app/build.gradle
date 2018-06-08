@@ -1,18 +1,34 @@
 apply plugin: 'com.android.application'
 
+// Load keystore
+def keystorePropertiesFile = rootProject.file("../../../vendor/keys/keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
     compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
+
     defaultConfig {
         applicationId "com.katsuna.clock"
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        project.ext.set("archivesBaseName", "Clock-" + defaultConfig.versionName)
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+        signingConfigs {
+            katsunaConfig {
+                storeFile rootProject.file("../../../vendor/keys/katsuna.keystore")
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
             }
         }
     }
@@ -24,6 +40,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.katsunaConfig
+
+            lintOptions {
+                disable 'MissingTranslation'
+            }
         }
     }
 }

@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.katsuna.commons.utils.Constants.KATSUNA_PRIVACY_URL;
+import static com.katsuna.commons.utils.Constants.KATSUNA_TERMS_OF_USE;
 
 
 /**
@@ -141,6 +142,11 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
                                 Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                                         Uri.parse(KATSUNA_PRIVACY_URL));
                                 startActivity(browserIntent);
+                                break;
+                            case R.id.drawer_terms:
+                                Intent termsIntent = new Intent(Intent.ACTION_VIEW,
+                                        Uri.parse(KATSUNA_TERMS_OF_USE));
+                                startActivity(termsIntent);
                                 break;
                         }
 

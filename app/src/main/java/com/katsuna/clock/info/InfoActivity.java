@@ -23,7 +23,7 @@ public class InfoActivity extends KatsunaInfoActivity {
         PackageInfo pInfo;
         try {
             pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            mAppIcon.setImageResource(R.mipmap.ic_launcher);
+            mAppIcon.setImageResource(R.drawable.common_clock_icon);
             mAppName.setText(R.string.app_name);
             mAppVersion.setText(getString(R.string.common_version_info, pInfo.versionName));
         } catch (PackageManager.NameNotFoundException e) {

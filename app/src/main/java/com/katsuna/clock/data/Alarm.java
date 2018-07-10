@@ -4,6 +4,8 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -11,7 +13,7 @@ import com.google.common.base.Objects;
 import com.google.gson.Gson;
 
 @Entity(tableName = "alarms")
-public final class Alarm {
+public final class Alarm implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "alarmId")
@@ -58,6 +60,13 @@ public final class Alarm {
     @ColumnInfo(name = "status")
     private AlarmStatus mAlarmStatus = AlarmStatus.ACTIVE;
 
+    @Nullable
+    @ColumnInfo(name = "ringtone")
+    private final String mRingtone;
+
+    @ColumnInfo(name = "vibrate")
+    private final boolean mVibrate;
+
     /**
      * Use this constructor to create easily a new active Alarm without day recurrence.
      * All the other alarm values get the default one.
@@ -68,7 +77,7 @@ public final class Alarm {
     @Ignore
     public Alarm(@NonNull AlarmType alarmType, @Nullable String description) {
         this(0, alarmType, 0, 0, description, false, false, false,
-                false, false, false, false, AlarmStatus.ACTIVE);
+                false, false, false, false, AlarmStatus.ACTIVE, null, false);
     }
 
     /**
@@ -86,16 +95,18 @@ public final class Alarm {
      * @param saturdayEnabled  enable flag for saturday
      * @param sundayEnabled    enable flag for sunday
      * @param alarmStatus      status of the alarm
+     * @param ringtone         ringtone of the alarm
+     * @param vibrate          vibrate flag of the alarm
      */
     @Ignore
     public Alarm(@NonNull AlarmType alarmType, @NonNull Integer hour,
                  @NonNull Integer minute, @Nullable String description, boolean mondayEnabled,
                  boolean tuesdayEnabled, boolean wednesdayEnabled, boolean thursdayEnabled,
                  boolean fridayEnabled, boolean saturdayEnabled, boolean sundayEnabled,
-                 @NonNull AlarmStatus alarmStatus) {
+                 @NonNull AlarmStatus alarmStatus, @Nullable String ringtone, boolean vibrate) {
         this(0, alarmType, hour, minute, description, mondayEnabled,
                 tuesdayEnabled, wednesdayEnabled, thursdayEnabled, fridayEnabled, saturdayEnabled,
-                sundayEnabled, alarmStatus);
+                sundayEnabled, alarmStatus, ringtone, vibrate);
     }
 
     /**
@@ -112,12 +123,14 @@ public final class Alarm {
      * @param saturdayEnabled  enable flag for saturday
      * @param sundayEnabled    enable flag for sunday
      * @param alarmStatus      status of the alarm
+     * @param ringtone         ringtone of the alarm
+     * @param vibrate          vibrate flag of the alarm
      */
     public Alarm(long alarmId, @NonNull AlarmType alarmType, @NonNull Integer hour,
                  @NonNull Integer minute, @Nullable String description, boolean mondayEnabled,
                  boolean tuesdayEnabled, boolean wednesdayEnabled, boolean thursdayEnabled,
                  boolean fridayEnabled, boolean saturdayEnabled, boolean sundayEnabled,
-                 @NonNull AlarmStatus alarmStatus) {
+                 @NonNull AlarmStatus alarmStatus, @Nullable String ringtone, boolean vibrate) {
         mAlarmId = alarmId;
         mAlarmType = alarmType;
         mHour = hour;
@@ -131,6 +144,8 @@ public final class Alarm {
         mSaturdayEnabled = saturdayEnabled;
         mSundayEnabled = sundayEnabled;
         mAlarmStatus = alarmStatus;
+        mRingtone = ringtone;
+        mVibrate = vibrate;
     }
 
     public long getAlarmId() {
@@ -195,6 +210,15 @@ public final class Alarm {
         return mAlarmStatus;
     }
 
+    @Nullable
+    public String getRingtone() {
+        return mRingtone;
+    }
+
+    public boolean isVibrate() {
+        return mVibrate;
+    }
+
     public void setAlarmStatus(@NonNull AlarmStatus alarmStatus) {
         this.mAlarmStatus = alarmStatus;
     }
@@ -220,7 +244,9 @@ public final class Alarm {
                 Objects.equal(mFridayEnabled, alarm.mFridayEnabled) &&
                 Objects.equal(mSaturdayEnabled, alarm.mSaturdayEnabled) &&
                 Objects.equal(mSundayEnabled, alarm.mSundayEnabled) &&
-                Objects.equal(mAlarmStatus, alarm.mAlarmStatus);
+                Objects.equal(mAlarmStatus, alarm.mAlarmStatus) &&
+                Objects.equal(mRingtone, alarm.mRingtone) &&
+                Objects.equal(mVibrate, alarm.mVibrate);
     }
 
     @Override
@@ -233,4 +259,60 @@ public final class Alarm {
         Gson gson = new Gson();
         return gson.toJson(this);
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.mAlarmId);
+        dest.writeInt(this.mAlarmType.ordinal());
+        dest.writeValue(this.mHour);
+        dest.writeValue(this.mMinute);
+        dest.writeString(this.mDescription);
+        dest.writeByte(this.mMondayEnabled ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.mTuesdayEnabled ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.mWednesdayEnabled ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.mThursdayEnabled ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.mFridayEnabled ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.mSaturdayEnabled ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.mSundayEnabled ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.mAlarmStatus.ordinal());
+        dest.writeString(this.mRingtone);
+        dest.writeByte(this.mVibrate ? (byte) 1 : (byte) 0);
+    }
+
+    protected Alarm(Parcel in) {
+        this.mAlarmId = in.readLong();
+        int tmpMAlarmType = in.readInt();
+        this.mAlarmType = AlarmType.values()[tmpMAlarmType];
+        this.mHour = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.mMinute = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.mDescription = in.readString();
+        this.mMondayEnabled = in.readByte() != 0;
+        this.mTuesdayEnabled = in.readByte() != 0;
+        this.mWednesdayEnabled = in.readByte() != 0;
+        this.mThursdayEnabled = in.readByte() != 0;
+        this.mFridayEnabled = in.readByte() != 0;
+        this.mSaturdayEnabled = in.readByte() != 0;
+        this.mSundayEnabled = in.readByte() != 0;
+        int tmpMAlarmStatus = in.readInt();
+        this.mAlarmStatus = AlarmStatus.values()[tmpMAlarmStatus];
+        this.mRingtone = in.readString();
+        this.mVibrate = in.readByte() != 0;
+    }
+
+    public static final Parcelable.Creator<Alarm> CREATOR = new Parcelable.Creator<Alarm>() {
+        @Override
+        public Alarm createFromParcel(Parcel source) {
+            return new Alarm(source);
+        }
+
+        @Override
+        public Alarm[] newArray(int size) {
+            return new Alarm[size];
+        }
+    };
 }

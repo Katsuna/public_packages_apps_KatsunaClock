@@ -2,7 +2,10 @@ package com.katsuna.clock;
 
 import android.content.Context;
 import android.media.AudioAttributes;
+import android.net.Uri;
 import android.os.Vibrator;
+
+import com.katsuna.clock.data.Alarm;
 
 /**
  * Manages playing alarm ringtones and vibrating the device.
@@ -27,15 +30,19 @@ public final class AlarmKlaxon {
         }
     }
 
-    public static void start(Context context) {
+    public static void start(Context context, Alarm alarm) {
         // Make sure we are stopped before starting
         stop(context);
         LogUtils.v("AlarmKlaxon.start()");
 
-        getAsyncRingtonePlayer(context).play();
+        Uri ringtone = Uri.parse(alarm.getRingtone());
 
-        final Vibrator vibrator = getVibrator(context);
-        vibrate(vibrator);
+        getAsyncRingtonePlayer(context).play(ringtone, 5000);
+
+        if (alarm.isVibrate()) {
+            final Vibrator vibrator = getVibrator(context);
+            vibrate(vibrator);
+        }
 
         sStarted = true;
     }

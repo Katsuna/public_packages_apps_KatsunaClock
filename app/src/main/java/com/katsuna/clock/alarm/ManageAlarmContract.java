@@ -15,7 +15,7 @@ class ManageAlarmContract {
     interface View extends BaseView<ManageAlarmContract.Presenter> {
         void showEmptyAlarmError();
 
-        void showAlarmsList();
+        void showAlarmsList(Alarm alarm);
 
         void setTime(String hour, String minute);
 
@@ -33,25 +33,35 @@ class ManageAlarmContract {
 
         void showDescriptionControl(boolean flag);
 
-        void showAlarmTypeControl(boolean flag);
-
         void showAlarmTimeControl(boolean flag);
 
         void showAlarmDaysControl(boolean flag);
 
         void adjustFabPositions(ManageAlarmStep step);
+
+        void showAlarmOptionsControl(boolean flag);
+
+        void showDescriptionStep(boolean flag);
+
+        void setTitle(int resId);
+
+        void setAlarmTimeTitle(int resId);
+
+        void setDefaultRingtone();
+
+        void setDefaultVibrate();
+
+        void hideKeyboard();
     }
 
     interface Presenter extends BasePresenter {
 
-        void saveAlarm(@NonNull AlarmType alarmType, String description, String hour, String minute,
+        void saveAlarm(String description, String hour, String minute,
                        boolean mondayEnabled, boolean tuesdayEnabled, boolean wednesdayEnabled,
                        boolean thursdayEnabled, boolean fridayEnabled, boolean saturdayEnabled,
-                       boolean sundayEnabled);
+                       boolean sundayEnabled, @NonNull String ringToneUri, boolean vibrateEnabled);
 
         void populateAlarm();
-
-        boolean isDataMissing();
 
         void previousStep();
 
@@ -61,11 +71,13 @@ class ManageAlarmContract {
 
         ManageAlarmStep getCurrentStep();
 
-        void alarmTypeSelected(AlarmType alarmType);
-
         void addHours(String hour, int hours);
 
         void addMinutes(String minute, int minutes);
+
+        AlarmType getAlarmType();
+
+        void showStep(ManageAlarmStep step);
     }
 
 }

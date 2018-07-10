@@ -20,6 +20,8 @@ interface AlarmsContract {
 
         void showAddAlarm();
 
+        void showAddReminder();
+
         void showAlarmDetailsUi(long alarmId);
 
         void showNoAlarms();
@@ -34,6 +36,8 @@ interface AlarmsContract {
         void loadAlarms();
 
         void addNewAlarm();
+
+        void addNewReminder();
 
         void openAlarmDetails(@NonNull Alarm alarm);
 

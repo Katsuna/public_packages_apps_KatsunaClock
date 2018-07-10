@@ -55,7 +55,7 @@ public class AlarmDaoTest {
 
         // When an alarm with the same id is inserted
         Alarm newAlarm = new Alarm(alarmId, AlarmType.ALARM, 0, 0, "description2", false,
-                false, false, false, false, false, false, AlarmStatus.ACTIVE);
+                false, false, false, false, false, false, AlarmStatus.ACTIVE, "ringtone", false);
         mDatabase.alarmsDao().insertAlarm(newAlarm);
 
         // When getting the alarm by id from the database
@@ -73,8 +73,9 @@ public class AlarmDaoTest {
 
 
         // When the alarm is updated
-        Alarm updatedAlarm = new Alarm(ALARM.getAlarmId(), AlarmType.ALARM, 0, 0, "description2", false,
-                false, false, false, false, false, false, AlarmStatus.ACTIVE);
+        Alarm updatedAlarm = new Alarm(ALARM.getAlarmId(), AlarmType.ALARM, 0, 0, "description2",
+                false, false, false, false, false, false, false, AlarmStatus.ACTIVE, "ringtone",
+                false);
         mDatabase.alarmsDao().updateAlarm(updatedAlarm);
 
         // When getting the alarm by id from the database

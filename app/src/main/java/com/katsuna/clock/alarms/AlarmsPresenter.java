@@ -73,6 +73,11 @@ public class AlarmsPresenter implements AlarmsContract.Presenter {
     }
 
     @Override
+    public void addNewReminder() {
+        mAlarmsView.showAddReminder();
+    }
+
+    @Override
     public void openAlarmDetails(@NonNull Alarm requestedAlarm) {
         mAlarmsView.showAlarmDetailsUi(requestedAlarm.getAlarmId());
     }

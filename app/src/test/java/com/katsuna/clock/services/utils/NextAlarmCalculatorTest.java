@@ -35,7 +35,7 @@ public class NextAlarmCalculatorTest {
     public void nonRecurringAlarmAfterPresentTime_getScheduledInTheSameDay() {
         // setup
         Alarm alarm = new Alarm(AlarmType.ALARM, 14, 30, null, false, false, false, false, false,
-                false, false, AlarmStatus.ACTIVE);
+                false, false, AlarmStatus.ACTIVE, "ringtone", false);
         LocalDateTime expectedTriggerTime = now.plusHours(2);
 
         // execute
@@ -50,7 +50,7 @@ public class NextAlarmCalculatorTest {
     public void nonRecurringAlarmBeforePresentTime_getScheduledNextDay() {
         // setup
         Alarm alarm = new Alarm(AlarmType.ALARM, 10, 30, null, false, false, false, false, false,
-                false, false, AlarmStatus.ACTIVE);
+                false, false, AlarmStatus.ACTIVE, "ringtone", false);
         LocalDateTime expectedTriggerTime = now.plusDays(1).minusHours(2);
 
         // execute
@@ -65,7 +65,7 @@ public class NextAlarmCalculatorTest {
     public void nonRecurringAlarmAtTheSamePresentTime_getScheduledNextDay() {
         // setup
         Alarm alarm = new Alarm(AlarmType.ALARM, 12, 30, null, false, false, false, false, false,
-                false, false, AlarmStatus.ACTIVE);
+                false, false, AlarmStatus.ACTIVE, "ringtone", false);
         LocalDateTime expectedTriggerTime = now.plusDays(1);
 
         // execute
@@ -80,7 +80,7 @@ public class NextAlarmCalculatorTest {
     public void recurringAlarmAfterPresentTime_getScheduledInTheSameDay() {
         // setup
         Alarm alarm = new Alarm(AlarmType.ALARM, 14, 30, null, false, false, true, false, false,
-                false, false, AlarmStatus.ACTIVE);
+                false, false, AlarmStatus.ACTIVE, "ringtone", false);
         LocalDateTime expectedTriggerTime = now.plusHours(2);
 
         // execute
@@ -95,7 +95,7 @@ public class NextAlarmCalculatorTest {
     public void recurringAlarmBeforePresentTime_getScheduledInTheSameDayNextWeek() {
         // setup
         Alarm alarm = new Alarm(AlarmType.ALARM, 10, 30, null, false, false, true, false, false,
-                false, false, AlarmStatus.ACTIVE);
+                false, false, AlarmStatus.ACTIVE, "ringtone", false);
         LocalDateTime expectedTriggerTime = now.minusHours(2).plusWeeks(1);
 
         // execute
@@ -110,7 +110,7 @@ public class NextAlarmCalculatorTest {
     public void recurringAlarmAtTheSamePresentTime_getScheduledInTheSameDayNextWeek() {
         // setup
         Alarm alarm = new Alarm(AlarmType.ALARM, 12, 30, null, false, false, true, false, false,
-                false, false, AlarmStatus.ACTIVE);
+                false, false, AlarmStatus.ACTIVE, "ringtone", false);
         LocalDateTime expectedTriggerTime = now.plusWeeks(1);
 
         // execute
@@ -125,7 +125,7 @@ public class NextAlarmCalculatorTest {
     public void recurringAlarmWithAllDaysAtTheSamePresentTime_getScheduledAtNextDay() {
         // setup
         Alarm alarm = new Alarm(AlarmType.ALARM, 12, 30, null, true, true, true, true, true,
-                true, true, AlarmStatus.ACTIVE);
+                true, true, AlarmStatus.ACTIVE, "ringtone", false);
         LocalDateTime expectedTriggerTime = now.plusDays(1);
 
         // execute

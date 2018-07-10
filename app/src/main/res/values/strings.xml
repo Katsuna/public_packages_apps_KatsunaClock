@@ -1,7 +1,16 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Clock</string>
     <string name="no_alarms">There are no active alarms or reminders yet</string>
-    <string name="add_new">Add new</string>
+    <string name="add_new_alarm">Add alarm</string>
+    <string name="add_new_alarm_title">Add New Alarm</string>
+    <string name="edit_alarm_title">Edit Alarm</string>
+    <string name="add_new_reminder">Add reminder</string>
+    <string name="add_new_reminder_title">Add New Reminder</string>
+    <string name="edit_reminder_title">Edit Reminder</string>
+    <string name="set_alarm_time">Set Alarm Time</string>
+    <string name="alarm_time_set">Alarm Time</string>
+    <string name="set_reminder_time">Set Reminder Time</string>
+    <string name="reminder_time_set">Reminder Time</string>
     <string name="edit">Edit</string>
     <string name="turn_off">Turn Off</string>
     <string name="turn_on">Turn On</string>
@@ -9,9 +18,10 @@
     <string name="alarm">Alarm</string>
     <string name="reminder">Reminder</string>
     <string name="description">Description</string>
-    <string name="alarm_type">Type</string>
+    <string name="about_reminder">About Reminder</string>
     <string name="alarm_time">Time</string>
     <string name="alarm_day">Day</string>
+    <string name="alarm_options">Expand options</string>
     <string name="time_separator" translatable="false">:</string>
     <string name="monday">Monday</string>
     <string name="tuesday">Tuesday</string>
@@ -27,4 +37,34 @@
     <string name="unsupported_operation">Unsupported operation.</string>
     <string name="reminder_with_no_description">A reminder should have a description.</string>
     <string name="snooze">Snooze</string>
+
+    <!-- alarm alert strings -->
+    <string name="alarm_set">Alarm Set</string>
+    <string name="back">Back</string>
+
+    <string name="alarm_is_set_at">Alarm is set at %1$s</string>
+    <string name="every">Every %1$s</string>
+    <string name="remaining_time">Remaining time until ring: %1$s</string>
+    <string name="remaining_time_detail_days" tools:ignore="PluralsCandidate">%1$d days, %2$d hours and %3$d minutes</string>
+    <string name="remaining_time_detail_hours" tools:ignore="PluralsCandidate">%1$d hours and %2$d minutes</string>
+    <string name="remaining_time_detail_minutes" tools:ignore="PluralsCandidate">%1$d minutes</string>
+    <string name="remaining_time_few_seconds">a few seconds</string>
+
+    <!-- eof alarm alert strings -->
+
+    <string name="alarm_title">%1$s • %2$s</string>
+    <string name="ring_in">Ring in %1$s</string>
+
+    <string name="ringtone">Ringtone: %1$s</string>
+    <string name="vibrate_on">Vibrate on</string>
+    <string name="vibrate_off">Vibrate off</string>
+
+    <string name="time_display">%1$s:%2$s</string>
+
+    <!-- content descriptions for buttons that change hour and minutes -->
+    <string name="add_hour">Add hour</string>
+    <string name="subtract_hour">Subtract hour</string>
+    <string name="add_minute">Add minute</string>
+    <string name="subtract_minute">Subtract minute</string>
+
 </resources>

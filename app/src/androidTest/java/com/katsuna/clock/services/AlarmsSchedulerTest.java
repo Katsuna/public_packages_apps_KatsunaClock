@@ -42,8 +42,9 @@ public class AlarmsSchedulerTest {
         // setup
         LocalDateTime after5minutes = LocalDateTime.now().plusMinutes(5);
 
-        final Alarm alarm = new Alarm(AlarmType.ALARM, after5minutes.getHour(), after5minutes.getMinute(),
-                "", false, false, false, false, false, true, false, AlarmStatus.ACTIVE);
+        final Alarm alarm = new Alarm(AlarmType.ALARM, after5minutes.getHour(),
+                after5minutes.getMinute(), "", false, false, false, false, false, true, false,
+                AlarmStatus.ACTIVE, "ringtone", false);
         mAlarmsDatasource.saveAlarm(alarm);
 
         // action set
@@ -80,8 +81,9 @@ public class AlarmsSchedulerTest {
         // setup
         LocalDateTime after5minutes = LocalDateTime.now().plusMinutes(5);
 
-        final Alarm alarm = new Alarm(AlarmType.ALARM, after5minutes.getHour(), after5minutes.getMinute(),
-                "", false, false, false, false, false, true, false, AlarmStatus.ACTIVE);
+        final Alarm alarm = new Alarm(AlarmType.ALARM, after5minutes.getHour(),
+                after5minutes.getMinute(), "", false, false, false, false, false, true, false,
+                AlarmStatus.ACTIVE, "ringtone", false);
         mAlarmsDatasource.saveAlarm(alarm);
 
         // action set
@@ -124,12 +126,14 @@ public class AlarmsSchedulerTest {
         // setup
         LocalDateTime after5minutes = LocalDateTime.now().plusMinutes(5);
 
-        final Alarm alarmOne = new Alarm(AlarmType.ALARM, after5minutes.getHour(), after5minutes.getMinute(),
-                "", false, false, false, false, false, true, false, AlarmStatus.ACTIVE);
+        final Alarm alarmOne = new Alarm(AlarmType.ALARM, after5minutes.getHour(),
+                after5minutes.getMinute(), "", false, false, false, false, false, true, false,
+                AlarmStatus.ACTIVE, "ringtone", false);
         mAlarmsDatasource.saveAlarm(alarmOne);
 
-        final Alarm alarmTwo = new Alarm(AlarmType.ALARM, after5minutes.getHour(), after5minutes.getMinute(),
-                "", false, false, false, false, false, true, false, AlarmStatus.ACTIVE);
+        final Alarm alarmTwo = new Alarm(AlarmType.ALARM, after5minutes.getHour(),
+                after5minutes.getMinute(), "", false, false, false, false, false, true, false,
+                AlarmStatus.ACTIVE, "ringtone", false);
         mAlarmsDatasource.saveAlarm(alarmTwo);
 
         // action set alarms

@@ -166,7 +166,7 @@ public class AlarmActivationActivity extends AppCompatActivity {
     }
 
     private void soundTheAlarm() {
-        AlarmKlaxon.start(this);
+        AlarmKlaxon.start(this, mAlarm);
     }
 
 

@@ -7,6 +7,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.katsuna.clock.R;
+import com.katsuna.clock.data.AlarmType;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,6 +21,7 @@ import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.katsuna.clock.alarm.ManageAlarmActivity.EXTRA_ALARM_TYPE;
 import static org.hamcrest.CoreMatchers.not;
 
 @RunWith(AndroidJUnit4.class)
@@ -36,7 +38,6 @@ public class ManageAlarmScreenTest {
         launchNewManageAlarmActivity();
 
         // Add invalid alarm type and description combination
-        onView(withId(R.id.reminder_type_radio_button)).perform(click());
         onView(withId(R.id.alarm_description)).perform(clearText());
 
         // Try to save the task
@@ -53,6 +54,7 @@ public class ManageAlarmScreenTest {
     private void launchNewManageAlarmActivity() {
         Intent intent = new Intent(InstrumentationRegistry.getInstrumentation().getTargetContext(),
                 ManageAlarmActivity.class);
+        intent.putExtra(EXTRA_ALARM_TYPE, AlarmType.REMINDER);
         mActivityRule.launchActivity(intent);
     }
 }

@@ -7,12 +7,15 @@ import com.katsuna.clock.R;
 import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.data.AlarmType;
+import com.katsuna.clock.services.utils.NextAlarmCalculator;
+import com.katsuna.clock.util.DateUtils;
+import com.katsuna.clock.util.TimeDiff;
 import com.katsuna.commons.entities.ColorProfileKeyV2;
 import com.katsuna.commons.entities.UserProfile;
 import com.katsuna.commons.utils.ColorCalcV2;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.threeten.bp.LocalDateTime;
+
 import java.util.Locale;
 
 public class AlarmFormatter {
@@ -26,48 +29,15 @@ public class AlarmFormatter {
     }
 
     public String getDays() {
-        List<String> days = new ArrayList<>();
-        if (mAlarm.isMondayEnabled()) {
-            days.add(getString(R.string.monday));
-        }
-        if (mAlarm.isTuesdayEnabled()) {
-            days.add(getString(R.string.tuesday));
-        }
-        if (mAlarm.isWednesdayEnabled()) {
-            days.add(getString(R.string.wednesday));
-        }
-        if (mAlarm.isThursdayEnabled()) {
-            days.add(getString(R.string.thursday));
-        }
-        if (mAlarm.isFridayEnabled()) {
-            days.add(getString(R.string.friday));
-        }
-        if (mAlarm.isSaturdayEnabled()) {
-            days.add(getString(R.string.saturday));
-        }
-        if (mAlarm.isSundayEnabled()) {
-            days.add(getString(R.string.sunday));
-        }
-
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < days.size(); i++) {
-            sb.append(days.get(i));
-            if (days.size() > (i+2)) {
-                // we have at least two more to add
-                sb.append(", ");
-            } else if (days.size() > (i+1)) {
-                // we have one more to add
-                sb.append(" ").append(getString(R.string.and)).append(" ");
-            }
-        }
-
-        return sb.toString();
+        return DaysFormatter.getDays(mContext, mAlarm.isMondayEnabled(), mAlarm.isTuesdayEnabled(),
+                mAlarm.isWednesdayEnabled(), mAlarm.isThursdayEnabled(), mAlarm.isFridayEnabled(),
+                mAlarm.isSaturdayEnabled(), mAlarm.isSundayEnabled());
     }
 
     public int getAlarmTypeIconResId() {
         int output;
         if (mAlarm.getAlarmType() == AlarmType.REMINDER) {
-            output = R.drawable.ic_notifications_24dp;
+            output = R.drawable.ic_notifications_black54_24dp;
         } else {
             output = R.drawable.ic_access_time_24dp;
         }
@@ -77,9 +47,11 @@ public class AlarmFormatter {
     public String getTitle() {
         String output;
         if (mAlarm.getAlarmType() == AlarmType.ALARM) {
-            output = showTime();
+            output = mContext.getString(R.string.alarm_title, getString(R.string.alarm),
+                    showTime());
         } else {
-            output = mAlarm.getDescription();
+            output = mContext.getString(R.string.alarm_title, getString(R.string.reminder),
+                    mAlarm.getDescription());
         }
         return output;
     }
@@ -125,5 +97,54 @@ public class AlarmFormatter {
         }
         return ColorCalcV2.getColorResId(profileKey, profile.colorProfile);
     }
+
+    public String getAlertMessage() {
+        String output = mContext.getString(R.string.alarm_is_set_at, showTime());
+        output += "\n";
+        String days = getDaysFrequency();
+        if (!days.isEmpty()) {
+            output += days;
+            output += "\n";
+        }
+        output += mContext.getString(R.string.remaining_time, getTimeUntilRing());
+        return output;
+    }
+
+    public String getDaysFrequency() {
+        String output = "";
+        if (mAlarm.isRecurring()) {
+            output += mContext.getString(R.string.every, getDays());
+        }
+        return output;
+    }
+
+    public String getRingInTime() {
+        return mContext.getString(R.string.ring_in, getTimeUntilRing());
+    }
+
+    public String getTimeUntilRing() {
+        NextAlarmCalculator nextAlarmCalculator = new NextAlarmCalculator();
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime triggerDate  = nextAlarmCalculator.getTriggerDateTime(now, mAlarm);
+
+        String timeDiffPresentation;
+        TimeDiff timeDiff = DateUtils.calculateTimeDiff(now, triggerDate);
+        if (timeDiff.days > 0) {
+            timeDiffPresentation = mContext.getString(R.string.remaining_time_detail_days,
+                    timeDiff.days, timeDiff.hours, timeDiff.minutes);
+        } else if (timeDiff.hours > 0) {
+            timeDiffPresentation = mContext.getString(R.string.remaining_time_detail_hours,
+                    timeDiff.hours, timeDiff.minutes);
+        } else {
+            if (timeDiff.minutes == 0) {
+                timeDiffPresentation = mContext.getString(R.string.remaining_time_few_seconds);
+            } else {
+                timeDiffPresentation = mContext.getString(R.string.remaining_time_detail_minutes,
+                        timeDiff.minutes);
+            }
+        }
+        return timeDiffPresentation;
+    }
+
 
 }

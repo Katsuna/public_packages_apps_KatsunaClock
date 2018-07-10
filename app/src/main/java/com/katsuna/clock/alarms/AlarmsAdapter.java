@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,11 +102,17 @@ class AlarmsAdapter extends BaseAdapter {
         TextView title = rowView.findViewById(R.id.alarm_title);
         title.setText(alarmFormatter.getTitle());
 
-        TextView description = rowView.findViewById(R.id.alarm_description);
-        description.setText(alarmFormatter.getDescription());
+        TextView alarmDays = rowView.findViewById(R.id.alarm_days);
+        String days = alarmFormatter.getDaysFrequency();
+        if (TextUtils.isEmpty(days)) {
+            alarmDays.setVisibility(View.GONE);
+        } else {
+            alarmDays.setText(days);
+            alarmDays.setVisibility(View.VISIBLE);
+        }
 
-        TextView days = rowView.findViewById(R.id.alarm_days);
-        days.setText(alarmFormatter.getDays());
+        TextView ringTime = rowView.findViewById(R.id.alarm_ring_time);
+        ringTime.setText(alarmFormatter.getRingInTime());
 
         UserProfile userProfile = mUserProfileProvider.getProfile();
 

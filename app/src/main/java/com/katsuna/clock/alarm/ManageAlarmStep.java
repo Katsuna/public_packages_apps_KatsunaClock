@@ -1,7 +1,8 @@
 package com.katsuna.clock.alarm;
 
 public enum ManageAlarmStep {
-    TYPE,
+    DESCRIPTION,
     TIME,
-    DAYS
+    DAYS,
+    OPTIONS
 }

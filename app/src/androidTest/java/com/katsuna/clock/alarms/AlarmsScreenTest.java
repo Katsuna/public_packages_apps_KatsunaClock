@@ -44,6 +44,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.core.StringContains.containsString;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -56,6 +57,22 @@ public class AlarmsScreenTest {
             new ActivityTestRule<>(AlarmsActivity.class);
 
     private UiDevice mDevice;
+
+    public static Matcher<View> withBackgroundColor(final int color) {
+        Checks.checkNotNull(color);
+        return new BoundedMatcher<View, View>(View.class) {
+            @Override
+            public boolean matchesSafely(View warning) {
+                ColorDrawable colorDrawable = (ColorDrawable) warning.getBackground();
+                return color == colorDrawable.getColor();
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with text color: ");
+            }
+        };
+    }
 
     @Before
     public void init() {
@@ -74,7 +91,7 @@ public class AlarmsScreenTest {
         onView(withId(R.id.create_alarm_fab)).perform(click());
 
         // Check if the add alarm screen is displayed
-        onView(withId(R.id.reminder_type_radio_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.minute)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -83,7 +100,7 @@ public class AlarmsScreenTest {
         onView(withId(R.id.create_alarm_button)).perform(click());
 
         // Check if the add alarm screen is displayed
-        onView(withId(R.id.reminder_type_radio_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.minute)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -91,8 +108,11 @@ public class AlarmsScreenTest {
         // First add an alarm
         createAlarm(AlarmType.REMINDER, DESCRIPTION);
 
+        // Click ok on alert
+        onView(withId(R.id.alert_ok_button)).perform(click());
+
         // Click on the alarm on the list
-        onView(withText(DESCRIPTION)).perform(click());
+        onView(withText(containsString(DESCRIPTION))).perform(click());
 
         // Click on the edit alarm button
         onView(withId(R.id.button_edit)).perform(click());
@@ -107,9 +127,13 @@ public class AlarmsScreenTest {
         onView(withId(R.id.next_step_fab)).perform(click());
         onView(withId(R.id.next_step_fab)).perform(click());
         onView(withId(R.id.next_step_fab)).perform(click());
+        onView(withId(R.id.next_step_fab)).perform(click());
+
+        // Click ok on alert
+        onView(withId(R.id.alert_ok_button)).perform(click());
 
         // Verify alarm is displayed on screen in the alarm list.
-        onView(withItemText(editAlarmDescription)).check(matches(isDisplayed()));
+        onView(withText(containsString(editAlarmDescription))).check(matches(isDisplayed()));
 
         // Verify previous alarm description is not displayed
         onView(withItemText(DESCRIPTION)).check(doesNotExist());
@@ -122,8 +146,11 @@ public class AlarmsScreenTest {
         // First add an alarm
         createAlarm(AlarmType.REMINDER, DESCRIPTION);
 
+        // Click ok on alert
+        onView(withId(R.id.alert_ok_button)).perform(click());
+
         // Click on the alarm on the list
-        onView(withText(DESCRIPTION)).perform(click());
+        onView(withText(containsString(DESCRIPTION))).perform(click());
 
         // Click on the turn off alarm button
         onView(allOf(withId(R.id.button_turn_off), isDisplayed()))
@@ -133,37 +160,37 @@ public class AlarmsScreenTest {
         UserProfile userProfile = mActivityRule.getActivity().getProfile();
         int expectedColor = ColorCalcV2.getColor(InstrumentationRegistry.getTargetContext(),
                 ColorProfileKeyV2.SECONDARY_GREY_2, userProfile.colorProfile);
-        onView(allOf(withId(R.id.alarm_container_card_inner), hasDescendant(withText(DESCRIPTION))))
+        onView(allOf(withId(R.id.alarm_container_card_inner),
+                hasDescendant(withText(containsString(DESCRIPTION)))))
                 .check(matches(withBackgroundColor(expectedColor)));
 
         // Click on the alarm on the list
-        onView(withText(DESCRIPTION)).perform(click());
+        onView(withText(containsString(DESCRIPTION))).perform(click());
         deleteAlarmWithDescription(DESCRIPTION);
     }
 
     private void deleteAlarmWithDescription(String description) {
-        onView(withItemText(description)).perform(click());
+        onView(withText(containsString(description))).perform(click());
 
         onView(withId(R.id.txt_delete)).perform(click());
 
         // Verify alarm removed
-        onView(withItemText(description)).check(matches(not(isDisplayed())));
+        onView(withText(containsString(description))).check(matches(not(isDisplayed())));
     }
 
     private void createAlarm(AlarmType alarmType, String description) {
-        // Click on the add alarm fab
-        onView(withId(R.id.create_alarm_fab)).perform(click());
 
         if (alarmType == AlarmType.REMINDER) {
-            onView(withId(R.id.reminder_type_radio_button)).perform(click());
+            // Click on the add alarm fab
+            onView(withId(R.id.create_reminder_fab)).perform(click());
             onView(withId(R.id.alarm_description)).perform(typeText(description),
                     closeSoftKeyboard());
+            // move to time selection step
+            onView(withId(R.id.next_step_fab)).perform(click());
         } else if (alarmType == AlarmType.ALARM) {
-            onView(withId(R.id.alarm_type_radio_button)).perform(click());
+            // Click on the add alarm fab
+            onView(withId(R.id.create_alarm_fab)).perform(click());
         }
-
-        // move to time selection step
-        onView(withId(R.id.next_step_fab)).perform(click());
 
         // move to days selection step
         onView(withId(R.id.next_step_fab)).perform(click());
@@ -171,7 +198,10 @@ public class AlarmsScreenTest {
         onView(withId(R.id.monday_tb)).perform(click());
         onView(withId(R.id.friday_tb)).perform(click());
 
-        // Save the alarm
+        // move to options selection
+        onView(withId(R.id.next_step_fab)).perform(click());
+
+        // step Save the alarm
         onView(withId(R.id.next_step_fab)).perform(click());
     }
 
@@ -199,21 +229,6 @@ public class AlarmsScreenTest {
             @Override
             public void describeTo(Description description) {
                 description.appendText("is isDescendantOfA LV with text " + itemText);
-            }
-        };
-    }
-
-    public static Matcher<View> withBackgroundColor(final int color) {
-        Checks.checkNotNull(color);
-        return new BoundedMatcher<View, View>(View.class) {
-            @Override
-            public boolean matchesSafely(View warning) {
-                ColorDrawable colorDrawable = (ColorDrawable) warning.getBackground();
-                return color == colorDrawable.getColor();
-            }
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("with text color: ");
             }
         };
     }

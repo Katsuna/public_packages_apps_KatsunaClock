@@ -28,29 +28,50 @@
                     android:orientation="vertical">
 
                     <TextClock
-                        android:id="@+id/time"
+                        android:id="@+id/date_minimized"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="16dp"
-                        android:fontFamily="sans-serif-light"
-                        android:format12Hour="kk:mm"
-                        android:format24Hour="kk:mm"
-                        android:letterSpacing="0"
-                        android:textColor="@color/common_black"
-                        android:textSize="112sp" />
-
-                    <TextClock
-                        android:id="@+id/date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="8dp"
                         android:fontFamily="sans-serif-medium"
-                        android:format12Hour="EEEE, d MMMM"
-                        android:format24Hour="EEEE, d MMMM"
+                        android:format12Hour="kk:mm EEEE, d MMMM"
+                        android:format24Hour="kk:mm EEEE, d MMMM"
                         android:textColor="@color/common_black"
-                        android:textSize="24sp" />
+                        android:textSize="24sp"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/date_expanded_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextClock
+                            android:id="@+id/time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="sans-serif-light"
+                            android:format12Hour="kk:mm"
+                            android:format24Hour="kk:mm"
+                            android:letterSpacing="0"
+                            android:textColor="@color/common_black"
+                            android:textSize="112sp" />
+
+                        <TextClock
+                            android:id="@+id/date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="sans-serif-medium"
+                            android:format12Hour="EEEE, d MMMM"
+                            android:format24Hour="EEEE, d MMMM"
+                            android:textColor="@color/common_black"
+                            android:textSize="24sp" />
+
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/no_alarms"
@@ -76,7 +97,7 @@
                     android:clipToPadding="false"
                     android:divider="@color/common_transparent"
                     android:dividerHeight="0dp"
-                    android:paddingBottom="80dp" />
+                    android:paddingBottom="120dp" />
 
             </RelativeLayout>
 
@@ -85,28 +106,70 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:gravity="end"
-                android:orientation="horizontal">
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/create_alarm_button"
-                    android:layout_width="140dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@color/common_blueA700"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@string/add_new"
-                    android:textAllCaps="false"
-                    android:textColor="@color/common_white87"
-                    android:textSize="14sp"
-                    android:visibility="gone" />
+                    android:gravity="end"
+                    android:orientation="horizontal">
 
-                <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/create_alarm_fab"
-                    android:layout_width="wrap_content"
+                    <Button
+                        android:id="@+id/create_alarm_button"
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@color/common_blueA700"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/add_new_alarm"
+                        android:textAllCaps="false"
+                        android:textColor="@color/common_white87"
+                        android:textSize="14sp"
+                        android:visibility="gone" />
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/create_alarm_fab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_alarm_white_24dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:src="@drawable/ic_add_24dp" />
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/create_reminder_button"
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@color/common_blueA700"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/add_new_reminder"
+                        android:textAllCaps="false"
+                        android:textColor="@color/common_white87"
+                        android:textSize="14sp"
+                        android:visibility="gone" />
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/create_reminder_fab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_notifications_blck_24dp" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

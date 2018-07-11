@@ -38,7 +38,7 @@ public class SettingsActivity extends SettingsActivityBase {
 
     protected void initControls() {
         super.initControls();
-        initToolbar(R.drawable.common_ic_close_black54_24dp);
+        initToolbar();
         mScrollViewContainer = findViewById(R.id.scroll_view_container);
     }
 }

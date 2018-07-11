@@ -95,13 +95,23 @@ public class AlarmsPresenterTest {
     }
 
     @Test
-    public void clickOnFab_ShowsAddTaskUi() {
+    public void clickOnAlarmFab_ShowsAddTaskUi() {
         // When adding a new task
         mAlarmsPresenter.addNewAlarm();
 
         // Then add task UI is shown
         verify(mAlarmsView).showAddAlarm();
     }
+
+    @Test
+    public void clickOnReminderFab_ShowsAddTaskUi() {
+        // When adding a new task
+        mAlarmsPresenter.addNewReminder();
+
+        // Then add task UI is shown
+        verify(mAlarmsView).showAddReminder();
+    }
+
 
     @Test
     public void clickOnTask_ShowsDetailUi() {

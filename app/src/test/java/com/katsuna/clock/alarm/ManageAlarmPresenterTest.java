@@ -63,6 +63,16 @@ public class ManageAlarmPresenterTest {
     }
 
     @Test
+    public void startPresenterForNewAlarm_InitializeAlarmType() {
+        // Get a reference to the class under test
+        mManageAlarmPresenter = new ManageAlarmPresenter(0, AlarmType.ALARM, mAlarmsDataSource,
+                mManageAlarmView, mAlarmValidator, mAlarmsScheduler);
+
+        // Then the presenter is set to the view
+        Assert.assertTrue(mManageAlarmPresenter.getAlarmType() == AlarmType.ALARM);
+    }
+
+    @Test
     public void startPresenterForExistingAlarm_LoadsAlarm() {
         // Get a reference to the class under test
         long id = 123;
@@ -205,7 +215,7 @@ public class ManageAlarmPresenterTest {
     }
 
     @Test
-    public void alarmTypeStepCompleted_showsTimeSelectionStep() {
+    public void alarmTypeSelection_showsTimeSelectionStep() {
         mManageAlarmPresenter = new ManageAlarmPresenter(0, AlarmType.ALARM, mAlarmsDataSource,
                 mManageAlarmView, new AlarmValidator(), mAlarmsScheduler);
 
@@ -218,6 +228,7 @@ public class ManageAlarmPresenterTest {
         verify(mManageAlarmView).showDescriptionControl(false);
         verify(mManageAlarmView).showAlarmTimeControl(true);
         verify(mManageAlarmView).showAlarmDaysControl(false);
+        verify(mManageAlarmView).showAlarmOptionsControl(false);
         verify(mManageAlarmView).showPreviousStepFab(false);
 
     }
@@ -245,6 +256,46 @@ public class ManageAlarmPresenterTest {
     }
 
     @Test
+    public void alarmDaysStepCompleted_showsAlarmOptionsStep() {
+        mManageAlarmPresenter = new ManageAlarmPresenter(0, AlarmType.ALARM, mAlarmsDataSource,
+                mManageAlarmView, new AlarmValidator(), mAlarmsScheduler);
+
+        mManageAlarmPresenter.start();
+
+        // when next button is pressed
+        mManageAlarmPresenter.validateAlarmTime("21", "34");
+
+        // and show options requested
+        mManageAlarmPresenter.showStep(ManageAlarmStep.OPTIONS);
+
+        // Then presenter step should change properly
+        Assert.assertTrue(mManageAlarmPresenter.getCurrentStep() == ManageAlarmStep.OPTIONS);
+
+        // And view calls must be made
+        verify(mManageAlarmView).showAlarmOptionsControl(true);
+    }
+
+    @Test
+    public void returnFromAlarmOptionsStep_showsAlarmDaysStep() {
+        mManageAlarmPresenter = new ManageAlarmPresenter(0, AlarmType.ALARM, mAlarmsDataSource,
+                mManageAlarmView, new AlarmValidator(), mAlarmsScheduler);
+
+        mManageAlarmPresenter.start();
+
+        // when next button is pressed
+        mManageAlarmPresenter.validateAlarmTime("21", "34");
+
+        // and show options requested
+        mManageAlarmPresenter.showStep(ManageAlarmStep.OPTIONS);
+
+        // And previous button is pressed
+        mManageAlarmPresenter.previousStep();
+
+        // Then presenter step should change properly
+        Assert.assertTrue(mManageAlarmPresenter.getCurrentStep() == ManageAlarmStep.DAYS);
+    }
+
+    @Test
     public void alarmTimeStepCompleted_showsAlarmDaysStep() {
         mManageAlarmPresenter = new ManageAlarmPresenter(0, AlarmType.ALARM, mAlarmsDataSource,
                 mManageAlarmView, new AlarmValidator(), mAlarmsScheduler);
@@ -261,7 +312,6 @@ public class ManageAlarmPresenterTest {
         verify(mManageAlarmView).showAlarmTimeControl(false);
         verify(mManageAlarmView).showAlarmDaysControl(true);
     }
-
 
     @Test
     public void returnFromAlarmDaysTimeStep_showsAlarmTimeStep() {

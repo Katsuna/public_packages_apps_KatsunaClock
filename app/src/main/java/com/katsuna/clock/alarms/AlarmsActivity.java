@@ -154,7 +154,7 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
                     // check if top is reached
                     if (!mAlarmsList.canScrollVertically(-1)) {
                         if (mTimeMinimized) {
-                            minimizeDate(false);
+                            //minimizeDate(false);
                         }
                     }
                 }

@@ -17,6 +17,7 @@ import com.katsuna.clock.data.AlarmType;
 import com.katsuna.clock.data.source.AlarmsDataSource;
 import com.katsuna.clock.services.utils.AlarmsScheduler;
 import com.katsuna.clock.services.utils.IAlarmsScheduler;
+import com.katsuna.clock.util.AlarmAlertWakeLock;
 import com.katsuna.clock.util.Injection;
 import com.katsuna.commons.entities.ColorProfile;
 import com.katsuna.commons.entities.ColorProfileKeyV2;
@@ -46,6 +47,8 @@ public class AlarmActivationActivity extends AppCompatActivity {
         LogUtils.d("%s onCreate", TAG);
 
         super.onCreate(savedInstanceState);
+
+        AlarmAlertWakeLock.acquireCpuWakeLock(this);
 
         enableLaunchingWhenLocked();
         hideNavigationBar();
@@ -162,6 +165,7 @@ public class AlarmActivationActivity extends AppCompatActivity {
         stopAlarm();
         mAlarmsScheduler.snooze(mAlarm, delay);
         handled = true;
+        AlarmAlertWakeLock.releaseCpuLock();
         finish();
     }
 
@@ -172,6 +176,7 @@ public class AlarmActivationActivity extends AppCompatActivity {
 
     private void stopAlarm() {
         AlarmKlaxon.stop(this);
+        AlarmAlertWakeLock.releaseCpuLock();
     }
 
     @Override

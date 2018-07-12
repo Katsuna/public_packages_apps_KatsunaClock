@@ -88,7 +88,6 @@ public class AlarmActivationTest {
 
         result = mDevice.wait(Until.gone(By.pkg(COM_KATSUNA_CLOCK)), LAUNCH_TIMEOUT);
         assertTrue(result);
-        assertThat(mAlarmsScheduler.isAlarmSet(mAlarm), is(false));
     }
 
     @Test

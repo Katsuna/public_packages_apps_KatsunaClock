@@ -136,7 +136,7 @@ public class AlarmsScreenTest {
         onView(withText(containsString(editAlarmDescription))).check(matches(isDisplayed()));
 
         // Verify previous alarm description is not displayed
-        onView(withItemText(DESCRIPTION)).check(doesNotExist());
+        onView(withText(containsString(DESCRIPTION))).check(doesNotExist());
 
         deleteAlarmWithDescription(editAlarmDescription);
     }

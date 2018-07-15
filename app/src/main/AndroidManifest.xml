@@ -102,9 +102,11 @@
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
         </receiver>
+
         <receiver
             android:name=".receivers.AlarmReceiver"
-            android:enabled="true" />
+            android:directBootAware="true"
+            tools:targetApi="n" />
 
     </application>
 

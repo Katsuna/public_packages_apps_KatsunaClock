@@ -18,6 +18,8 @@ public interface AlarmsDataSource {
 
     void getAlarm(long alarmId, @NonNull GetAlarmCallback callback);
 
+    Alarm getAlarm(long alarmId);
+
     void saveAlarm(@NonNull Alarm alarm);
 
     void deleteAlarm(long alarmId);

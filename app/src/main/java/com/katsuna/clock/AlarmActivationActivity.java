@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,9 +16,7 @@ import com.katsuna.clock.data.AlarmStateManager;
 import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.data.AlarmType;
 import com.katsuna.clock.data.source.AlarmsDataSource;
-import com.katsuna.clock.services.utils.AlarmsScheduler;
 import com.katsuna.clock.services.utils.IAlarmsScheduler;
-import com.katsuna.clock.util.AlarmAlertWakeLock;
 import com.katsuna.clock.util.Injection;
 import com.katsuna.commons.entities.ColorProfile;
 import com.katsuna.commons.entities.ColorProfileKeyV2;
@@ -40,7 +39,20 @@ public class AlarmActivationActivity extends AppCompatActivity {
     private Alarm mAlarm;
     private boolean handled = false;
     private boolean mFocusDuringOnPause;
-    private TextView mDescription;
+
+    //https://stackoverflow.com/a/20935175
+    @Override
+    public void onAttachedToWindow() {
+        Window window = getWindow();
+
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                | WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        super.onAttachedToWindow();
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,41 +60,29 @@ public class AlarmActivationActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
-        AlarmAlertWakeLock.acquireCpuWakeLock(this);
-
-        enableLaunchingWhenLocked();
         hideNavigationBar();
 
         setContentView(R.layout.activation);
 
         mSnoozeButton = findViewById(R.id.snooze_button);
         mDismissButton = findViewById(R.id.dismiss_button);
-        mDescription = findViewById(R.id.alarm_description);
-
-        Long alarmId = getAlarmId();
+        TextView mDescription = findViewById(R.id.alarm_description);
 
         mAlarmsDataSource = Injection.provideAlarmsDataSource(this);
         mAlarmsScheduler = Injection.provideAlarmScheduler(this);
 
-        //noinspection ConstantConditions
-        mAlarmsDataSource.getAlarm(alarmId, new AlarmsDataSource.GetAlarmCallback() {
-            @Override
-            public void onAlarmLoaded(Alarm alarm) {
-                mAlarm = alarm;
-                if (mAlarm.getAlarmType() == AlarmType.REMINDER) {
-                    mDescription.setText(mAlarm.getDescription());
-                }
-
-                init();
-                soundTheAlarm();
+        Alarm alarm = getAlarm();
+        if (alarm == null) {
+            LogUtils.d("%s onCreate no alarm in intent.", TAG);
+        } else {
+            mAlarm = alarm;
+            if (mAlarm.getAlarmType() == AlarmType.REMINDER) {
+                mDescription.setText(mAlarm.getDescription());
             }
 
-            @Override
-            public void onDataNotAvailable() {
-                // TODO
-            }
-        });
-
+            init();
+            soundTheAlarm();
+        }
     }
 
     @Override
@@ -115,13 +115,13 @@ public class AlarmActivationActivity extends AppCompatActivity {
         Shape.setRoundedBackground(mSnoozeButton, white, radius);
     }
 
-    private Long getAlarmId() {
-        Long alarmId = null;
+    private Alarm getAlarm() {
+        Alarm alarm = null;
         Intent i = getIntent();
-        if (i.getExtras() != null) {
-            alarmId = i.getExtras().getLong(AlarmsScheduler.ALARM_ID);
+        if (i != null) {
+            alarm = i.getParcelableExtra("alarm");
         }
-        return alarmId;
+        return alarm;
     }
 
     private void init() {
@@ -165,18 +165,18 @@ public class AlarmActivationActivity extends AppCompatActivity {
         stopAlarm();
         mAlarmsScheduler.snooze(mAlarm, delay);
         handled = true;
-        AlarmAlertWakeLock.releaseCpuLock();
         finish();
     }
 
     private void soundTheAlarm() {
+        LogUtils.d("%s soundTheAlarm called", TAG);
         AlarmKlaxon.start(this, mAlarm);
     }
 
 
     private void stopAlarm() {
+        LogUtils.d("%s stopAlarm called", TAG);
         AlarmKlaxon.stop(this);
-        AlarmAlertWakeLock.releaseCpuLock();
     }
 
     @Override
@@ -198,14 +198,6 @@ public class AlarmActivationActivity extends AppCompatActivity {
                 // activity was started when screen was off / screen was on with keygaurd displayed
                 // see https://stackoverflow.com/a/25474853
            } */
-    }
-
-    private void enableLaunchingWhenLocked() {
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-                | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-                | WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
     }
 
     private void hideNavigationBar() {

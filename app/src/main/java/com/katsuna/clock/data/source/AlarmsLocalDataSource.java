@@ -99,6 +99,11 @@ public class AlarmsLocalDataSource implements AlarmsDataSource {
     }
 
     @Override
+    public Alarm getAlarm(long alarmId) {
+        return mAlarmsDao.getAlarmById(alarmId);
+    }
+
+    @Override
     public void saveAlarm(@NonNull final Alarm alarm) {
         Runnable saveRunnable = new Runnable() {
             @Override

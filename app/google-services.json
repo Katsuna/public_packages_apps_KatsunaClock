@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "525261599237",
+    "firebase_url": "https://katsuna-clock.firebaseio.com",
+    "project_id": "katsuna-clock",
+    "storage_bucket": "katsuna-clock.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:525261599237:android:ddc380714cdfdfc1",
+        "android_client_info": {
+          "package_name": "com.katsuna.clock"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "525261599237-529c2pe6odfh4r4voilr76taqca6r096.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.katsuna.clock",
+            "certificate_hash": "e557327c98b23a9808a037a8643b4d8906ef7896"
+          }
+        },
+        {
+          "client_id": "525261599237-c2nngadg7ad2le5mntlmdgvaacrjqe50.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAD0_yKbc_aJ_P6xiUvH8EsBECOGazL8PM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "525261599237-c2nngadg7ad2le5mntlmdgvaacrjqe50.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

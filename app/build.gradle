@@ -60,6 +60,7 @@ dependencies {
     implementation "com.google.guava:guava:$rootProject.guavaVersion"
     implementation "com.google.code.gson:gson:$rootProject.gson"
     implementation "com.jakewharton.threetenabp:threetenabp:1.1.0"
+    implementation 'com.google.firebase:firebase-core:16.0.1'
     annotationProcessor "android.arch.persistence.room:compiler:$rootProject.roomVersion"
 
     implementation project(':commons')
@@ -83,3 +84,5 @@ dependencies {
     androidTestImplementation "com.android.support.test.uiautomator:uiautomator-v18:$rootProject.uiautomatorVersion"
     androidTestImplementation "org.hamcrest:hamcrest-integration:$rootProject.hamcrestVersion"
 }
+
+apply plugin: 'com.google.gms.google-services'

@@ -12,6 +12,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -157,6 +159,37 @@ public class ManageAlarmActivity extends KatsunaActivity implements ManageAlarmC
                 }
             }
         });
+        mHour.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String output = null;
+                try {
+                    int input = Integer.parseInt(s.toString());
+                    if (input > 23) {
+                        output = "23";
+                    } else if (input < 0) {
+                        output = "00";
+                    }
+                } catch (NumberFormatException ex) {
+                    output = "00";
+                }
+
+                // limits overriden or NumberFormatException case
+                if (output != null) {
+                    mHour.setText(output);
+                }
+            }
+        });
 
         mMinute = findViewById(R.id.minute);
         mMinute.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -166,6 +199,37 @@ public class ManageAlarmActivity extends KatsunaActivity implements ManageAlarmC
                     mMinute.setTextColor(mPrimaryColor2);
                 } else {
                     mMinute.setTextColor(mBlack58Color);
+                }
+            }
+        });
+        mMinute.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String output = null;
+                try {
+                    int input = Integer.parseInt(s.toString());
+                    if (input > 59) {
+                        output = "59";
+                    } else if (input < 0) {
+                        output = "00";
+                    }
+                } catch (NumberFormatException ex) {
+                    output = "00";
+                }
+
+                // limits overriden or NumberFormatException case
+                if (output != null) {
+                    mMinute.setText(output);
                 }
             }
         });

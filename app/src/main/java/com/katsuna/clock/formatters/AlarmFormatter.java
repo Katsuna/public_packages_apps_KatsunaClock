@@ -79,9 +79,10 @@ public class AlarmFormatter {
         if (mAlarm.getAlarmStatus() == AlarmStatus.INACTIVE) {
             profileKey = ColorProfileKeyV2.PRIMARY_GREY_1;
         } else if (mAlarm.getAlarmType() == AlarmType.ALARM) {
-            profileKey = ColorProfileKeyV2.PRIMARY_COLOR_2;
-        } else {
             profileKey = ColorProfileKeyV2.PRIMARY_COLOR_1;
+
+        } else {
+            profileKey = ColorProfileKeyV2.PRIMARY_COLOR_2;
         }
         return ColorCalcV2.getColorResId(profileKey, profile.colorProfile);
     }
@@ -91,9 +92,9 @@ public class AlarmFormatter {
         if (mAlarm.getAlarmStatus() == AlarmStatus.INACTIVE) {
             profileKey = ColorProfileKeyV2.SECONDARY_GREY_2;
         } else if (mAlarm.getAlarmType() == AlarmType.ALARM) {
-            profileKey = ColorProfileKeyV2.SECONDARY_COLOR_2;
-        } else {
             profileKey = ColorProfileKeyV2.SECONDARY_COLOR_1;
+        } else {
+            profileKey = ColorProfileKeyV2.SECONDARY_COLOR_2;
         }
         return ColorCalcV2.getColorResId(profileKey, profile.colorProfile);
     }

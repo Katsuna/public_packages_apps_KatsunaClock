@@ -65,7 +65,7 @@ dependencies {
     implementation "com.google.code.gson:gson:$rootProject.gson"
     implementation "com.jakewharton.threetenabp:threetenabp:1.1.0"
     implementation "com.google.firebase:firebase-core:$rootProject.firebaseVersion"
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.4'
+    implementation "com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion"
     annotationProcessor "android.arch.persistence.room:compiler:$rootProject.roomVersion"
 
     implementation project(':commons')

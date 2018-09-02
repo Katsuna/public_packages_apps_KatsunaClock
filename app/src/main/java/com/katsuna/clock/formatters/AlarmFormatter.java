@@ -99,7 +99,9 @@ public class AlarmFormatter {
     }
 
     public String getAlertMessage() {
-        String output = mContext.getString(R.string.alarm_is_set_at, showTime());
+        String output = mAlarm.getAlarmType() == AlarmType.ALARM ?
+                mContext.getString(R.string.alarm_is_set_at, showTime()) :
+                mContext.getString(R.string.reminder_is_set_at, showTime());
         output += "\n";
         String days = getDaysFrequency();
         if (!days.isEmpty()) {

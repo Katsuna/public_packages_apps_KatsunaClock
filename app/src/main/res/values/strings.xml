@@ -40,9 +40,11 @@
 
     <!-- alarm alert strings -->
     <string name="alarm_set">Alarm Set</string>
+    <string name="reminder_set">Reminder Set</string>
     <string name="back">Back</string>
 
     <string name="alarm_is_set_at">Alarm is set at %1$s</string>
+    <string name="reminder_is_set_at">Reminder is set at %1$s</string>
     <string name="every">Every %1$s</string>
     <string name="remaining_time">Remaining time until ring: %1$s</string>
     <string name="remaining_time_detail_days" tools:ignore="PluralsCandidate">%1$d days, %2$d hours and %3$d minutes</string>

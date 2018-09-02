@@ -303,7 +303,8 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
 
     private void showAlarmSetAlert(final Alarm alarm) {
         KatsunaAlertBuilder builder = new KatsunaAlertBuilder(this);
-        String title = getString(R.string.alarm_set);
+        String title = alarm.getAlarmType() == AlarmType.ALARM ? getString(R.string.alarm_set) :
+                getString(R.string.reminder_set);
         builder.setTitle(title);
 
         // calc and set message

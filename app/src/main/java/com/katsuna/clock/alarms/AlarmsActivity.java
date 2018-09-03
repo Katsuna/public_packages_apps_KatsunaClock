@@ -46,6 +46,8 @@ import static com.katsuna.commons.utils.Constants.KATSUNA_TERMS_OF_USE;
 public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.View,
         IUserProfileProvider {
 
+    private static final int ALARMS_MINIMIZE_THRESHOLD = 6;
+
     private static final int REQUEST_CODE_NEW_ALARM = 1;
     private static final int REQUEST_CODE_EDIT_ALARM = 2;
 
@@ -136,7 +138,6 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
         mDateMinimized = findViewById(R.id.date_minimized);
         mDateExpanded = findViewById(R.id.date_expanded_container);
         mAlarmsList = findViewById(R.id.alarms_list);
-        mAlarmsList = findViewById(R.id.alarms_list);
         mAlarmsList.setAdapter(mAlarmsAdapter);
         mAlarmsList.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
@@ -154,7 +155,7 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
                     // check if top is reached
                     if (!mAlarmsList.canScrollVertically(-1)) {
                         if (mTimeMinimized) {
-                            //minimizeDate(false);
+                            minimizeDate(false);
                         }
                     }
                 }
@@ -166,6 +167,9 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
     }
 
     private void minimizeDate(boolean flag) {
+        // skip minimize function when there are few alarms
+        if (mAlarmsList.getCount() < ALARMS_MINIMIZE_THRESHOLD) return;
+
         if (flag) {
             fadeView(mDateExpanded, false);
             fadeView(mDateMinimized, true);

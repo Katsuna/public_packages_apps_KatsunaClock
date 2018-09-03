@@ -143,8 +143,10 @@
                                     android:layout_height="wrap_content"
                                     android:inputType="number"
                                     android:maxLength="2"
+                                    android:selectAllOnFocus="true"
                                     android:textAlignment="center"
                                     android:textColor="@color/common_black58"
+                                    android:textColorHighlight="@color/common_transparent"
                                     android:textSize="56sp"
                                     tools:ignore="LabelFor" />
 
@@ -197,8 +199,10 @@
                                     android:layout_height="wrap_content"
                                     android:inputType="number"
                                     android:maxLength="2"
+                                    android:selectAllOnFocus="true"
                                     android:textAlignment="center"
                                     android:textColor="@color/common_black58"
+                                    android:textColorHighlight="@color/common_transparent"
                                     android:textSize="56sp"
                                     tools:ignore="LabelFor" />
 

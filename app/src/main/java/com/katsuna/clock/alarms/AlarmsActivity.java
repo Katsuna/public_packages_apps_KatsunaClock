@@ -144,10 +144,10 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 long now = SystemClock.elapsedRealtime();
                 // check in intervals of 500ms to avoid consequent calls.
-                if (lastScrollCheckTimestamp != 0 && lastScrollCheckTimestamp + 500 > now) return;
+                //if (lastScrollCheckTimestamp != 0 && lastScrollCheckTimestamp + 100 > now) return;
 
                 int firstVisiblePosition = mAlarmsList.getFirstVisiblePosition();
-                if (firstVisiblePosition > 0) {
+                if (firstVisiblePosition > 1) {
                     if (!mTimeMinimized) {
                         minimizeDate(true);
                     }
@@ -244,6 +244,12 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
                         return true;
                     }
                 });
+        mKatsunaNavigationView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawerLayout.closeDrawers();
+            }
+        });
     }
 
     @Override

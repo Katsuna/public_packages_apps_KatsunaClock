@@ -28,6 +28,7 @@ import com.katsuna.clock.util.Injection;
 import com.katsuna.commons.controls.KatsunaNavigationView;
 import com.katsuna.commons.entities.UserProfile;
 import com.katsuna.commons.ui.KatsunaActivity;
+import com.katsuna.commons.utils.BrowserUtils;
 import com.katsuna.commons.utils.IUserProfileProvider;
 import com.katsuna.commons.utils.KatsunaAlertBuilder;
 
@@ -230,15 +231,12 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
                                 startActivity(new Intent(AlarmsActivity.this, InfoActivity.class));
                                 break;
                             case R.id.drawer_privacy:
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                                        Uri.parse(KATSUNA_PRIVACY_URL));
-                                startActivity(browserIntent);
+                                BrowserUtils.openUrl(AlarmsActivity.this, KATSUNA_PRIVACY_URL);
                                 break;
                             case R.id.drawer_terms:
-                                Intent termsIntent = new Intent(Intent.ACTION_VIEW,
-                                        Uri.parse(KATSUNA_TERMS_OF_USE));
-                                startActivity(termsIntent);
+                                BrowserUtils.openUrl(AlarmsActivity.this, KATSUNA_TERMS_OF_USE);
                                 break;
+
                         }
 
                         return true;

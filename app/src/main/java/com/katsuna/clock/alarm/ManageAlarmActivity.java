@@ -3,6 +3,7 @@ package com.katsuna.clock.alarm;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -28,6 +29,7 @@ import com.katsuna.clock.R;
 import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmType;
 import com.katsuna.clock.formatters.DaysFormatter;
+import com.katsuna.clock.formatters.TodayFormatter;
 import com.katsuna.clock.util.Injection;
 import com.katsuna.clock.validators.ValidationResult;
 import com.katsuna.commons.entities.ColorProfileKeyV2;
@@ -36,7 +38,9 @@ import com.katsuna.commons.ui.KatsunaActivity;
 import com.katsuna.commons.utils.ColorAdjusterV2;
 import com.katsuna.commons.utils.ColorCalcV2;
 import com.katsuna.commons.utils.KeyboardUtils;
+import com.katsuna.commons.utils.TypefaceUtils;
 
+import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
@@ -298,6 +302,14 @@ public class ManageAlarmActivity extends KatsunaActivity implements ManageAlarmC
         mSaturdayToggle.setOnCheckedChangeListener(daysOnCheckedChangeListener);
         mSundayToggle = findViewById(R.id.sunday_tb);
         mSundayToggle.setOnCheckedChangeListener(daysOnCheckedChangeListener);
+
+        addToday(mMondayToggle, DayOfWeek.MONDAY);
+        addToday(mTuesdayToggle, DayOfWeek.TUESDAY);
+        addToday(mWednesdayToggle, DayOfWeek.WEDNESDAY);
+        addToday(mThursdayToggle, DayOfWeek.THURSDAY);
+        addToday(mFridayToggle, DayOfWeek.FRIDAY);
+        addToday(mSaturdayToggle, DayOfWeek.SATURDAY);
+        addToday(mSundayToggle, DayOfWeek.SUNDAY);
 
         mPreviousStepFab = findViewById(R.id.prev_step_fab);
         mPreviousStepFab.setOnClickListener(new View.OnClickListener() {
@@ -653,6 +665,20 @@ public class ManageAlarmActivity extends KatsunaActivity implements ManageAlarmC
         setRingtone(alarm);
         mVibrate = alarm.isVibrate();
         adjustVibrateOption(mVibrate);
+    }
+
+    private void addToday(ToggleButton dayToggle, DayOfWeek dayOfWeek) {
+        if (TodayFormatter.isToday(dayOfWeek)) {
+            String currentText = dayToggle.getText().toString();
+            String todayText = getResources().getString(R.string.common_today);
+            String fullText = currentText + " (" + todayText + ")";
+
+            Typeface typeface1 = Typeface.create("sans-serif-medium", Typeface.NORMAL);
+            Typeface typeface2 = Typeface.create("sans-serif-light", Typeface.NORMAL);
+
+            TypefaceUtils.applyCustomTypefaceSpan(dayToggle, typeface1, typeface2, fullText,
+                    currentText.length()-1);
+        }
     }
 
     @Override

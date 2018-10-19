@@ -29,6 +29,8 @@ interface AlarmsContract {
         void focusOnAlarm(Alarm alarm, boolean focus);
 
         void reloadAlarm(Alarm alarm);
+
+        void moveFabsToBottomAndTint(boolean flag);
     }
 
     interface Presenter extends BasePresenter {

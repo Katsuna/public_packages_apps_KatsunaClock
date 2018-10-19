@@ -83,11 +83,17 @@ class AlarmsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+        UserProfile userProfile = mUserProfileProvider.getProfile();
+
         View rowView = view;
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         if (rowView == null) {
             inflater = LayoutInflater.from(viewGroup.getContext());
-            rowView = inflater.inflate(R.layout.alarm, viewGroup, false);
+            if (userProfile.isRightHanded) {
+                rowView = inflater.inflate(R.layout.alarm, viewGroup, false);
+            } else {
+                rowView = inflater.inflate(R.layout.alarm_lh, viewGroup, false);
+            }
         }
 
         final Alarm alarm = getItem(i);
@@ -113,8 +119,6 @@ class AlarmsAdapter extends BaseAdapter {
 
         TextView ringTime = rowView.findViewById(R.id.alarm_ring_time);
         ringTime.setText(alarmFormatter.getRingInTime());
-
-        UserProfile userProfile = mUserProfileProvider.getProfile();
 
         CardView alarmCard = rowView.findViewById(R.id.alarm_container_card);
         alarmCard.setCardBackgroundColor(ContextCompat.getColor(context,

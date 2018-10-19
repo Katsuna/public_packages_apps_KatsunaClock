@@ -98,11 +98,19 @@ public class ManageAlarmActivity extends KatsunaActivity implements ManageAlarmC
     private boolean mVibrate;
     private TextView mTimeSelected;
     private TextView mDaysSelected;
+    private UserProfile mUserProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manage_alarm);
+    }
+
+    private void initActivity(UserProfile userProfile) {
+        if (userProfile.isRightHanded) {
+            setContentView(R.layout.activity_manage_alarm);
+        } else {
+            setContentView(R.layout.activity_manage_alarm_lh);
+        }
 
         init();
 
@@ -303,14 +311,6 @@ public class ManageAlarmActivity extends KatsunaActivity implements ManageAlarmC
         mSundayToggle = findViewById(R.id.sunday_tb);
         mSundayToggle.setOnCheckedChangeListener(daysOnCheckedChangeListener);
 
-        addToday(mMondayToggle, DayOfWeek.MONDAY);
-        addToday(mTuesdayToggle, DayOfWeek.TUESDAY);
-        addToday(mWednesdayToggle, DayOfWeek.WEDNESDAY);
-        addToday(mThursdayToggle, DayOfWeek.THURSDAY);
-        addToday(mFridayToggle, DayOfWeek.FRIDAY);
-        addToday(mSaturdayToggle, DayOfWeek.SATURDAY);
-        addToday(mSundayToggle, DayOfWeek.SUNDAY);
-
         mPreviousStepFab = findViewById(R.id.prev_step_fab);
         mPreviousStepFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -371,12 +371,25 @@ public class ManageAlarmActivity extends KatsunaActivity implements ManageAlarmC
     @Override
     protected void onResume() {
         super.onResume();
-        adjustProfiles();
-    }
 
-    private void adjustProfiles() {
         UserProfile userProfile = mUserProfileContainer.getActiveUserProfile();
 
+        // first time init check
+        if (mUserProfile == null) {
+            mUserProfile = userProfile;
+            initActivity(userProfile);
+            adjustProfiles(userProfile);
+        } else if (!mUserProfile.equals(userProfile)){
+            // check if we need to change layouts
+            if (mUserProfile.isRightHanded != userProfile.isRightHanded) {
+                mUserProfile = userProfile;
+                initActivity(userProfile);
+            }
+            adjustProfiles(userProfile);
+        }
+    }
+
+    private void adjustProfiles(UserProfile userProfile) {
         mPrimaryColor2 = ColorCalcV2.getColor(this, ColorProfileKeyV2.PRIMARY_COLOR_2,
                 userProfile.colorProfile);
         mSecondaryColor2 = ColorCalcV2.getColor(this, ColorProfileKeyV2.SECONDARY_COLOR_2,
@@ -384,6 +397,15 @@ public class ManageAlarmActivity extends KatsunaActivity implements ManageAlarmC
 
         adjustTimeControls();
         adjustSteps();
+
+        // adjust left hand profile for today
+        addToday(mMondayToggle, DayOfWeek.MONDAY, userProfile);
+        addToday(mTuesdayToggle, DayOfWeek.TUESDAY, userProfile);
+        addToday(mWednesdayToggle, DayOfWeek.WEDNESDAY, userProfile);
+        addToday(mThursdayToggle, DayOfWeek.THURSDAY, userProfile);
+        addToday(mFridayToggle, DayOfWeek.FRIDAY, userProfile);
+        addToday(mSaturdayToggle, DayOfWeek.SATURDAY, userProfile);
+        addToday(mSundayToggle, DayOfWeek.SUNDAY, userProfile);
     }
 
     private void adjustTimeControls() {
@@ -667,17 +689,40 @@ public class ManageAlarmActivity extends KatsunaActivity implements ManageAlarmC
         adjustVibrateOption(mVibrate);
     }
 
-    private void addToday(ToggleButton dayToggle, DayOfWeek dayOfWeek) {
+    private void addToday(ToggleButton dayToggle, DayOfWeek dayOfWeek, UserProfile userProfile) {
         if (TodayFormatter.isToday(dayOfWeek)) {
-            String currentText = dayToggle.getText().toString();
+            String currentText = "";
+            if (dayToggle == mMondayToggle) {
+                currentText = getResources().getString(R.string.monday);
+            } else if (dayToggle == mTuesdayToggle) {
+                currentText = getResources().getString(R.string.tuesday);
+            } else if (dayToggle == mWednesdayToggle) {
+                currentText = getResources().getString(R.string.wednesday);
+            } else if (dayToggle == mThursdayToggle) {
+                currentText = getResources().getString(R.string.thursday);
+            } else if (dayToggle == mFridayToggle) {
+                currentText = getResources().getString(R.string.friday);
+            } else if (dayToggle == mSaturdayToggle) {
+                currentText = getResources().getString(R.string.saturday);
+            } else if (dayToggle == mSundayToggle) {
+                currentText = getResources().getString(R.string.sunday);
+            }
             String todayText = getResources().getString(R.string.common_today);
-            String fullText = currentText + " (" + todayText + ")";
+            String todayWrapped = " (" + todayText + ") ";
 
-            Typeface typeface1 = Typeface.create("sans-serif-medium", Typeface.NORMAL);
-            Typeface typeface2 = Typeface.create("sans-serif-light", Typeface.NORMAL);
+            Typeface typefaceMedium = Typeface.create("sans-serif-medium", Typeface.NORMAL);
+            Typeface typefaceLight = Typeface.create("sans-serif-light", Typeface.NORMAL);
 
-            TypefaceUtils.applyCustomTypefaceSpan(dayToggle, typeface1, typeface2, fullText,
-                    currentText.length()-1);
+            if (userProfile.isRightHanded) {
+                String fullText = currentText + todayWrapped;
+                TypefaceUtils.applyCustomTypefaceSpan(dayToggle, typefaceMedium, typefaceLight,
+                        fullText, currentText.length()-1);
+            } else {
+                String fullText = todayWrapped + currentText;
+
+                TypefaceUtils.applyCustomTypefaceSpan(dayToggle, typefaceLight, typefaceMedium,
+                        fullText, todayWrapped.length()-1);
+            }
         }
     }
 
@@ -815,27 +860,29 @@ public class ManageAlarmActivity extends KatsunaActivity implements ManageAlarmC
         CoordinatorLayout.LayoutParams previousStepFabParams =
                 (CoordinatorLayout.LayoutParams) mPreviousStepFab.getLayoutParams();
 
+        int horizontalGravity = mUserProfile.isRightHanded ? Gravity.END : Gravity.START;
+
         switch (step) {
             case DESCRIPTION:
-                nextStepFabParams.anchorGravity = Gravity.TOP | Gravity.END;
+                nextStepFabParams.anchorGravity = Gravity.TOP | horizontalGravity;
                 break;
             case TIME:
-                previousStepFabParams.anchorGravity = Gravity.TOP | Gravity.END;
+                previousStepFabParams.anchorGravity = Gravity.TOP | horizontalGravity;
                 previousStepFabParams.setAnchorId(R.id.alarm_time_container);
                 nextStepFabParams.setAnchorId(R.id.alarm_time_container);
-                nextStepFabParams.anchorGravity = Gravity.BOTTOM | Gravity.END;
+                nextStepFabParams.anchorGravity = Gravity.BOTTOM | horizontalGravity;
                 break;
             case DAYS:
-                previousStepFabParams.anchorGravity = Gravity.TOP | Gravity.END;
+                previousStepFabParams.anchorGravity = Gravity.TOP | horizontalGravity;
                 previousStepFabParams.setAnchorId(R.id.alarm_days_container);
                 nextStepFabParams.setAnchorId(R.id.alarm_days_container);
-                nextStepFabParams.anchorGravity = Gravity.BOTTOM | Gravity.END;
+                nextStepFabParams.anchorGravity = Gravity.BOTTOM | horizontalGravity;
                 break;
             case OPTIONS:
-                previousStepFabParams.anchorGravity = Gravity.TOP | Gravity.END;
+                previousStepFabParams.anchorGravity = Gravity.TOP | horizontalGravity;
                 previousStepFabParams.setAnchorId(R.id.alarm_options_container);
                 nextStepFabParams.setAnchorId(R.id.alarm_options_container);
-                nextStepFabParams.anchorGravity = Gravity.BOTTOM | Gravity.END;
+                nextStepFabParams.anchorGravity = Gravity.BOTTOM | horizontalGravity;
                 break;
         }
     }

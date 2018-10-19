@@ -102,18 +102,16 @@
             </RelativeLayout>
 
             <LinearLayout
-                android:id="@+id/dial_buttons_container"
+                android:id="@+id/fab_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="8dp"
+                android:layout_height="match_parent"
+                android:gravity="center|end"
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:orientation="horizontal">
+                    android:id="@+id/create_alarm_buttons_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
                     <Button
                         android:id="@+id/create_alarm_button"
@@ -141,10 +139,9 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:orientation="horizontal">
+                    android:id="@+id/create_reminder_buttons_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
                     <Button
                         android:id="@+id/create_reminder_button"

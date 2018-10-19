@@ -118,6 +118,9 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
             }
         });
 
+        mFabContainer = findViewById(R.id.fab_container);
+        mButtonsContainer1 = findViewById(R.id.create_alarm_buttons_container);
+        mButtonsContainer2 = findViewById(R.id.create_reminder_buttons_container);
 
         mPopupButton1 = findViewById(R.id.create_alarm_button);
         mPopupButton1.setOnClickListener(new View.OnClickListener() {
@@ -353,11 +356,18 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
     @Override
     public void focusOnAlarm(Alarm alarm, boolean focus) {
         mAlarmsAdapter.focusOnAlarm(alarm, focus);
+        moveFabsToBottomAndTint(focus);
     }
 
     @Override
     public void reloadAlarm(Alarm alarm) {
         mAlarmsAdapter.reloadAlarm(alarm);
+    }
+
+    @Override
+    public void moveFabsToBottomAndTint(boolean flag) {
+        tintFabs(flag);
+        adjustFabPosition(!flag);
     }
 
     @Override

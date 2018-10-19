@@ -18,10 +18,10 @@
             android:id="@+id/alarm_container_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
             app:cardCornerRadius="8dp"
             app:cardElevation="2dp">
 
@@ -53,9 +53,10 @@
                             android:id="@+id/alarm_type_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
                             android:layout_margin="10dp"
+                            android:drawableEnd="@drawable/ic_label_black_24dp"
                             android:drawablePadding="8dp"
-                            android:drawableStart="@drawable/ic_label_black_24dp"
                             android:fontFamily="sans-serif-medium"
                             android:text="@string/about_reminder"
                             android:textColor="@color/common_black58"
@@ -65,12 +66,12 @@
                             android:id="@+id/alarm_description"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignStart="@id/alarm_type_text"
                             android:layout_below="@id/alarm_type_text"
-                            android:layout_marginBottom="26dp"
-                            android:layout_marginEnd="20dp"
-                            android:layout_marginStart="28dp"
+                            android:layout_alignEnd="@id/alarm_type_text"
+                            android:layout_marginStart="20dp"
                             android:layout_marginTop="8dp"
+                            android:layout_marginEnd="28dp"
+                            android:layout_marginBottom="26dp"
                             android:hint="@string/description"
                             android:inputType="text"
                             android:textSize="14sp" />
@@ -84,8 +85,8 @@
                     android:id="@+id/alarm_time_handler"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/common_selection_elevation"
                     android:layout_marginTop="@dimen/wizard_margin_top"
+                    android:layout_marginBottom="@dimen/common_selection_elevation"
                     android:elevation="0dp">
 
                     <RelativeLayout
@@ -100,9 +101,10 @@
                             android:id="@+id/alarm_time_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
                             android:layout_margin="8dp"
+                            android:drawableEnd="@drawable/ic_access_time_24dp"
                             android:drawablePadding="8dp"
-                            android:drawableStart="@drawable/ic_access_time_24dp"
                             android:fontFamily="sans-serif-medium"
                             android:text="@string/alarm_time"
                             android:textSize="20sp" />
@@ -112,10 +114,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/alarm_time_text"
-                            android:layout_marginBottom="16dp"
-                            android:layout_marginStart="40dp"
+                            android:layout_alignParentEnd="true"
                             android:layout_marginTop="8dp"
+                            android:layout_marginEnd="40dp"
+                            android:layout_marginBottom="16dp"
                             android:fontFamily="sans-serif-medium"
+                            android:gravity="end"
                             android:text="@string/alarm_options"
                             android:textColor="@color/common_black54"
                             android:textSize="18sp" />
@@ -125,10 +129,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/alarm_time_text"
-                            android:layout_marginBottom="16dp"
-                            android:layout_marginStart="40dp"
+                            android:layout_alignParentEnd="true"
                             android:layout_marginTop="16dp"
-                            android:gravity="start"
+                            android:layout_marginEnd="40dp"
+                            android:layout_marginBottom="16dp"
+                            android:gravity="end"
                             android:orientation="horizontal"
                             android:visibility="gone">
 
@@ -181,9 +186,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="top"
-                                android:layout_marginEnd="12dp"
                                 android:layout_marginStart="12dp"
                                 android:layout_marginTop="6dp"
+                                android:layout_marginEnd="12dp"
                                 android:text="@string/time_separator"
                                 android:textColor="@color/common_black54"
                                 android:textSize="46sp" />
@@ -252,18 +257,19 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:background="@color/common_grey50"
-                        android:paddingBottom="8dp"
-                        android:paddingTop="8dp">
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp">
 
                         <TextView
                             android:id="@+id/alarm_days_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
+                            android:layout_alignParentEnd="true"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:drawableEnd="@drawable/ic_insert_invitation_black_24dp"
                             android:drawablePadding="8dp"
-                            android:drawableStart="@drawable/ic_insert_invitation_black_24dp"
                             android:fontFamily="sans-serif-medium"
                             android:text="@string/alarm_day"
                             android:textSize="20sp" />
@@ -273,11 +279,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/alarm_days_text"
-                            android:layout_marginBottom="16dp"
-                            android:layout_marginEnd="26dp"
-                            android:layout_marginStart="40dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginStart="26dp"
                             android:layout_marginTop="8dp"
+                            android:layout_marginEnd="40dp"
+                            android:layout_marginBottom="16dp"
                             android:fontFamily="sans-serif-medium"
+                            android:gravity="end"
                             android:text="@string/alarm_options"
                             android:textColor="@color/common_black54"
                             android:textSize="18sp" />
@@ -286,9 +294,10 @@
                             android:id="@+id/alarm_days_radio_group"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignStart="@id/alarm_days_text"
                             android:layout_below="@id/alarm_days_text"
-                            android:layout_marginStart="28dp"
+                            android:layout_alignEnd="@id/alarm_days_text"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginEnd="28dp"
                             android:orientation="vertical"
                             android:visibility="gone">
 
@@ -296,11 +305,11 @@
                                 android:id="@+id/monday_tb"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="start"
+                                android:layout_gravity="end"
                                 android:layout_marginEnd="8dp"
                                 android:background="@null"
-                                android:drawableStart="?android:attr/listChoiceIndicatorSingle"
-                                android:gravity="start|center"
+                                android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
+                                android:gravity="end|center"
                                 android:text="@string/monday"
                                 android:textAllCaps="false"
                                 android:textColor="@color/common_black58"
@@ -308,17 +317,17 @@
                                 android:textOn="@string/monday"
                                 android:textSize="18sp" />
 
-                            <include layout="@layout/divider" />
+                            <include layout="@layout/divider_lh" />
 
                             <ToggleButton
                                 android:id="@+id/tuesday_tb"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="start"
+                                android:layout_gravity="end"
                                 android:layout_marginEnd="8dp"
                                 android:background="@null"
-                                android:drawableStart="?android:attr/listChoiceIndicatorSingle"
-                                android:gravity="start|center"
+                                android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
+                                android:gravity="end|center"
                                 android:text="@string/tuesday"
                                 android:textAllCaps="false"
                                 android:textColor="@color/common_black58"
@@ -326,17 +335,17 @@
                                 android:textOn="@string/tuesday"
                                 android:textSize="18sp" />
 
-                            <include layout="@layout/divider" />
+                            <include layout="@layout/divider_lh" />
 
                             <ToggleButton
                                 android:id="@+id/wednesday_tb"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="start"
+                                android:layout_gravity="end"
                                 android:layout_marginEnd="8dp"
                                 android:background="@null"
-                                android:drawableStart="?android:attr/listChoiceIndicatorSingle"
-                                android:gravity="start|center"
+                                android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
+                                android:gravity="end|center"
                                 android:text="@string/wednesday"
                                 android:textAllCaps="false"
                                 android:textColor="@color/common_black58"
@@ -344,17 +353,17 @@
                                 android:textOn="@string/wednesday"
                                 android:textSize="18sp" />
 
-                            <include layout="@layout/divider" />
+                            <include layout="@layout/divider_lh" />
 
                             <ToggleButton
                                 android:id="@+id/thursday_tb"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="start"
+                                android:layout_gravity="end"
                                 android:layout_marginEnd="8dp"
                                 android:background="@null"
-                                android:drawableStart="?android:attr/listChoiceIndicatorSingle"
-                                android:gravity="start|center"
+                                android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
+                                android:gravity="end|center"
                                 android:text="@string/thursday"
                                 android:textAllCaps="false"
                                 android:textColor="@color/common_black58"
@@ -362,17 +371,17 @@
                                 android:textOn="@string/thursday"
                                 android:textSize="18sp" />
 
-                            <include layout="@layout/divider" />
+                            <include layout="@layout/divider_lh" />
 
                             <ToggleButton
                                 android:id="@+id/friday_tb"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="start"
+                                android:layout_gravity="end"
                                 android:layout_marginEnd="8dp"
                                 android:background="@null"
-                                android:drawableStart="?android:attr/listChoiceIndicatorSingle"
-                                android:gravity="start|center"
+                                android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
+                                android:gravity="end|center"
                                 android:text="@string/friday"
                                 android:textAllCaps="false"
                                 android:textColor="@color/common_black58"
@@ -380,17 +389,17 @@
                                 android:textOn="@string/friday"
                                 android:textSize="18sp" />
 
-                            <include layout="@layout/divider" />
+                            <include layout="@layout/divider_lh" />
 
                             <ToggleButton
                                 android:id="@+id/saturday_tb"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="start"
+                                android:layout_gravity="end"
                                 android:layout_marginEnd="8dp"
                                 android:background="@null"
-                                android:drawableStart="?android:attr/listChoiceIndicatorSingle"
-                                android:gravity="start|center"
+                                android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
+                                android:gravity="end|center"
                                 android:text="@string/saturday"
                                 android:textAllCaps="false"
                                 android:textColor="@color/common_black58"
@@ -398,17 +407,17 @@
                                 android:textOn="@string/saturday"
                                 android:textSize="18sp" />
 
-                            <include layout="@layout/divider" />
+                            <include layout="@layout/divider_lh" />
 
                             <ToggleButton
                                 android:id="@+id/sunday_tb"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="start"
+                                android:layout_gravity="end"
                                 android:layout_marginEnd="8dp"
                                 android:background="@null"
-                                android:drawableStart="?android:attr/listChoiceIndicatorSingle"
-                                android:gravity="start|center"
+                                android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
+                                android:gravity="end|center"
                                 android:text="@string/sunday"
                                 android:textAllCaps="false"
                                 android:textColor="@color/common_black58"
@@ -436,18 +445,19 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:background="@color/common_grey50"
-                        android:paddingBottom="8dp"
-                        android:paddingTop="8dp">
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp">
 
                         <TextView
                             android:id="@+id/alarm_options_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
+                            android:layout_alignParentEnd="true"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:drawableEnd="@drawable/ic_tune_black_24dp"
                             android:drawablePadding="8dp"
-                            android:drawableStart="@drawable/ic_tune_black_24dp"
                             android:fontFamily="sans-serif-medium"
                             android:text="@string/alarm_options"
                             android:textSize="20sp" />
@@ -456,9 +466,9 @@
                             android:id="@+id/alarm_options_group"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignStart="@id/alarm_options_text"
                             android:layout_below="@id/alarm_options_text"
-                            android:layout_marginStart="28dp"
+                            android:layout_alignEnd="@id/alarm_options_text"
+                            android:layout_marginEnd="28dp"
                             android:orientation="vertical"
                             android:visibility="gone">
 
@@ -466,30 +476,31 @@
                                 android:id="@+id/alarm_ringtone_option"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="16dp"
-                                android:layout_marginEnd="8dp"
+                                android:layout_gravity="end"
                                 android:layout_marginStart="8dp"
                                 android:layout_marginTop="20dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginBottom="16dp"
+                                android:drawableEnd="@drawable/ic_volume_up_black54_24dp"
                                 android:drawablePadding="8dp"
-                                android:drawableStart="@drawable/ic_volume_up_black54_24dp"
                                 android:fontFamily="sans-serif-medium"
                                 android:text="@string/alarm_options"
                                 android:textColor="@color/common_black54"
                                 android:textSize="18sp" />
 
-                            <include layout="@layout/divider" />
+                            <include layout="@layout/divider_lh" />
 
                             <ToggleButton
                                 android:id="@+id/alarm_vibrate_option"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="start"
-                                android:layout_marginEnd="8dp"
-                                android:layout_marginStart="4dp"
+                                android:layout_gravity="end"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="4dp"
                                 android:background="@null"
+                                android:drawableEnd="?android:attr/listChoiceIndicatorSingle"
                                 android:drawablePadding="4dp"
-                                android:drawableStart="?android:attr/listChoiceIndicatorSingle"
-                                android:gravity="start|center"
+                                android:gravity="end|center"
                                 android:textAllCaps="false"
                                 android:textColor="@color/common_black58"
                                 android:textOff="@string/vibrate_off"
@@ -512,22 +523,22 @@
         android:id="@+id/prev_step_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="19dp"
+        android:layout_marginStart="19dp"
         android:src="@drawable/ic_arrow_upward_black_24dp"
         android:visibility="gone"
         app:backgroundTint="@color/common_white"
         app:layout_anchor="@id/alarm_time_container"
-        app:layout_anchorGravity="top|end" />
+        app:layout_anchorGravity="top|start" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/next_step_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="19dp"
+        android:layout_marginStart="19dp"
         android:layout_marginTop="8dp"
         android:src="@drawable/ic_arrow_downward_black_24dp"
         app:backgroundTint="@color/common_white"
         app:layout_anchor="@id/alarm_time_container"
-        app:layout_anchorGravity="top|end" />
+        app:layout_anchorGravity="top|start" />
 
 </android.support.design.widget.CoordinatorLayout>

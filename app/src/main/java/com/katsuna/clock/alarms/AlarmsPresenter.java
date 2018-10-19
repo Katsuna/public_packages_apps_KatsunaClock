@@ -87,6 +87,7 @@ public class AlarmsPresenter implements AlarmsContract.Presenter {
         mAlarmsDataSource.deleteAlarm(alarm.getAlarmId());
         mAlarmsScheduler.cancel(alarm);
         loadAlarms();
+        mAlarmsView.moveFabsToBottomAndTint(false);
     }
 
     @Override

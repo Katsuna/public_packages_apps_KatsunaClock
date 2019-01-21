@@ -322,7 +322,7 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
         AlarmFormatter alarmFormatter = new AlarmFormatter(this, alarm);
         builder.setMessage(alarmFormatter.getAlertMessage());
         builder.setView(R.layout.common_katsuna_alert);
-        builder.setUserProfile(mUserProfileContainer.getActiveUserProfile());
+        builder.setUserProfile(getActiveUserProfile());
         builder.setOkListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -372,6 +372,6 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
 
     @Override
     public UserProfile getProfile() {
-        return mUserProfileContainer.getActiveUserProfile();
+        return getActiveUserProfile();
     }
 }

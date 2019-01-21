@@ -372,7 +372,7 @@ public class ManageAlarmActivity extends KatsunaActivity implements ManageAlarmC
     protected void onResume() {
         super.onResume();
 
-        UserProfile userProfile = mUserProfileContainer.getActiveUserProfile();
+        UserProfile userProfile = getActiveUserProfile();
 
         // first time init check
         if (mUserProfile == null) {

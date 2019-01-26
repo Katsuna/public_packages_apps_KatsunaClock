@@ -45,9 +45,8 @@
     <application
         android:name="ClockApplication"
         android:allowBackup="false"
-        android:icon="@drawable/common_clock_icon"
+        android:icon="@mipmap/ic_clock_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/common_clock_icon"
         android:supportsRtl="true"
         android:theme="@style/CommonAppTheme">
         <activity

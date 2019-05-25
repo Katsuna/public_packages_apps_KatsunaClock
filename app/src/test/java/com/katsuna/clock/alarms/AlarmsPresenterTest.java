@@ -17,7 +17,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Mockito.verify;
@@ -91,7 +91,7 @@ public class AlarmsPresenterTest {
 
         // Then all alarms are shown in UI
         verify(mAlarmsView).showAlarms(mAlarmsCaptor.capture());
-        assertTrue(mAlarmsCaptor.getValue().size() == 3);
+        assertEquals(3, mAlarmsCaptor.getValue().size());
     }
 
     @Test

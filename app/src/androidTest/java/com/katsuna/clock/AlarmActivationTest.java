@@ -21,14 +21,12 @@ import com.katsuna.clock.util.Injection;
 import com.katsuna.clock.util.Keyguard;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.threeten.bp.LocalDateTime;
 
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -81,13 +79,13 @@ public class AlarmActivationTest {
         boolean result = mDevice.wait(Until.hasObject(By.pkg(COM_KATSUNA_CLOCK).depth(0)),
                 ONE_MINUTE);
 
-        assertTrue(result);
+        Assert.assertTrue(result);
 
         UiObject2 dismissButton = mDevice.findObject(By.res(COM_KATSUNA_CLOCK, "dismiss_button"));
         dismissButton.click();
 
         result = mDevice.wait(Until.gone(By.pkg(COM_KATSUNA_CLOCK)), LAUNCH_TIMEOUT);
-        assertTrue(result);
+        Assert.assertTrue(result);
     }
 
     @Test
@@ -103,13 +101,13 @@ public class AlarmActivationTest {
         boolean result = mDevice.wait(Until.hasObject(By.pkg(COM_KATSUNA_CLOCK).depth(0)),
                 ONE_MINUTE);
 
-        assertTrue(result);
+        Assert.assertTrue(result);
 
         UiObject2 dismissButton = mDevice.findObject(By.res(COM_KATSUNA_CLOCK, "dismiss_button"));
         dismissButton.click();
 
         result = mDevice.wait(Until.gone(By.pkg(COM_KATSUNA_CLOCK)), LAUNCH_TIMEOUT);
-        assertTrue(result);
+        Assert.assertTrue(result);
 
         try {
             mDevice.wakeUp();
@@ -128,15 +126,15 @@ public class AlarmActivationTest {
         boolean result = mDevice.wait(Until.hasObject(By.pkg(COM_KATSUNA_CLOCK).depth(0)),
                 ONE_MINUTE);
 
-        assertTrue(result);
+        Assert.assertTrue(result);
 
         UiObject2 dismissButton = mDevice.findObject(By.res(COM_KATSUNA_CLOCK, "snooze_button"));
         dismissButton.click();
 
         result = mDevice.wait(Until.gone(By.pkg(COM_KATSUNA_CLOCK)), LAUNCH_TIMEOUT);
-        assertTrue(result);
+        Assert.assertTrue(result);
 
-        assertTrue(mAlarmsScheduler.isAlarmSet(mAlarm));
+        Assert.assertTrue(mAlarmsScheduler.isAlarmSet(mAlarm));
     }
 
 
@@ -154,12 +152,12 @@ public class AlarmActivationTest {
             @Override
             public void schedulingFinished() {
                 // verify scheduled
-                assertTrue(mAlarmsScheduler.isAlarmSet(mAlarm));
+                Assert.assertTrue(mAlarmsScheduler.isAlarmSet(mAlarm));
             }
 
             @Override
             public void schedulingFailed(Exception ex) {
-                fail();
+                Assert.fail();
             }
         });
     }

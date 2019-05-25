@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class AlarmValidatorTest {
@@ -38,10 +39,10 @@ public class AlarmValidatorTest {
         // given invalid input
         // validator returns results
         List<ValidationResult> results = mValidator.validateTime("", "34");
-        assertTrue(results.size() == 1);
+        assertEquals(1, results.size());
 
         ValidationResult result = results.get(0);
-        assertTrue(result.messageResId == R.string.validation_hour);
+        assertEquals(result.messageResId, R.string.validation_hour);
     }
 
     @Test
@@ -49,10 +50,10 @@ public class AlarmValidatorTest {
         // given invalid input
         // validator returns results
         List<ValidationResult> results = mValidator.validateTime("10", "");
-        assertTrue(results.size() == 1);
+        assertEquals(1, results.size());
 
         ValidationResult result = results.get(0);
-        assertTrue(result.messageResId == R.string.validation_minute);
+        assertEquals(result.messageResId, R.string.validation_minute);
     }
 
     @Test
@@ -60,10 +61,10 @@ public class AlarmValidatorTest {
         // given invalid input
         // validator returns results
         List<ValidationResult> results = mValidator.validateTime("10", "-1");
-        assertTrue(results.size() == 1);
+        assertEquals(1, results.size());
 
         ValidationResult result = results.get(0);
-        assertTrue(result.messageResId == R.string.validation_minute);
+        assertEquals(result.messageResId, R.string.validation_minute);
     }
 
     @Test
@@ -71,10 +72,10 @@ public class AlarmValidatorTest {
         // given invalid input
         // validator returns results
         List<ValidationResult> results = mValidator.validateTime("10", "60");
-        assertTrue(results.size() == 1);
+        assertEquals(1, results.size());
 
         ValidationResult result = results.get(0);
-        assertTrue(result.messageResId == R.string.validation_minute);
+        assertEquals(result.messageResId, R.string.validation_minute);
     }
 
     @Test
@@ -82,10 +83,10 @@ public class AlarmValidatorTest {
         // given invalid input
         // validator returns results
         List<ValidationResult> results = mValidator.validateTime("-1", "10");
-        assertTrue(results.size() == 1);
+        assertEquals(1, results.size());
 
         ValidationResult result = results.get(0);
-        assertTrue(result.messageResId == R.string.validation_hour);
+        assertEquals(result.messageResId, R.string.validation_hour);
     }
 
     @Test
@@ -93,10 +94,10 @@ public class AlarmValidatorTest {
         // given invalid input
         // validator returns results
         List<ValidationResult> results = mValidator.validateTime("24", "59");
-        assertTrue(results.size() == 1);
+        assertEquals(1, results.size());
 
         ValidationResult result = results.get(0);
-        assertTrue(result.messageResId == R.string.validation_hour);
+        assertEquals(result.messageResId, R.string.validation_hour);
     }
 
 
@@ -105,13 +106,13 @@ public class AlarmValidatorTest {
         // given invalid input
         // validator returns results
         List<ValidationResult> results = mValidator.validateTime("text", "text");
-        assertTrue(results.size() == 2);
+        assertEquals(2, results.size());
 
         ValidationResult hourResult = results.get(0);
-        assertTrue(hourResult.messageResId == R.string.validation_hour);
+        assertEquals(hourResult.messageResId, R.string.validation_hour);
 
         ValidationResult minuteResult = results.get(1);
-        assertTrue(minuteResult.messageResId == R.string.validation_minute);
+        assertEquals(minuteResult.messageResId, R.string.validation_minute);
     }
 
     @Test
@@ -119,10 +120,10 @@ public class AlarmValidatorTest {
         // given invalid input
         // validator returns result
         List<ValidationResult> results = mValidator.validateAlarmType(null, "");
-        assertTrue(results.size() == 1);
+        assertEquals(1, results.size());
 
         ValidationResult result = results.get(0);
-        assertTrue(result.messageResId == R.string.validation_alarm_type);
+        assertEquals(result.messageResId, R.string.validation_alarm_type);
     }
 
     @Test
@@ -130,10 +131,10 @@ public class AlarmValidatorTest {
         // given invalid input
         // validator returns result
         List<ValidationResult> results = mValidator.validateAlarmType(AlarmType.ALARM, "desc");
-        assertTrue(results.size() == 1);
+        assertEquals(1, results.size());
 
         ValidationResult result = results.get(0);
-        assertTrue(result.messageResId == R.string.unsupported_operation);
+        assertEquals(result.messageResId, R.string.unsupported_operation);
     }
 
     @Test
@@ -141,10 +142,10 @@ public class AlarmValidatorTest {
         // given invalid input
         // validator returns result
         List<ValidationResult> results = mValidator.validateAlarmType(AlarmType.REMINDER, "");
-        assertTrue(results.size() == 1);
+        assertEquals(1, results.size());
 
         ValidationResult result = results.get(0);
-        assertTrue(result.messageResId == R.string.reminder_with_no_description);
+        assertEquals(result.messageResId, R.string.reminder_with_no_description);
     }
 
 

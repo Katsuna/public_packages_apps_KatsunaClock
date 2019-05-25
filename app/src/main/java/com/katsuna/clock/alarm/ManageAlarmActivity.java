@@ -741,12 +741,20 @@ public class ManageAlarmActivity extends KatsunaActivity implements ManageAlarmC
 
     @Override
     public void showNextStepFab(boolean flag) {
-        mNextStepFab.setVisibility(flag ? View.VISIBLE : View.GONE);
+        if (flag) {
+            mNextStepFab.show();
+        } else {
+            mNextStepFab.hide();
+        }
     }
 
     @Override
     public void showPreviousStepFab(boolean flag) {
-        mPreviousStepFab.setVisibility(flag ? View.VISIBLE : View.GONE);
+        if (flag) {
+            mPreviousStepFab.show();
+        } else {
+            mPreviousStepFab.hide();
+        }
     }
 
     @Override

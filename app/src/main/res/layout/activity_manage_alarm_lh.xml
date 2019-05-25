@@ -74,7 +74,8 @@
                             android:layout_marginBottom="26dp"
                             android:hint="@string/description"
                             android:inputType="text"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"
+                            tools:ignore="Autofill" />
 
                     </RelativeLayout>
 
@@ -153,7 +154,7 @@
                                     android:textColor="@color/common_black58"
                                     android:textColorHighlight="@color/common_transparent"
                                     android:textSize="56sp"
-                                    tools:ignore="LabelFor" />
+                                    tools:ignore="LabelFor,Autofill" />
 
                                 <RelativeLayout
                                     android:layout_width="90dp"
@@ -209,7 +210,7 @@
                                     android:textColor="@color/common_black58"
                                     android:textColorHighlight="@color/common_transparent"
                                     android:textSize="56sp"
-                                    tools:ignore="LabelFor" />
+                                    tools:ignore="LabelFor,Autofill" />
 
                                 <RelativeLayout
                                     android:layout_width="90dp"

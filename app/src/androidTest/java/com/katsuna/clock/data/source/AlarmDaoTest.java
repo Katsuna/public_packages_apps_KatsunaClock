@@ -9,13 +9,13 @@ import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.data.AlarmType;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -44,7 +44,7 @@ public class AlarmDaoTest {
 
         Alarm loaded = mDatabase.alarmsDao().getAlarmById(alarmId);
 
-        assertEquals(ALARM, loaded);
+        Assert.assertEquals(ALARM, loaded);
     }
 
     @Test
@@ -62,7 +62,7 @@ public class AlarmDaoTest {
         Alarm loaded = mDatabase.alarmsDao().getAlarmById(ALARM.getAlarmId());
 
         // The loaded data contains the expected values
-        assertEquals(loaded, newAlarm);
+        Assert.assertEquals(loaded, newAlarm);
     }
 
     @Test
@@ -82,7 +82,7 @@ public class AlarmDaoTest {
         Alarm loaded = mDatabase.alarmsDao().getAlarmById(ALARM.getAlarmId());
 
         // The loaded data contains the expected values
-        assertEquals(loaded, updatedAlarm);
+        Assert.assertEquals(loaded, updatedAlarm);
     }
 
     @Test

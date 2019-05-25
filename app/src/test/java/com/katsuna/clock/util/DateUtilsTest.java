@@ -1,7 +1,6 @@
 package com.katsuna.clock.util;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.threeten.bp.Instant;
 import org.threeten.bp.LocalDateTime;
@@ -44,12 +43,12 @@ public class DateUtilsTest {
 
         TimeDiff timeDiff = DateUtils.calculateTimeDiff(now, target);
 
-        Assert.assertTrue(timeDiff.seconds == secs);
-        Assert.assertTrue(timeDiff.minutes == minutes);
-        Assert.assertTrue(timeDiff.hours == hours);
-        Assert.assertTrue(timeDiff.days == days);
-        Assert.assertTrue(timeDiff.months == months);
-        Assert.assertTrue(timeDiff.years == years);
+        Assert.assertEquals(timeDiff.seconds, secs);
+        Assert.assertEquals(timeDiff.minutes, minutes);
+        Assert.assertEquals(timeDiff.hours, hours);
+        Assert.assertEquals(timeDiff.days, days);
+        Assert.assertEquals(timeDiff.months, months);
+        Assert.assertEquals(timeDiff.years, years);
     }
 
 }

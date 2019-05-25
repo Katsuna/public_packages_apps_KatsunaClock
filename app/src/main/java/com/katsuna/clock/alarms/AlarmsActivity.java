@@ -2,7 +2,6 @@ package com.katsuna.clock.alarms;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
@@ -346,8 +345,8 @@ public class AlarmsActivity extends KatsunaActivity implements AlarmsContract.Vi
     @Override
     public void showNoAlarms() {
         mNoAlarmsText.setVisibility(View.VISIBLE);
-        mFab1.setVisibility(View.VISIBLE);
-        mFab2.setVisibility(View.VISIBLE);
+        mFab1.show();
+        mFab2.show();
         mPopupButton1.setVisibility(View.VISIBLE);
         mPopupButton2.setVisibility(View.VISIBLE);
         mAlarmsList.setVisibility(View.GONE);

@@ -295,7 +295,6 @@ public final class AsyncRingtonePlayer {
         private long mCrescendoStopTime = 0;
 
         @SuppressLint("PrivateApi")
-        @SuppressWarnings("JavaReflectionMemberAccess")
         private RingtonePlaybackDelegate() {
             try {
                 mSetVolumeMethod = Ringtone.class.getDeclaredMethod("setVolume", float.class);

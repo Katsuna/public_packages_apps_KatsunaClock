@@ -9,14 +9,10 @@ import com.katsuna.clock.data.Alarm;
 import com.katsuna.clock.data.AlarmStatus;
 import com.katsuna.clock.data.AlarmType;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class AlarmFormatterTest {
@@ -41,7 +37,7 @@ public class AlarmFormatterTest {
         String expected = mContext.getString(R.string.tuesday) + comma +
                 mContext.getString(R.string.thursday) + space +  mContext.getString(R.string.and) +
                 space + mContext.getString(R.string.saturday);
-        assertEquals(expected, formatter.getDays());
+        Assert.assertEquals(expected, formatter.getDays());
     }
 
     @Test
@@ -58,7 +54,7 @@ public class AlarmFormatterTest {
                 mContext.getString(R.string.friday) + comma +
                 mContext.getString(R.string.saturday) + space +  mContext.getString(R.string.and) +
                         space + mContext.getString(R.string.sunday);
-        assertEquals(expected, formatter.getDays());
+        Assert.assertEquals(expected, formatter.getDays());
     }
 
     @Test
@@ -69,7 +65,7 @@ public class AlarmFormatterTest {
         AlarmFormatter formatter = new AlarmFormatter(mContext, alarm);
 
         String expected = "";
-        assertEquals(expected, formatter.getDays());
+        Assert.assertEquals(expected, formatter.getDays());
     }
 
     @Test
@@ -80,7 +76,7 @@ public class AlarmFormatterTest {
         AlarmFormatter formatter = new AlarmFormatter(mContext, alarm);
 
         String expected = "14:10";
-        assertTrue(formatter.getTitle().contains(expected));
+        Assert.assertTrue(formatter.getTitle().contains(expected));
     }
 
     @Test
@@ -103,7 +99,7 @@ public class AlarmFormatterTest {
         AlarmFormatter formatter = new AlarmFormatter(mContext, alarm);
 
         String expected = mContext.getString(R.string.alarm);
-        assertEquals(expected, formatter.getDescription());
+        Assert.assertEquals(expected, formatter.getDescription());
     }
 
     @Test
@@ -114,7 +110,7 @@ public class AlarmFormatterTest {
         AlarmFormatter formatter = new AlarmFormatter(mContext, alarm);
 
         String expected = "14:10";
-        assertEquals(expected, formatter.getDescription());
+        Assert.assertEquals(expected, formatter.getDescription());
     }
 
     @Test
@@ -125,7 +121,7 @@ public class AlarmFormatterTest {
         AlarmFormatter formatter = new AlarmFormatter(mContext, alarm);
 
         int expected = R.drawable.ic_access_time_24dp;
-        assertEquals(expected, formatter.getAlarmTypeIconResId());
+        Assert.assertEquals(expected, formatter.getAlarmTypeIconResId());
     }
 
     @Test
@@ -136,7 +132,7 @@ public class AlarmFormatterTest {
         AlarmFormatter formatter = new AlarmFormatter(mContext, alarm);
 
         int expected = R.drawable.ic_notifications_black54_24dp;
-        assertEquals(expected, formatter.getAlarmTypeIconResId());
+        Assert.assertEquals(expected, formatter.getAlarmTypeIconResId());
     }
 
 }

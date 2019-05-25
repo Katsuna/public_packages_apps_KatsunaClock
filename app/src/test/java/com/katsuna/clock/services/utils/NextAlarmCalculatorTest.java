@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.threeten.bp.LocalDateTime;
 
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 public class NextAlarmCalculatorTest {
 
@@ -43,7 +43,7 @@ public class NextAlarmCalculatorTest {
         LocalDateTime triggerTime = mNextAlarmCalculator.getTriggerDateTime(now, alarm);
 
         // evaluate
-        assertTrue(triggerTime.equals(expectedTriggerTime));
+        assertEquals(triggerTime, expectedTriggerTime);
     }
 
     @Test
@@ -58,7 +58,7 @@ public class NextAlarmCalculatorTest {
         LocalDateTime triggerTime = mNextAlarmCalculator.getTriggerDateTime(now, alarm);
 
         // evaluate
-        assertTrue(triggerTime.equals(expectedTriggerTime));
+        assertEquals(triggerTime, expectedTriggerTime);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class NextAlarmCalculatorTest {
         LocalDateTime triggerTime = mNextAlarmCalculator.getTriggerDateTime(now, alarm);
 
         // evaluate
-        assertTrue(triggerTime.equals(expectedTriggerTime));
+        assertEquals(triggerTime, expectedTriggerTime);
     }
 
     @Test
@@ -88,7 +88,7 @@ public class NextAlarmCalculatorTest {
         LocalDateTime triggerTime = mNextAlarmCalculator.getTriggerDateTime(now, alarm);
 
         // evaluate
-        assertTrue(triggerTime.equals(expectedTriggerTime));
+        assertEquals(triggerTime, expectedTriggerTime);
     }
 
     @Test
@@ -103,7 +103,7 @@ public class NextAlarmCalculatorTest {
         LocalDateTime triggerTime = mNextAlarmCalculator.getTriggerDateTime(now, alarm);
 
         // evaluate
-        assertTrue(triggerTime.equals(expectedTriggerTime));
+        assertEquals(triggerTime, expectedTriggerTime);
     }
 
     @Test
@@ -118,7 +118,7 @@ public class NextAlarmCalculatorTest {
         LocalDateTime triggerTime = mNextAlarmCalculator.getTriggerDateTime(now, alarm);
 
         // evaluate
-        assertTrue(triggerTime.equals(expectedTriggerTime));
+        assertEquals(triggerTime, expectedTriggerTime);
     }
 
     @Test
@@ -133,6 +133,6 @@ public class NextAlarmCalculatorTest {
         LocalDateTime triggerTime = mNextAlarmCalculator.getTriggerDateTime(now, alarm);
 
         // evaluate
-        assertTrue(triggerTime.equals(expectedTriggerTime));
+        assertEquals(triggerTime, expectedTriggerTime);
     }
 }

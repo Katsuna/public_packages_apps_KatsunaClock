@@ -8,8 +8,7 @@ import com.katsuna.clock.validators.AlarmValidator;
 import com.katsuna.clock.validators.IAlarmValidator;
 import com.katsuna.clock.validators.ValidationResult;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -69,7 +68,7 @@ public class ManageAlarmPresenterTest {
                 mManageAlarmView, mAlarmValidator, mAlarmsScheduler);
 
         // Then the presenter is set to the view
-        Assert.assertTrue(mManageAlarmPresenter.getAlarmType() == AlarmType.ALARM);
+        Assert.assertSame(mManageAlarmPresenter.getAlarmType(), AlarmType.ALARM);
     }
 
     @Test
@@ -123,7 +122,6 @@ public class ManageAlarmPresenterTest {
         String minute = "61";
         mManageAlarmPresenter.validateAlarmTypeInfo(null, null);
         mManageAlarmPresenter.validateAlarmTime(hour, minute);
-        //noinspection ConstantConditions
         mManageAlarmPresenter.saveAlarm(null, hour, minute, false, false, false,
                 false, false, false, false, "ringtone", true);
 
@@ -211,7 +209,7 @@ public class ManageAlarmPresenterTest {
         mManageAlarmPresenter = new ManageAlarmPresenter(0, AlarmType.REMINDER, mAlarmsDataSource,
                 mManageAlarmView, new AlarmValidator(), mAlarmsScheduler);
 
-        Assert.assertTrue(mManageAlarmPresenter.getCurrentStep() == ManageAlarmStep.DESCRIPTION);
+        Assert.assertSame(mManageAlarmPresenter.getCurrentStep(), ManageAlarmStep.DESCRIPTION);
     }
 
     @Test
@@ -222,7 +220,7 @@ public class ManageAlarmPresenterTest {
         mManageAlarmPresenter.start();
 
         // Then presenter step should change properly
-        Assert.assertTrue(mManageAlarmPresenter.getCurrentStep() == ManageAlarmStep.TIME);
+        Assert.assertSame(mManageAlarmPresenter.getCurrentStep(), ManageAlarmStep.TIME);
 
         // And view calls should be made
         verify(mManageAlarmView).showDescriptionControl(false);
@@ -247,7 +245,7 @@ public class ManageAlarmPresenterTest {
         mManageAlarmPresenter.previousStep();
 
         // Then presenter step should change properly
-        Assert.assertTrue(mManageAlarmPresenter.getCurrentStep() == ManageAlarmStep.DESCRIPTION);
+        Assert.assertSame(mManageAlarmPresenter.getCurrentStep(), ManageAlarmStep.DESCRIPTION);
 
         // And view calls must be made
         verify(mManageAlarmView).showDescriptionControl(true);
@@ -269,7 +267,7 @@ public class ManageAlarmPresenterTest {
         mManageAlarmPresenter.showStep(ManageAlarmStep.OPTIONS);
 
         // Then presenter step should change properly
-        Assert.assertTrue(mManageAlarmPresenter.getCurrentStep() == ManageAlarmStep.OPTIONS);
+        Assert.assertSame(mManageAlarmPresenter.getCurrentStep(), ManageAlarmStep.OPTIONS);
 
         // And view calls must be made
         verify(mManageAlarmView).showAlarmOptionsControl(true);
@@ -292,7 +290,7 @@ public class ManageAlarmPresenterTest {
         mManageAlarmPresenter.previousStep();
 
         // Then presenter step should change properly
-        Assert.assertTrue(mManageAlarmPresenter.getCurrentStep() == ManageAlarmStep.DAYS);
+        Assert.assertSame(mManageAlarmPresenter.getCurrentStep(), ManageAlarmStep.DAYS);
     }
 
     @Test
@@ -306,7 +304,7 @@ public class ManageAlarmPresenterTest {
         mManageAlarmPresenter.validateAlarmTime("21", "34");
 
         // Then presenter step should change properly
-        Assert.assertTrue(mManageAlarmPresenter.getCurrentStep() == ManageAlarmStep.DAYS);
+        Assert.assertSame(mManageAlarmPresenter.getCurrentStep(), ManageAlarmStep.DAYS);
 
         // And view calls must be made
         verify(mManageAlarmView).showAlarmTimeControl(false);
@@ -327,7 +325,7 @@ public class ManageAlarmPresenterTest {
         mManageAlarmPresenter.previousStep();
 
         // Then presenter step should change properly
-        Assert.assertTrue(mManageAlarmPresenter.getCurrentStep() == ManageAlarmStep.TIME);
+        Assert.assertSame(mManageAlarmPresenter.getCurrentStep(), ManageAlarmStep.TIME);
 
         // And view calls must be made
         verify(mManageAlarmView, times(3)).showDescriptionControl(false);

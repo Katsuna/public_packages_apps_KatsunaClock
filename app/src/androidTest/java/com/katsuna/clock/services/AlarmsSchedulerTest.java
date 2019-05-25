@@ -14,13 +14,11 @@ import com.katsuna.clock.services.utils.INextAlarmCalculator;
 import com.katsuna.clock.services.utils.NextAlarmCalculator;
 import com.katsuna.clock.util.Injection;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.threeten.bp.LocalDateTime;
-
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class AlarmsSchedulerTest {
@@ -58,7 +56,7 @@ public class AlarmsSchedulerTest {
 
             @Override
             public void schedulingFailed(Exception ex) {
-                fail();
+                Assert.fail();
             }
         });
 
@@ -67,13 +65,13 @@ public class AlarmsSchedulerTest {
         }
 
         // verify scheduled
-        assertTrue(mAlarmsScheduler.isAlarmSet(alarm));
+        Assert.assertTrue(mAlarmsScheduler.isAlarmSet(alarm));
 
         // action
         mAlarmsScheduler.cancel(alarm);
 
         // verify not scheduled
-        assertTrue(!mAlarmsScheduler.isAlarmSet(alarm));
+        Assert.assertTrue(!mAlarmsScheduler.isAlarmSet(alarm));
     }
 
     @Test
@@ -97,7 +95,7 @@ public class AlarmsSchedulerTest {
 
             @Override
             public void schedulingFailed(Exception ex) {
-                fail();
+                Assert.fail();
             }
         });
 
@@ -106,19 +104,19 @@ public class AlarmsSchedulerTest {
         }
 
         // verify
-        assertTrue(mAlarmsScheduler.isAlarmSet(alarm));
+        Assert.assertTrue(mAlarmsScheduler.isAlarmSet(alarm));
 
         // action schedule
         mAlarmsScheduler.snooze(alarm, 60);
 
         // verify
-        assertTrue(mAlarmsScheduler.isAlarmSet(alarm));
+        Assert.assertTrue(mAlarmsScheduler.isAlarmSet(alarm));
 
         // action cancel
         mAlarmsScheduler.cancel(alarm);
 
         // verify cancel
-        assertTrue(!mAlarmsScheduler.isAlarmSet(alarm));
+        Assert.assertTrue(!mAlarmsScheduler.isAlarmSet(alarm));
     }
 
     @Test
@@ -147,7 +145,7 @@ public class AlarmsSchedulerTest {
 
             @Override
             public void schedulingFailed(Exception ex) {
-                fail();
+                Assert.fail();
             }
         });
 
@@ -156,21 +154,21 @@ public class AlarmsSchedulerTest {
         }
 
         // verify
-        assertTrue(mAlarmsScheduler.isAlarmSet(alarmOne));
-        assertTrue(mAlarmsScheduler.isAlarmSet(alarmTwo));
+        Assert.assertTrue(mAlarmsScheduler.isAlarmSet(alarmOne));
+        Assert.assertTrue(mAlarmsScheduler.isAlarmSet(alarmTwo));
 
         // action cancel first alarm
         mAlarmsScheduler.cancel(alarmOne);
 
         // verify
-        assertTrue(!mAlarmsScheduler.isAlarmSet(alarmOne));
-        assertTrue(mAlarmsScheduler.isAlarmSet(alarmTwo));
+        Assert.assertTrue(!mAlarmsScheduler.isAlarmSet(alarmOne));
+        Assert.assertTrue(mAlarmsScheduler.isAlarmSet(alarmTwo));
 
         // action cancel second to cleanup
         mAlarmsScheduler.cancel(alarmTwo);
 
         // verify cancel
-        assertTrue(!mAlarmsScheduler.isAlarmSet(alarmTwo));
+        Assert.assertTrue(!mAlarmsScheduler.isAlarmSet(alarmTwo));
 
     }
 

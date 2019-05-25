@@ -8,7 +8,6 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion rootProject.buildToolsVersion
 
     defaultConfig {
         applicationId "com.katsuna.clock"
@@ -60,10 +59,10 @@ dependencies {
     implementation "com.android.support:design:$supportLibraryVersion"
     implementation "com.android.support:cardview-v7:$supportLibraryVersion"
     implementation "android.arch.persistence.room:runtime:$rootProject.roomVersion"
-    implementation "com.android.support.test.espresso:espresso-idling-resource:$rootProject.espressoVersion"
+    implementation "com.android.support.test.espresso:espresso-idling-resource:$rootProject.espressoIdlingVersion"
     implementation "com.google.guava:guava:$rootProject.guavaVersion"
     implementation "com.google.code.gson:gson:$rootProject.gson"
-    implementation "com.jakewharton.threetenabp:threetenabp:1.1.0"
+    implementation "com.jakewharton.threetenabp:threetenabp:$rootProject.threetenabpVersion"
     implementation "com.google.firebase:firebase-core:$rootProject.firebaseVersion"
     implementation "com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion"
     annotationProcessor "android.arch.persistence.room:compiler:$rootProject.roomVersion"
@@ -74,8 +73,8 @@ dependencies {
     testImplementation "junit:junit:$rootProject.junitVersion"
     testImplementation "org.mockito:mockito-core:$rootProject.mockitoVersion"
     testImplementation "org.hamcrest:hamcrest-core:$rootProject.hamcrestVersion"
-    testImplementation('org.threeten:threetenbp:1.3.6') {
-        exclude module: 'com.jakewharton.threetenabp:threetenabp:1.1.0'
+    testImplementation('org.threeten:threetenbp:1.4.0') {
+        exclude module: "com.jakewharton.threetenabp:threetenabp:$rootProject.threetenabpVersion"
     }
 
     // Android Testing Support Library's runner and rules

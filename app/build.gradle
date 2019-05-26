@@ -13,8 +13,8 @@ android {
         applicationId "com.katsuna.clock"
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
-        versionCode 9
-        versionName "1.0.5"
+        versionCode 10
+        versionName "1.0.6"
         project.ext.set("archivesBaseName", "Clock-" + defaultConfig.versionName)
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

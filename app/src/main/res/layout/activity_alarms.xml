@@ -10,6 +10,78 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <LinearLayout
+            android:id="@+id/fab_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:background="@color/common_white12"
+            android:elevation="5dp"
+            android:gravity="center|end"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/create_alarm_buttons_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/create_alarm_button"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/common_blueA700"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/add_new_alarm"
+                    android:textAllCaps="false"
+                    android:textColor="@color/common_white87"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/create_alarm_fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:src="@drawable/ic_alarm_white_24dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/create_reminder_buttons_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/create_reminder_button"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/common_blueA700"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/add_new_reminder"
+                    android:textAllCaps="false"
+                    android:textColor="@color/common_white87"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/create_reminder_fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:src="@drawable/ic_notifications_blck_24dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
         <include layout="@layout/common_toolbar" />
 
         <FrameLayout
@@ -78,9 +150,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:layout_marginEnd="30dp"
                         android:layout_marginStart="30dp"
-                        android:layout_marginTop="80dp"
+                        android:layout_marginTop="180dp"
+                        android:layout_marginEnd="30dp"
                         android:gravity="center"
                         android:text="@string/no_alarms"
                         android:textSize="20sp"
@@ -100,75 +172,6 @@
                     android:paddingBottom="120dp" />
 
             </RelativeLayout>
-
-            <LinearLayout
-                android:id="@+id/fab_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|end"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/create_alarm_buttons_container"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <Button
-                        android:id="@+id/create_alarm_button"
-                        android:layout_width="140dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@color/common_blueA700"
-                        android:fontFamily="sans-serif-medium"
-                        android:text="@string/add_new_alarm"
-                        android:textAllCaps="false"
-                        android:textColor="@color/common_white87"
-                        android:textSize="14sp"
-                        android:visibility="gone" />
-
-                    <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/create_alarm_fab"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:src="@drawable/ic_alarm_white_24dp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/create_reminder_buttons_container"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <Button
-                        android:id="@+id/create_reminder_button"
-                        android:layout_width="140dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@color/common_blueA700"
-                        android:fontFamily="sans-serif-medium"
-                        android:text="@string/add_new_reminder"
-                        android:textAllCaps="false"
-                        android:textColor="@color/common_white87"
-                        android:textSize="14sp"
-                        android:visibility="gone" />
-
-                    <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/create_reminder_fab"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        android:src="@drawable/ic_notifications_blck_24dp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
 
         </FrameLayout>
 
